@@ -1,1 +1,16 @@
-
+spring:
+  application:
+    name: authorization-server
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://192.168.99.100:5432/authorization-server
+    username: user
+    password: ce3a50ea7498d644b16ccac53cc1b51a
+    sql-script-encoding: UTF-8
+    initialization-mode: always
+server:
+  port: 9090
