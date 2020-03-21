@@ -1,36 +1,35 @@
 package com.blesk.authorizationserver.Model;
 
-import org.hibernate.annotations.OnDelete;
-import org.hibernate.annotations.OnDeleteAction;
-import org.hibernate.annotations.Where;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @Entity
 @Table(name = "accounts")
-@Where(clause="is_deleted=FALSE")
-public class Accounts {
+public class Accounts implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "account_id")
     private Long accountId;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY,  mappedBy="account")
+    @JsonIgnore
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER,  mappedBy="account")
     private Logins login;
 
-    @ManyToMany(cascade=CascadeType.ALL, fetch = FetchType.EAGER)
+    @JsonIgnore
+    @ManyToMany(cascade=CascadeType.ALL, fetch = FetchType.LAZY)
     @JoinTable(name="account_role_items", joinColumns=@JoinColumn(name="user_id"),
             inverseJoinColumns=@JoinColumn(name="role_id"))
-    private Set<Roles> roles = new HashSet<>();
+    private Set<Roles> roles = new HashSet<Roles>();
 
-    @Column(name = "user_id", nullable=false)
+    @Column(name = "user_id", nullable=false, unique = true)
     private Long userId;
 
-    @Column(name = "user_name", nullable=false)
+    @Column(name = "user_name", nullable=false, unique = true)
     private String userName;
 
     @Column(name = "password", nullable=false)

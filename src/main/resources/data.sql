@@ -1,5 +1,7 @@
 INSERT INTO accounts (user_id, user_name, password, balance, is_activated, created_by, created_at, is_deleted)
 VALUES (1, 'matebence', '$2a$10$jbIi/RIYNm5xAW9M7IaE5.WPw6BZgD8wcpkZUg0jm8RHPtdfDcMgm', 200.00, TRUE, 1, CURRENT_TIMESTAMP, FALSE);
+INSERT INTO accounts (user_id, user_name, password, balance, is_activated, created_by, created_at, is_deleted)
+VALUES (2, 'ss', '$2a$10$jbIi/RIYNm5xAW9M7IaE5.WPw6BZgD8wcpkZUg0jm8RHPtdfDcMgm', 500.00, TRUE, 1, CURRENT_TIMESTAMP, FALSE);
 INSERT INTO logins (account_id, no_trys, last_login, ip_address)
 VALUES (1, 0, CURRENT_TIMESTAMP, '192.168.99.100');
 INSERT INTO roles (name, created_by, created_at, is_deleted)

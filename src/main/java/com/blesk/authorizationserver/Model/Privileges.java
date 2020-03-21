@@ -1,26 +1,27 @@
 package com.blesk.authorizationserver.Model;
 
-import org.hibernate.annotations.Where;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 
 @Entity
 @Table(name = "privileges")
-@Where(clause="is_deleted=FALSE")
-public class Privileges {
+public class Privileges implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "privilege_id")
     private Long privilegeId;
 
-    @ManyToMany(cascade = CascadeType.ALL, mappedBy = "privileges", fetch = FetchType.LAZY)
+    @JsonIgnore
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, mappedBy = "privileges", fetch = FetchType.LAZY)
     private Set<Roles> roles = new HashSet<Roles>();
 
-    @Column(name = "name", nullable=false)
+    @Column(name = "name", nullable=false, unique = true)
     private String name;
 
     @Column(name = "is_deleted", nullable=false)
