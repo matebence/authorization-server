@@ -24,7 +24,6 @@ public class AccountDAOImpl extends DAOImpl<Accounts> implements AccountDAO {
         CriteriaQuery<Accounts> criteriaQuery = criteriaBuilder.createQuery(Accounts.class);
         Root<Accounts> root = criteriaQuery.from(Accounts.class);
         return entityManager.createQuery(criteriaQuery
-                .where(criteriaBuilder.equal(root.get("userName"), userName))
-                .orderBy(criteriaBuilder.asc(root.get("createdAt")))).getSingleResult();
+                .where(criteriaBuilder.equal(root.get("userName"), userName))).getSingleResult();
     }
 }

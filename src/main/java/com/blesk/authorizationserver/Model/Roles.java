@@ -5,7 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -21,11 +22,11 @@ public class Roles implements Serializable {
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.LAZY)
     @JoinTable(name="role_privilege_items", joinColumns=@JoinColumn(name="role_id"),
             inverseJoinColumns=@JoinColumn(name="privilege_id"))
-    private Set<Privileges> privileges = new HashSet<Privileges>();
+    private List<Privileges> privileges = new ArrayList<Privileges>();
 
     @JsonIgnore
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, mappedBy = "roles")
-    private Set<Accounts> accounts = new HashSet<Accounts>();
+    private List<Accounts> accounts = new ArrayList<Accounts>();
 
     @Column(name = "name", nullable=false, unique = true)
     private String name;
@@ -62,19 +63,19 @@ public class Roles implements Serializable {
         this.roleId = roleId;
     }
 
-    public Set<Privileges> getPrivileges() {
+    public List<Privileges> getPrivileges() {
         return privileges;
     }
 
-    public void setPrivileges(Set<Privileges> privileges) {
+    public void setPrivileges(List<Privileges> privileges) {
         this.privileges = privileges;
     }
 
-    public Set<Accounts> getAccounts() {
+    public List<Accounts> getAccounts() {
         return accounts;
     }
 
-    public void setAccounts(Set<Accounts> accounts) {
+    public void setAccounts(List<Accounts> accounts) {
         this.accounts = accounts;
     }
 

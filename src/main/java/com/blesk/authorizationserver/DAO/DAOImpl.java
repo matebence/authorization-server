@@ -4,6 +4,8 @@ import com.blesk.authorizationserver.Utility.Criteria;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -22,6 +24,8 @@ import java.util.Map;
 @Repository
 public class DAOImpl<T> implements DAO<T> {
 
+    private Logger logger = LoggerFactory.getLogger(this.getClass());
+
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -29,7 +33,14 @@ public class DAOImpl<T> implements DAO<T> {
     @Transactional
     public T save(T t) {
         Session session = entityManager.unwrap(Session.class);
-        session.save(t);
+        try {
+            session.save(t);
+        } catch (Exception e) {
+            logger.info(e.getMessage());
+        } finally {
+            session.clear();
+            session.close();
+        }
         return t;
     }
 
@@ -37,7 +48,14 @@ public class DAOImpl<T> implements DAO<T> {
     @Transactional
     public boolean update(T t) {
         Session session = entityManager.unwrap(Session.class);
-        session.update(t);
+        try {
+            session.update(t);
+        } catch (Exception e) {
+            logger.info(e.getMessage());
+        } finally {
+            session.clear();
+            session.close();
+        }
         return session.getTransaction().getStatus() == TransactionStatus.COMMITTED;
     }
 
@@ -45,7 +63,14 @@ public class DAOImpl<T> implements DAO<T> {
     @Transactional
     public boolean delete(T t) {
         Session session = entityManager.unwrap(Session.class);
-        session.delete(t);
+        try {
+            session.delete(t);
+        } catch (Exception e) {
+            logger.info(e.getMessage());
+        } finally {
+            session.clear();
+            session.close();
+        }
         return session.getTransaction().getStatus() == TransactionStatus.COMMITTED;
     }
 
@@ -59,13 +84,16 @@ public class DAOImpl<T> implements DAO<T> {
     @Transactional
     public List getAll(Class c, int pageNumber, int pageSize) {
         Session session = entityManager.unwrap(Session.class);
+
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
         CriteriaQuery criteriaQuery = criteriaBuilder.createQuery(c);
         Root select = criteriaQuery.from(c);
-        CriteriaQuery entity = criteriaQuery.select(select);
+        CriteriaQuery entity = criteriaQuery.select(select).orderBy(criteriaBuilder.asc(select.get("createdAt")));
+
         Query typedQuery = session.createQuery(entity);
         typedQuery.setFirstResult(pageNumber);
         typedQuery.setMaxResults(pageSize);
+
         return typedQuery.getResultList();
     }
 
@@ -86,13 +114,19 @@ public class DAOImpl<T> implements DAO<T> {
         CriteriaQuery select = criteriaQuery.select(root);
 
         if (criterias.get(Criteria.ORDER_BY) != null) {
-            select.orderBy(criteriaBuilder.asc(root.get(criterias.get(Criteria.ORDER_BY).get("createdAt"))));
+            for (Object o : criterias.get(Criteria.SEARCH).entrySet()) {
+                Map.Entry pair = (Map.Entry) o;
+                if (pair.getValue().toString().toUpperCase().equals("ASC")) {
+                    select.orderBy(criteriaBuilder.asc(root.get(pair.getKey().toString())));
+                } else if (pair.getValue().toString().toUpperCase().equals("DESC")) {
+                    select.orderBy(criteriaBuilder.asc(root.get(pair.getKey().toString())));
+                }
+            }
         }
 
         if (criterias.get(Criteria.SEARCH) != null) {
             for (Object o : criterias.get(Criteria.SEARCH).entrySet()) {
                 Map.Entry pair = (Map.Entry) o;
-                System.out.println(pair.getKey() + " = " + pair.getValue());
                 predicates.add(criteriaBuilder.equal(root.get(pair.getKey().toString()), pair.getValue().toString()));
             }
             select.where(predicates.toArray(new Predicate[]{}));

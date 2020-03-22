@@ -5,7 +5,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -19,7 +20,7 @@ public class Privileges implements Serializable {
 
     @JsonIgnore
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, mappedBy = "privileges", fetch = FetchType.LAZY)
-    private Set<Roles> roles = new HashSet<Roles>();
+    private List<Roles> roles = new ArrayList<Roles>();
 
     @Column(name = "name", nullable=false, unique = true)
     private String name;
@@ -56,11 +57,11 @@ public class Privileges implements Serializable {
         this.privilegeId = privilegeId;
     }
 
-    public Set<Roles> getRoles() {
+    public List<Roles> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Roles> roles) {
+    public void setRoles(List<Roles> roles) {
         this.roles = roles;
     }
 

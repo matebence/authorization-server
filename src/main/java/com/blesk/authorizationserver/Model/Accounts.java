@@ -24,7 +24,7 @@ public class Accounts implements Serializable {
     @ManyToMany(cascade={CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.LAZY)
     @JoinTable(name="account_role_items", joinColumns=@JoinColumn(name="user_id"),
             inverseJoinColumns=@JoinColumn(name="role_id"))
-    private Set<Roles> roles = new HashSet<Roles>();
+    private List<Roles> roles = new ArrayList<Roles>();
 
     @Column(name = "user_id", nullable=false, unique = true)
     private Long userId;
@@ -81,11 +81,11 @@ public class Accounts implements Serializable {
         this.login = login;
     }
 
-    public Set<Roles> getRoles() {
+    public List<Roles> getRoles() {
         return roles;
     }
 
-    public void setRoles(Set<Roles> roles) {
+    public void setRoles(List<Roles> roles) {
         this.roles = roles;
     }
 
