@@ -3,14 +3,13 @@ package com.blesk.authorizationserver.Model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 
 @Entity
 @Table(name = "roles")
-public class Roles implements Serializable {
+public class Roles {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +35,7 @@ public class Roles implements Serializable {
     @Column(name = "created_by", nullable=false)
     private Long createdBy;
 
-    @Column(name = "created_at", updatable=false)
+    @Column(name = "created_at", updatable=false, nullable=false)
     private java.sql.Timestamp createdAt;
 
     @Column(name = "updated_by", updatable=false)

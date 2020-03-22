@@ -15,6 +15,8 @@ public interface AccountsService {
 
     Accounts getAccount(Long id);
 
+    List<Accounts> getAllAccounts();
+
     Accounts getAccountInformations(String userName);
 
     List<Accounts> searchForAccount(HashMap<String, String> orderByColumn, HashMap<String, String> searchByColumns);

@@ -1,5 +1,6 @@
 package com.blesk.authorizationserver.Exceptions;
 
+import com.blesk.authorizationserver.Utility.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.http.HttpHeaders;
@@ -31,19 +32,19 @@ public class AuthorizationServerExceptionHandler {
 
     @ExceptionHandler(NullPointerException.class)
     public final ResponseEntity<ErrorMessage> handelNullPointerExceptions(Exception ex, WebRequest request) {
-        ErrorMessage errorObj = new ErrorMessage(new Date(), resourceLoader.getResource("nullPointerException.messeage").toString(), request.getDescription(false));
+        ErrorMessage errorObj = new ErrorMessage(new Date(), Messages.NULL_POINTER_EXCEPTION, request.getDescription(false));
         return new ResponseEntity<>(errorObj, new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(SQLException.class)
     public final ResponseEntity<ErrorMessage> handleDatabaseExceptions(Exception ex, WebRequest request) {
-        ErrorMessage errorObj = new ErrorMessage(new Date(), resourceLoader.getResource("sqlexception.messeage").toString(), request.getDescription(false));
+        ErrorMessage errorObj = new ErrorMessage(new Date(), Messages.SQL_EXCEPTION, request.getDescription(false));
         return new ResponseEntity<>(errorObj, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(Exception.class)
     public final ResponseEntity<ErrorMessage> handleExceptions(Exception ex, WebRequest request) {
-        ErrorMessage errorObj = new ErrorMessage(new Date(), resourceLoader.getResource("exception.messeage").toString(), request.getDescription(false));
+        ErrorMessage errorObj = new ErrorMessage(new Date(), Messages.EXCEPTION, request.getDescription(false));
         return new ResponseEntity<>(errorObj, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

@@ -82,17 +82,15 @@ public class DAOImpl<T> implements DAO<T> {
     }
 
     @Transactional
-    public List getAll(Class c, int pageNumber, int pageSize) {
+    public List getAll(Class c) {
         Session session = entityManager.unwrap(Session.class);
 
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
         CriteriaQuery criteriaQuery = criteriaBuilder.createQuery(c);
         Root select = criteriaQuery.from(c);
-        CriteriaQuery entity = criteriaQuery.select(select).orderBy(criteriaBuilder.asc(select.get("createdAt")));
 
+        CriteriaQuery entity = criteriaQuery.select(select).orderBy(criteriaBuilder.asc(select.get("createdAt")));
         Query typedQuery = session.createQuery(entity);
-        typedQuery.setFirstResult(pageNumber);
-        typedQuery.setMaxResults(pageSize);
 
         return typedQuery.getResultList();
     }

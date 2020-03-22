@@ -15,7 +15,7 @@ public interface DAO<T> {
 
     T get(Class c, Long id);
 
-    List<T> getAll(Class c, int pageNumber, int pageSize);
+    List<T> getAll(Class c);
 
     List<Accounts> searchBy(Class c, HashMap<String, HashMap<String, String>> criterias);
 }

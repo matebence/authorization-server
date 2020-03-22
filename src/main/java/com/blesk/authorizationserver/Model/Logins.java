@@ -3,12 +3,11 @@ package com.blesk.authorizationserver.Model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
-import java.io.Serializable;
 import java.sql.Timestamp;
 
 @Entity
 @Table(name = "logins")
-public class Logins implements Serializable {
+public class Logins {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
