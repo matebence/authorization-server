@@ -13,7 +13,9 @@ public interface RoleService {
 
     boolean updateRole(Roles roles);
 
-    Roles getRole(String roleName);
+    Roles getRole(Long id);
+
+    Roles getRoleByName(String roleName);
 
     List<Privileges> getRolePrivileges(String roleName);
 }

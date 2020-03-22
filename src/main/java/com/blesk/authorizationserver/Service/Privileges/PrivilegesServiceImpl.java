@@ -44,10 +44,18 @@ public class PrivilegeServiceImpl implements PrivilegeService {
     }
 
     @Override
-    public Privileges getPrivilege(String privilegeName) {
-        Privileges privilege = privilegeDAO.getPrivilegeByName(privilegeName);
+    public Privileges getPrivilege(Long id) {
+        Privileges privilege = privilegeDAO.get(Privileges.class, id);
         if(privilege == null)
             throw new AuthorizationServerException(resourceLoader.getResource("getprivilege.messeage").toString());
+        return privilege;
+    }
+
+    @Override
+    public Privileges getPrivilegeByName(String privilegeName) {
+        Privileges privilege = privilegeDAO.getPrivilegeByName(privilegeName);
+        if(privilege == null)
+            throw new AuthorizationServerException(resourceLoader.getResource("getPrivilegeByName.messeage").toString());
         return privilege;
     }
 }

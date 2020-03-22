@@ -10,5 +10,7 @@ public interface PrivilegeService {
 
     boolean updatePrivilege(Privileges privileges);
 
-    Privileges getPrivilege(String privilegeName);
+    Privileges getPrivilege(Long Id);
+
+    Privileges getPrivilegeByName(String privilegeName);
 }

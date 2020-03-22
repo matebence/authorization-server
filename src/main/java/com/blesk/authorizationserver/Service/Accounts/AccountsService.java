@@ -13,7 +13,9 @@ public interface AccountService {
 
     boolean updateAccount(Accounts accounts);
 
-    List<Accounts> searchForAccount(HashMap<String, String> orderByColumn, HashMap<String, String> searchByColumns);
+    Accounts getAccount(Long id);
 
-    Accounts getAccount(String userName);
+    Accounts getAccountInformations(String userName);
+
+    List<Accounts> searchForAccount(HashMap<String, String> orderByColumn, HashMap<String, String> searchByColumns);
 }

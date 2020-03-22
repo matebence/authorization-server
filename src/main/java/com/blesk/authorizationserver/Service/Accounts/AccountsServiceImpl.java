@@ -56,6 +56,23 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
+    public Accounts getAccount(Long id) {
+        Accounts accounts = accountDAO.get(Accounts.class, id);
+        if(accounts == null)
+            throw new AuthorizationServerException(resourceLoader.getResource("getaccount.messeage").toString());
+        return accounts;
+    }
+
+
+    @Override
+    public Accounts getAccountInformations(String userName) {
+        Accounts accounts = accountDAO.getAccountInformations(userName);
+        if(accounts == null)
+            throw new AuthorizationServerException(resourceLoader.getResource("getAccountInformations.messeage").toString());
+        return accounts;
+    }
+
+    @Override
     public List<Accounts> searchForAccount(HashMap<String, String> orderByColumn, HashMap<String, String> searchByColumns) {
         HashMap<String, HashMap<String, String>> criteria = new HashMap<>();
         criteria.put(Criteria.ORDER_BY, orderByColumn);
@@ -65,14 +82,6 @@ public class AccountServiceImpl implements AccountService {
         if (accounts.isEmpty())
             throw new AuthorizationServerException(resourceLoader.getResource("searchforaccount.messeage").toString());
 
-        return accounts;
-    }
-
-    @Override
-    public Accounts getAccount(String userName) {
-        Accounts accounts = accountDAO.getAccountInformations(userName);
-        if(accounts == null)
-            throw new AuthorizationServerException(resourceLoader.getResource("getaccount.messeage").toString());
         return accounts;
     }
 }

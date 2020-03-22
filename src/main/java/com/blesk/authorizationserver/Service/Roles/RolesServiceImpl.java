@@ -47,10 +47,18 @@ public class RoleServiceImpl implements RoleService {
     }
 
     @Override
-    public Roles getRole(String roleName) {
-        Roles role = roleDAO.getRoleByName(roleName);
+    public Roles getRole(Long id) {
+        Roles role = roleDAO.get(Roles.class, id);
         if(role == null)
             throw new AuthorizationServerException(resourceLoader.getResource("getrole.messeage").toString());
+        return role;
+    }
+
+    @Override
+    public Roles getRoleByName(String roleName) {
+        Roles role = roleDAO.getRoleByName(roleName);
+        if(role == null)
+            throw new AuthorizationServerException(resourceLoader.getResource("getRoleByName.messeage").toString());
         return role;
     }
 
