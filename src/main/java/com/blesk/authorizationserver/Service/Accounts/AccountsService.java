@@ -5,7 +5,7 @@ import com.blesk.authorizationserver.Model.Accounts;
 import java.util.HashMap;
 import java.util.List;
 
-public interface AccountService {
+public interface AccountsService {
 
     Accounts createAccount(Accounts accounts, String[] role);
 

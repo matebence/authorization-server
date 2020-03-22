@@ -11,7 +11,7 @@ import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
 
 @Repository
-public class AccountDAOImpl extends DAOImpl<Accounts> implements AccountDAO {
+public class AccountsDAOImpl extends DAOImpl<Accounts> implements AccountsDAO {
 
     @PersistenceContext
     private EntityManager entityManager;

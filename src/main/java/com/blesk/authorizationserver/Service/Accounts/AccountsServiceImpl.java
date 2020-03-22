@@ -1,7 +1,7 @@
 package com.blesk.authorizationserver.Service.Accounts;
 
-import com.blesk.authorizationserver.DAO.Accounts.AccountDAOImpl;
-import com.blesk.authorizationserver.DAO.Roles.RoleDAOImpl;
+import com.blesk.authorizationserver.DAO.Accounts.AccountsDAOImpl;
+import com.blesk.authorizationserver.DAO.Roles.RolesDAOImpl;
 import com.blesk.authorizationserver.Exceptions.AuthorizationServerException;
 import com.blesk.authorizationserver.Model.Accounts;
 import com.blesk.authorizationserver.Model.Roles;
@@ -14,14 +14,14 @@ import java.util.HashMap;
 import java.util.List;
 
 @Service
-public class AccountServiceImpl implements AccountService {
+public class AccountsServiceImpl implements AccountsService {
 
-    private AccountDAOImpl accountDAO;
-    private RoleDAOImpl roleDAO;
+    private AccountsDAOImpl accountDAO;
+    private RolesDAOImpl roleDAO;
     private ResourceLoader resourceLoader;
 
     @Autowired
-    public AccountServiceImpl(AccountDAOImpl accountDAO, RoleDAOImpl roleDAO, ResourceLoader resourceLoader){
+    public AccountsServiceImpl(AccountsDAOImpl accountDAO, RolesDAOImpl roleDAO, ResourceLoader resourceLoader){
         this.accountDAO = accountDAO;
         this.roleDAO = roleDAO;
         this.resourceLoader = resourceLoader;

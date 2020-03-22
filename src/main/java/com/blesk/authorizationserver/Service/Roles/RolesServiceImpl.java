@@ -1,6 +1,6 @@
 package com.blesk.authorizationserver.Service.Roles;
 
-import com.blesk.authorizationserver.DAO.Roles.RoleDAOImpl;
+import com.blesk.authorizationserver.DAO.Roles.RolesDAOImpl;
 import com.blesk.authorizationserver.Exceptions.AuthorizationServerException;
 import com.blesk.authorizationserver.Model.Privileges;
 import com.blesk.authorizationserver.Model.Roles;
@@ -11,13 +11,13 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public class RoleServiceImpl implements RoleService {
+public class RolesServiceImpl implements RolesService {
 
-    private RoleDAOImpl roleDAO;
+    private RolesDAOImpl roleDAO;
     private ResourceLoader resourceLoader;
 
     @Autowired
-    public RoleServiceImpl(RoleDAOImpl roleDAO, ResourceLoader resourceLoader){
+    public RolesServiceImpl(RolesDAOImpl roleDAO, ResourceLoader resourceLoader){
         this.roleDAO = roleDAO;
         this.resourceLoader = resourceLoader;
     }

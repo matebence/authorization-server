@@ -5,5 +5,5 @@ import com.blesk.authorizationserver.Model.Logins;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class LoginDAOImpl extends DAOImpl<Logins> implements LoginDAO {
+public class LoginsDAOImpl extends DAOImpl<Logins> implements LoginsDAO {
 }

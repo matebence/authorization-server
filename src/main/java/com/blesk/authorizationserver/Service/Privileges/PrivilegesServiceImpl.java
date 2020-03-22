@@ -1,6 +1,6 @@
 package com.blesk.authorizationserver.Service.Privileges;
 
-import com.blesk.authorizationserver.DAO.Privileges.PrivilegeDAOImpl;
+import com.blesk.authorizationserver.DAO.Privileges.PrivilegesDAOImpl;
 import com.blesk.authorizationserver.Exceptions.AuthorizationServerException;
 import com.blesk.authorizationserver.Model.Privileges;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,13 +8,13 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 @Service
-public class PrivilegeServiceImpl implements PrivilegeService {
+public class PrivilegesServiceImpl implements PrivilegesService {
 
-    private PrivilegeDAOImpl privilegeDAO;
+    private PrivilegesDAOImpl privilegeDAO;
     private ResourceLoader resourceLoader;
 
     @Autowired
-    public PrivilegeServiceImpl(PrivilegeDAOImpl privilegeDAO, ResourceLoader resourceLoader){
+    public PrivilegesServiceImpl(PrivilegesDAOImpl privilegeDAO, ResourceLoader resourceLoader){
         this.privilegeDAO = privilegeDAO;
         this.resourceLoader = resourceLoader;
     }

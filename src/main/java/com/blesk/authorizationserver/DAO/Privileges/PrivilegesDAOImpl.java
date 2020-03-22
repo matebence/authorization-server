@@ -13,7 +13,7 @@ import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
 @Repository
-public class PrivilegeDAOImpl extends DAOImpl<Privileges> implements PrivilegeDAO {
+public class PrivilegesDAOImpl extends DAOImpl<Privileges> implements PrivilegesDAO {
 
     @PersistenceContext
     private EntityManager entityManager;

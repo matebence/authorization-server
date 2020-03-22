@@ -13,7 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class RoleDAOImpl extends DAOImpl<Roles> implements RoleDAO {
+public class RolesDAOImpl extends DAOImpl<Roles> implements RolesDAO {
 
     @PersistenceContext
     private EntityManager entityManager;

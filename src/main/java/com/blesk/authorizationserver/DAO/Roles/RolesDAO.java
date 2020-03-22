@@ -5,7 +5,7 @@ import com.blesk.authorizationserver.Model.Roles;
 
 import java.util.List;
 
-public interface RoleDAO {
+public interface RolesDAO {
     List<Roles> getListOfRoles(String[] names);
 
     Roles getRoleByName(String name);

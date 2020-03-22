@@ -5,7 +5,7 @@ import com.blesk.authorizationserver.Model.Roles;
 
 import java.util.List;
 
-public interface RoleService {
+public interface RolesService {
 
     Roles createRole(Roles roles);
 

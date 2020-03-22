@@ -2,7 +2,7 @@ package com.blesk.authorizationserver.DAO.Privileges;
 
 import com.blesk.authorizationserver.Model.Privileges;
 
-public interface PrivilegeDAO {
+public interface PrivilegesDAO {
 
     Privileges getPrivilegeByName(String name);
 }
