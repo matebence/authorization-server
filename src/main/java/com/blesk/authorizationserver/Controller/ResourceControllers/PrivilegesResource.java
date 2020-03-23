@@ -1,4 +1,4 @@
-package com.blesk.authorizationserver.Controller;
+package com.blesk.authorizationserver.Controller.ResourceControllers;
 
 import com.blesk.authorizationserver.Model.Privileges;
 import com.blesk.authorizationserver.Service.Privileges.PrivilegesServiceImpl;
@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -59,7 +60,7 @@ public class PrivilegesResource {
 
     @PostMapping("/privileges")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Object> createPrivileges(@RequestBody Privileges privileges) {
+    public ResponseEntity<Object> createPrivileges(@Valid @RequestBody Privileges privileges) {
         Privileges privilege = privilegesService.createPrivilege(privileges);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
@@ -70,7 +71,7 @@ public class PrivilegesResource {
 
     @PutMapping("/privileges/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> updatePrivileges(@RequestBody Privileges privileges, @PathVariable long id) {
+    public ResponseEntity<Object> updatePrivileges(@Valid @RequestBody Privileges privileges, @PathVariable long id) {
         if (privilegesService.getPrivilege(id) != null) {
             privileges.setPrivilegeId(id);
         }

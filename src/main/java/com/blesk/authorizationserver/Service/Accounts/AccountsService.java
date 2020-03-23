@@ -4,6 +4,7 @@ import com.blesk.authorizationserver.Model.Accounts;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public interface AccountsService {
 
@@ -15,9 +16,9 @@ public interface AccountsService {
 
     Accounts getAccount(Long id);
 
-    List<Accounts> getAllAccounts();
+    List<Accounts> getAllAccounts(int pageNumber, int pageSize);
 
     Accounts getAccountInformations(String userName);
 
-    List<Accounts> searchForAccount(HashMap<String, String> orderByColumn, HashMap<String, String> searchByColumns);
+    Map<String, Object> searchForAccount(HashMap<String, HashMap<String, String>> criteria);
 }

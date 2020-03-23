@@ -1,8 +1,12 @@
 package com.blesk.authorizationserver.Model;
 
+import com.blesk.authorizationserver.Values.Messages;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
@@ -16,7 +20,6 @@ public class Roles {
     @Column(name = "role_id")
     private Long roleId;
 
-    @JsonIgnore
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.LAZY)
     @JoinTable(name="role_privilege_items", joinColumns=@JoinColumn(name="role_id"),
             inverseJoinColumns=@JoinColumn(name="privilege_id"))
@@ -26,24 +29,30 @@ public class Roles {
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, mappedBy = "roles")
     private List<Accounts> accounts = new ArrayList<Accounts>();
 
+    @NotNull(message = Messages.ROLES_NOT_NULL)
+    @Size(min = 3, max = 255, message = Messages.ROLES_SIZE)
     @Column(name = "name", nullable=false, unique = true)
     private String name;
 
     @Column(name = "is_deleted", nullable=false)
     private Boolean isDeleted = false;
 
+    @NotNull(message = Messages.ENTITY__CREATOR_ID)
+    @Positive(message = Messages.ENTITY_IDS)
     @Column(name = "created_by", nullable=false)
     private Long createdBy;
 
     @Column(name = "created_at", updatable=false, nullable=false)
     private java.sql.Timestamp createdAt;
 
+    @Positive(message = Messages.ENTITY_IDS)
     @Column(name = "updated_by", updatable=false)
     private Long updatedBy;
 
     @Column(name = "updated_at")
     private java.sql.Timestamp updatedAt;
 
+    @Positive(message = Messages.ENTITY_IDS)
     @Column(name = "deleted_by")
     private Long deletedBy;
 

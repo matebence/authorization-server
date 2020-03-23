@@ -14,7 +14,7 @@ public interface PrivilegesService {
 
     Privileges getPrivilege(Long Id);
 
-    List<Privileges> getAllPrivileges();
+    List<Privileges> getAllPrivileges(int pageNumber, int pageSize);
 
     Privileges getPrivilegeByName(String privilegeName);
 }

@@ -1,8 +1,9 @@
 package com.blesk.authorizationserver.Model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.blesk.authorizationserver.Values.Messages;
 
 import javax.persistence.*;
+import javax.validation.constraints.*;
 import java.sql.Timestamp;
 import java.util.*;
 
@@ -15,25 +16,30 @@ public class Accounts {
     @Column(name = "account_id")
     private Long accountId;
 
-    @JsonIgnore
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER,  mappedBy="account")
     private Logins login;
 
-    @JsonIgnore
     @ManyToMany(cascade={CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.LAZY)
     @JoinTable(name="account_role_items", joinColumns=@JoinColumn(name="user_id"),
             inverseJoinColumns=@JoinColumn(name="role_id"))
     private List<Roles> roles = new ArrayList<Roles>();
 
+    @NotNull(message = Messages.ACCOUNTS_USER_ID)
+    @Positive(message = Messages.ENTITY_IDS)
     @Column(name = "user_id", nullable=false, unique = true)
     private Long userId;
 
+    @NotNull(message = Messages.ACCOUNTS_USER_NAME_NULL)
+    @Size(min = 5, max = 255, message = Messages.ACCOUNTS_USER_NAME_LENGHT)
     @Column(name = "user_name", nullable=false, unique = true)
     private String userName;
 
+    @NotNull(message = Messages.ACCOUNTS_PASSWORD)
     @Column(name = "password", nullable=false)
     private String password;
 
+    @PositiveOrZero(message = Messages.ACCOUNTS_BALANCE_POSITIVE)
+    @Max(value = 10000, message = Messages.ACCOUNTS_BALANCE_MAX)
     @Column(name = "balance", nullable=false)
     private double balance;
 
@@ -43,18 +49,22 @@ public class Accounts {
     @Column(name = "is_deleted", nullable=false)
     private Boolean isDeleted;
 
+    @NotNull(message = Messages.ENTITY__CREATOR_ID)
+    @Positive(message = Messages.ENTITY_IDS)
     @Column(name = "created_by", nullable=false)
     private Long createdBy;
 
     @Column(name = "created_at", updatable=false, nullable=false)
     private java.sql.Timestamp createdAt;
 
+    @Positive(message = Messages.ENTITY_IDS)
     @Column(name = "updated_by", updatable=false)
     private Long updatedBy;
 
     @Column(name = "updated_at")
     private java.sql.Timestamp updatedAt;
 
+    @Positive(message = Messages.ENTITY_IDS)
     @Column(name = "deleted_by")
     private Long deletedBy;
 

@@ -1,4 +1,4 @@
-package com.blesk.authorizationserver.Controller;
+package com.blesk.authorizationserver.Controller.ResourceControllers;
 
 import com.blesk.authorizationserver.Model.Roles;
 import com.blesk.authorizationserver.Service.Roles.RolesServiceImpl;
@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.List;
 
@@ -59,7 +60,7 @@ public class RolesResource {
 
     @PostMapping("/roles")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Object> createRoles(@RequestBody Roles roles) {
+    public ResponseEntity<Object> createRoles(@Valid @RequestBody Roles roles) {
         Roles role = rolesService.createRole(roles);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
@@ -70,7 +71,7 @@ public class RolesResource {
 
     @PutMapping("/roles/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> updateRoles(@RequestBody Roles roles, @PathVariable long id) {
+    public ResponseEntity<Object> updateRoles(@Valid @RequestBody Roles roles, @PathVariable long id) {
         if (rolesService.getRole(id) != null) {
             roles.setRoleId(id);
         }

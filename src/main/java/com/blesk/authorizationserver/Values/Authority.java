@@ -1,4 +1,4 @@
-package com.blesk.authorizationserver.Utility;
+package com.blesk.authorizationserver.Values;
 
 public class Authority {
 

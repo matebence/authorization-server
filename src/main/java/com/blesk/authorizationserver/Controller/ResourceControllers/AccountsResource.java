@@ -1,4 +1,4 @@
-package com.blesk.authorizationserver.Controller;
+package com.blesk.authorizationserver.Controller.ResourceControllers;
 
 import com.blesk.authorizationserver.Model.Accounts;
 import com.blesk.authorizationserver.Service.Accounts.AccountsServiceImpl;
@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.util.HashMap;
 import java.util.List;
@@ -36,7 +37,7 @@ public class AccountsResource {
         CollectionModel<List<Accounts>> collectionModel = new CollectionModel(accounts);
 
         collectionModel.add(linkTo(methodOn(this.getClass()).retrieveAllAccounts(pageNumber, pageSize)).withSelfRel());
-        collectionModel.add(linkTo(methodOn(this.getClass()).retrieveAllAccounts(++pageNumber ,pageSize)).withRel("next-range"));
+        collectionModel.add(linkTo(methodOn(this.getClass()).retrieveAllAccounts(++pageNumber, pageSize)).withRel("next-range"));
 
         return collectionModel;
     }
@@ -48,7 +49,7 @@ public class AccountsResource {
 
         EntityModel<Accounts> entityModel = new EntityModel<Accounts>(accounts);
         entityModel.add(linkTo(methodOn(this.getClass()).retrieveAccounts(id)).withSelfRel());
-        entityModel.add(linkTo(methodOn(this.getClass()).retrieveAllAccounts(0 ,10)).withRel("all-accounts"));
+        entityModel.add(linkTo(methodOn(this.getClass()).retrieveAllAccounts(0, 10)).withRel("all-accounts"));
 
         return entityModel;
     }
@@ -61,7 +62,7 @@ public class AccountsResource {
 
     @PostMapping("/accounts")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Object> createAccounts(@RequestBody Accounts accounts) {
+    public ResponseEntity<Object> createAccounts(@Valid @RequestBody Accounts accounts) {
         Accounts account = accountsService.createAccount(accounts, new String[]{"ROLE_ADMIN"});
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
@@ -72,7 +73,7 @@ public class AccountsResource {
 
     @PutMapping("/accounts/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> updateAccounts(@RequestBody Accounts accounts, @PathVariable long id) {
+    public ResponseEntity<Object> updateAccounts(@Valid @RequestBody Accounts accounts, @PathVariable long id) {
         if (accountsService.getAccount(id) != null) {
             accounts.setAccountId(id);
         }
@@ -80,19 +81,21 @@ public class AccountsResource {
         return ResponseEntity.noContent().build();
     }
 
-    @PostMapping("/accounts/search/page/{pageNumber}")
+    @PostMapping("/accounts/search")
     @ResponseStatus(HttpStatus.OK)
-    public CollectionModel<List<Accounts>> searchForAccounts(@PathVariable int pageNumber, @RequestBody HashMap<String, HashMap<String, String>> search) {
-        Map<String, Object> accounts = accountsService.searchForAccount(search, pageNumber);
-        CollectionModel<List<Accounts>> collectionModel = new CollectionModel((List<Accounts>)accounts.get("results"));
+    public CollectionModel<List<Accounts>> searchForAccounts(@RequestBody HashMap<String, HashMap<String, String>> search) {
+        Map<String, Object> accounts = accountsService.searchForAccount(search);
 
-        collectionModel.add(linkTo(methodOn(this.getClass()).searchForAccounts(pageNumber, search)).withSelfRel());
-        if(accounts.get("hasPrev") != null){
-            collectionModel.add(linkTo(methodOn(this.getClass()).searchForAccounts(--pageNumber, search)).withRel("hasPrev"));
+        CollectionModel<List<Accounts>> collectionModel = new CollectionModel((List<Accounts>) accounts.get("results"));
+        collectionModel.add(linkTo(methodOn(this.getClass()).searchForAccounts(search)).withSelfRel());
+
+        if ((boolean) accounts.get("hasPrev")) {
+            collectionModel.add(linkTo(methodOn(this.getClass()).searchForAccounts(search)).withRel("hasPrev"));
         }
-        if(accounts.get("hasNext") != null){
-            collectionModel.add(linkTo(methodOn(this.getClass()).searchForAccounts(++pageNumber, search)).withRel("hasNext"));
+        if ((boolean) accounts.get("hasNext")) {
+            collectionModel.add(linkTo(methodOn(this.getClass()).searchForAccounts(search)).withRel("hasNext"));
         }
+
         return collectionModel;
     }
 }

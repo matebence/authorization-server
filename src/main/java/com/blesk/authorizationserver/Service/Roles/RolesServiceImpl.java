@@ -4,9 +4,8 @@ import com.blesk.authorizationserver.DAO.Roles.RolesDAOImpl;
 import com.blesk.authorizationserver.Exceptions.AuthorizationServerException;
 import com.blesk.authorizationserver.Model.Privileges;
 import com.blesk.authorizationserver.Model.Roles;
-import com.blesk.authorizationserver.Utility.Messages;
+import com.blesk.authorizationserver.Values.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -15,12 +14,10 @@ import java.util.List;
 public class RolesServiceImpl implements RolesService {
 
     private RolesDAOImpl roleDAO;
-    private ResourceLoader resourceLoader;
 
     @Autowired
-    public RolesServiceImpl(RolesDAOImpl roleDAO, ResourceLoader resourceLoader){
+    public RolesServiceImpl(RolesDAOImpl roleDAO){
         this.roleDAO = roleDAO;
-        this.resourceLoader = resourceLoader;
     }
 
     @Override
@@ -56,8 +53,8 @@ public class RolesServiceImpl implements RolesService {
     }
 
     @Override
-    public List<Roles> getAllRoles() {
-        List<Roles> roles = roleDAO.getAll(Roles.class);
+    public List<Roles> getAllRoles(int pageNumber, int pageSize) {
+        List<Roles> roles = roleDAO.getAll(Roles.class, pageNumber, pageSize);
         if(roles == null)
             throw new AuthorizationServerException(Messages.GET_ALL_ROLES);
         return roles;

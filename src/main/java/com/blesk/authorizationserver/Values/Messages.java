@@ -1,9 +1,14 @@
-package com.blesk.authorizationserver.Utility;
+package com.blesk.authorizationserver.Values;
 
 public class Messages {
+
+    public static final String TYPE_MISMATCH_EXCEPTION = "Nesprávný formát URL adresi";
+    public static final String REQUEST_BODY_NOT_FOUND_EXCEPTION = "Prázdna požiadavka";
+    public static final String PAGE_NOT_FOUND_EXCEPTION = "Je nám ľúto, ale požadovaná stránka nebola nájdená";
     public static final String NULL_POINTER_EXCEPTION = "Ľutujeme, ale nastala chyba";
     public static final String SQL_EXCEPTION = "Operácia sa neuskutočnila";
     public static final String EXCEPTION = "Nastala neočakávaná chyba";
+    public static final String PAGINATION_EXCEPTION = "Stránkovanie nie je nastavené";
 
     public static final String CREATE_ROLE = "Vytvorenie roli sa nepodarilo";
     public static final String DELETE_GET_ROLE = "Ľutujeme, ale rola neexistuje";
@@ -31,4 +36,20 @@ public class Messages {
     public static final String GET_ALL_ACCOUNTS = "Nenašiel sa žiadný účet";
     public static final String GET_ACCOUNT_INFORMATION = "Ľutujeme, účet neexistuje";
     public static final String SEARCH_FOR_ACCOUNT = "Kritériám nevyhoveli žiadné záznamy";
+
+    public static final String ACCOUNTS_USER_ID = "Identifikačné číslo používatela nebol nastavení";
+    public static final String ENTITY_IDS = "Nesprávny formát identifikačného čísla";
+    public static final String ENTITY__CREATOR_ID = "Identifikačné číslo vytvárajúcého používatela nebol nastavení";
+    public static final String ACCOUNTS_USER_NAME_NULL = "Nezadali ste používatelské meno";
+    public static final String ACCOUNTS_USER_NAME_LENGHT = "Používatelské meno je príliž krátké alebo dlhé";
+    public static final String ACCOUNTS_PASSWORD = "Nezadali ste heslo";
+    public static final String ACCOUNTS_BALANCE_POSITIVE = "Stav účtu nemože klesnút pod 0";
+    public static final String ACCOUNTS_BALANCE_MAX = "Maximalný stav úctu je 10000€";
+
+    public static final String PRIVILEGES_NOT_NULL = "Nezadali ste názov práva";
+    public static final String PRIVILEGES_SIZE = "Názov práva je príliž krátké alebo dlhé";
+
+    public static final String ROLES_NOT_NULL = "Nezadali ste meno role";
+    public static final String ROLES_SIZE = "Meno roli je príliž krátké alebo dlhé";
+
 }

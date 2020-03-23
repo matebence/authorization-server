@@ -1,6 +1,5 @@
 package com.blesk.authorizationserver.DAO;
 
-import com.blesk.authorizationserver.Utility.Criteria;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 import org.hibernate.resource.transaction.spi.TransactionStatus;
@@ -10,16 +9,11 @@ import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Repository
 public class DAOImpl<T> implements DAO<T> {
@@ -82,67 +76,26 @@ public class DAOImpl<T> implements DAO<T> {
     }
 
     @Transactional
-    public List getAll(Class c) {
+    public List getAll(Class c, int pageNumber, int pageSize) {
         Session session = entityManager.unwrap(Session.class);
-
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-        CriteriaQuery criteriaQuery = criteriaBuilder.createQuery(c);
-        Root select = criteriaQuery.from(c);
-
-        CriteriaQuery entity = criteriaQuery.select(select).orderBy(criteriaBuilder.asc(select.get("createdAt")));
-        Query typedQuery = session.createQuery(entity);
-
-        return typedQuery.getResultList();
-    }
-
-    @Override
-    @Transactional
-    public List searchBy(Class c, HashMap<String, HashMap<String, String>> criterias) {
-        int pageNumber, pageSize, totalItems, numberOfPages;
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 
         CriteriaQuery<Long> countCriteria = criteriaBuilder.createQuery(Long.class);
         countCriteria.select(criteriaBuilder.count(countCriteria.from(c)));
         Long count = entityManager.createQuery(countCriteria).getSingleResult();
 
+        if (pageNumber > Math.floor(count.intValue() / pageSize)) {
+            return Collections.emptyList();
+        }
+
         CriteriaQuery criteriaQuery = criteriaBuilder.createQuery(c);
-        Root root = criteriaQuery.from(c);
+        Root select = criteriaQuery.from(c);
 
-        List<Predicate> predicates = new ArrayList<Predicate>();
-        CriteriaQuery select = criteriaQuery.select(root);
+        CriteriaQuery entity = criteriaQuery.select(select).orderBy(criteriaBuilder.asc(select.get("createdAt")));
 
-        if (criterias.get(Criteria.ORDER_BY) != null) {
-            for (Object o : criterias.get(Criteria.SEARCH).entrySet()) {
-                Map.Entry pair = (Map.Entry) o;
-                if (pair.getValue().toString().toUpperCase().equals("ASC")) {
-                    select.orderBy(criteriaBuilder.asc(root.get(pair.getKey().toString())));
-                } else if (pair.getValue().toString().toUpperCase().equals("DESC")) {
-                    select.orderBy(criteriaBuilder.asc(root.get(pair.getKey().toString())));
-                }
-            }
-        }
-
-        if (criterias.get(Criteria.SEARCH) != null) {
-            for (Object o : criterias.get(Criteria.SEARCH).entrySet()) {
-                Map.Entry pair = (Map.Entry) o;
-                predicates.add(criteriaBuilder.equal(root.get(pair.getKey().toString()), pair.getValue().toString()));
-            }
-            select.where(predicates.toArray(new Predicate[]{}));
-        }
-
-        TypedQuery typedQuery = entityManager.createQuery(select);
-
-        if (criterias.get(Criteria.PAGINATION) != null) {
-            pageNumber = Integer.parseInt(criterias.get(Criteria.PAGINATION).get(Criteria.PAGE_NUMBER));
-            pageSize = Integer.parseInt(criterias.get(Criteria.PAGINATION).get(Criteria.PAGE_SIZE));
-            totalItems = count.intValue();
-            numberOfPages = totalItems / pageNumber;
-
-            if (pageNumber < numberOfPages) {
-                typedQuery.setFirstResult(pageNumber);
-                typedQuery.setMaxResults(pageSize);
-            }
-        }
+        Query typedQuery = session.createQuery(entity);
+        typedQuery.setFirstResult(pageNumber);
+        typedQuery.setMaxResults(pageSize);
 
         return typedQuery.getResultList();
     }

@@ -5,27 +5,25 @@ import com.blesk.authorizationserver.DAO.Roles.RolesDAOImpl;
 import com.blesk.authorizationserver.Exceptions.AuthorizationServerException;
 import com.blesk.authorizationserver.Model.Accounts;
 import com.blesk.authorizationserver.Model.Roles;
-import com.blesk.authorizationserver.Utility.Criteria;
-import com.blesk.authorizationserver.Utility.Messages;
+import com.blesk.authorizationserver.Values.Criteria;
+import com.blesk.authorizationserver.Values.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 public class AccountsServiceImpl implements AccountsService {
 
     private AccountsDAOImpl accountDAO;
     private RolesDAOImpl roleDAO;
-    private ResourceLoader resourceLoader;
 
     @Autowired
-    public AccountsServiceImpl(AccountsDAOImpl accountDAO, RolesDAOImpl roleDAO, ResourceLoader resourceLoader){
+    public AccountsServiceImpl(AccountsDAOImpl accountDAO, RolesDAOImpl roleDAO) {
         this.accountDAO = accountDAO;
         this.roleDAO = roleDAO;
-        this.resourceLoader = resourceLoader;
     }
 
     @Override
@@ -42,7 +40,7 @@ public class AccountsServiceImpl implements AccountsService {
     @Override
     public boolean deleteAccount(Long accountId) {
         Accounts accounts = accountDAO.get(Accounts.class, accountId);
-        if(accounts == null)
+        if (accounts == null)
             throw new AuthorizationServerException(Messages.DELETE_GET_ACCOUNT);
         if (!accountDAO.delete(accounts))
             throw new AuthorizationServerException(Messages.DELETE_ACCOUNT);
@@ -59,14 +57,14 @@ public class AccountsServiceImpl implements AccountsService {
     @Override
     public Accounts getAccount(Long id) {
         Accounts accounts = accountDAO.get(Accounts.class, id);
-        if(accounts == null)
+        if (accounts == null)
             throw new AuthorizationServerException(Messages.GET_ACCOUNT);
         return accounts;
     }
 
     @Override
-    public List<Accounts> getAllAccounts() {
-        List<Accounts> accounts = accountDAO.getAll(Accounts.class);
+    public List<Accounts> getAllAccounts(int pageNumber, int pageSize) {
+        List<Accounts> accounts = accountDAO.getAll(Accounts.class, pageNumber, pageSize);
         if (accounts.isEmpty())
             throw new AuthorizationServerException(Messages.GET_ALL_ACCOUNTS);
         return accounts;
@@ -75,17 +73,17 @@ public class AccountsServiceImpl implements AccountsService {
     @Override
     public Accounts getAccountInformations(String userName) {
         Accounts accounts = accountDAO.getAccountInformations(userName);
-        if(accounts == null)
+        if (accounts == null)
             throw new AuthorizationServerException(Messages.GET_ACCOUNT_INFORMATION);
         return accounts;
     }
 
     @Override
-    public List<Accounts> searchForAccount(HashMap<String, String> orderByColumn, HashMap<String, String> searchByColumns) {
-        HashMap<String, HashMap<String, String>> criteria = new HashMap<>();
-        criteria.put(Criteria.ORDER_BY, orderByColumn);
-        criteria.put(Criteria.SEARCH, searchByColumns);
-        List<Accounts> accounts = accountDAO.searchBy(Accounts.class, criteria);
+    public Map<String, Object> searchForAccount(HashMap<String, HashMap<String, String>> criteria) {
+        if (criteria.get(Criteria.PAGINATION) == null)
+            throw new NullPointerException(Messages.PAGINATION_EXCEPTION);
+
+        Map<String, Object> accounts = accountDAO.searchBy(criteria, Integer.parseInt(criteria.get(Criteria.PAGINATION).get(Criteria.PAGE_NUMBER)));
 
         if (accounts.isEmpty())
             throw new AuthorizationServerException(Messages.SEARCH_FOR_ACCOUNT);

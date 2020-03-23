@@ -15,7 +15,7 @@ public interface RolesService {
 
     Roles getRole(Long id);
 
-    List<Roles> getAllRoles();
+    List<Roles> getAllRoles(int pageNumber, int pageSize);
 
     Roles getRoleByName(String roleName);
 

@@ -3,9 +3,8 @@ package com.blesk.authorizationserver.Service.Privileges;
 import com.blesk.authorizationserver.DAO.Privileges.PrivilegesDAOImpl;
 import com.blesk.authorizationserver.Exceptions.AuthorizationServerException;
 import com.blesk.authorizationserver.Model.Privileges;
-import com.blesk.authorizationserver.Utility.Messages;
+import com.blesk.authorizationserver.Values.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,12 +13,10 @@ import java.util.List;
 public class PrivilegesServiceImpl implements PrivilegesService {
 
     private PrivilegesDAOImpl privilegeDAO;
-    private ResourceLoader resourceLoader;
 
     @Autowired
-    public PrivilegesServiceImpl(PrivilegesDAOImpl privilegeDAO, ResourceLoader resourceLoader){
+    public PrivilegesServiceImpl(PrivilegesDAOImpl privilegeDAO){
         this.privilegeDAO = privilegeDAO;
-        this.resourceLoader = resourceLoader;
     }
 
     @Override
@@ -55,8 +52,8 @@ public class PrivilegesServiceImpl implements PrivilegesService {
     }
 
     @Override
-    public List<Privileges> getAllPrivileges() {
-        List<Privileges> privileges = privilegeDAO.getAll(Privileges.class);
+    public List<Privileges> getAllPrivileges(int pageNumber, int pageSize) {
+        List<Privileges> privileges = privilegeDAO.getAll(Privileges.class, pageNumber, pageSize);
         if(privileges == null)
             throw new AuthorizationServerException(Messages.GET_ALL_PRIVILEGES);
         return privileges;
