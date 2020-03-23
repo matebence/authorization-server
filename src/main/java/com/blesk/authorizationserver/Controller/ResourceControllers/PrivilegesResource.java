@@ -3,6 +3,7 @@ package com.blesk.authorizationserver.Controller;
 import com.blesk.authorizationserver.Model.Privileges;
 import com.blesk.authorizationserver.Service.Privileges.PrivilegesServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,10 +27,16 @@ public class PrivilegesResource {
         this.privilegesService = privilegesService;
     }
 
-    @GetMapping("/privileges")
-    @ResponseStatus(HttpStatus.OK)
-    public List<Privileges> retrieveAllPrivileges() {
-        return privilegesService.getAllPrivileges();
+    @GetMapping("/privileges/page/{pageNumber}/limit/{pageSize}")
+    @ResponseStatus(HttpStatus.PARTIAL_CONTENT)
+    public CollectionModel<List<Privileges>> retrieveAllPrivileges(@PathVariable int pageNumber, @PathVariable int pageSize) {
+        List<Privileges> privileges = privilegesService.getAllPrivileges(pageNumber, pageSize);
+        CollectionModel<List<Privileges>> collectionModel = new CollectionModel(privileges);
+
+        collectionModel.add(linkTo(methodOn(this.getClass()).retrieveAllPrivileges(pageNumber, pageSize)).withSelfRel());
+        collectionModel.add(linkTo(methodOn(this.getClass()).retrieveAllPrivileges(++pageNumber, pageSize)).withRel("next-range"));
+
+        return collectionModel;
     }
 
     @GetMapping("/privileges/{id}")
@@ -39,7 +46,7 @@ public class PrivilegesResource {
 
         EntityModel<Privileges> EntityModel = new EntityModel<Privileges>(privileges);
         EntityModel.add(linkTo(methodOn(this.getClass()).retrievePrivileges(id)).withSelfRel());
-        EntityModel.add(linkTo(methodOn(this.getClass()).retrieveAllPrivileges()).withRel("all-privileges"));
+        EntityModel.add(linkTo(methodOn(this.getClass()).retrieveAllPrivileges(0 ,10)).withRel("all-privileges"));
 
         return EntityModel;
     }

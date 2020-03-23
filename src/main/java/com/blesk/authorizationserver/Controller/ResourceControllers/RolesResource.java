@@ -3,6 +3,7 @@ package com.blesk.authorizationserver.Controller;
 import com.blesk.authorizationserver.Model.Roles;
 import com.blesk.authorizationserver.Service.Roles.RolesServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -26,10 +27,16 @@ public class RolesResource {
         this.rolesService = rolesService;
     }
 
-    @GetMapping("/roles")
-    @ResponseStatus(HttpStatus.OK)
-    public List<Roles> retrieveAllRoles() {
-        return rolesService.getAllRoles();
+    @GetMapping("/roles/page/{pageNumber}/limit/{pageSize}")
+    @ResponseStatus(HttpStatus.PARTIAL_CONTENT)
+    public CollectionModel<List<Roles>> retrieveAllRoles(@PathVariable int pageNumber, @PathVariable int pageSize) {
+        List<Roles> roles = rolesService.getAllRoles(pageNumber, pageSize);
+        CollectionModel<List<Roles>> collectionModel = new CollectionModel(roles);
+
+        collectionModel.add(linkTo(methodOn(this.getClass()).retrieveAllRoles(pageNumber, pageSize)).withSelfRel());
+        collectionModel.add(linkTo(methodOn(this.getClass()).retrieveAllRoles(++pageNumber, pageSize)).withRel("next-range"));
+
+        return collectionModel;
     }
 
     @GetMapping("/roles/{id}")
@@ -39,7 +46,7 @@ public class RolesResource {
 
         EntityModel<Roles> EntityModel = new EntityModel<Roles>(roles);
         EntityModel.add(linkTo(methodOn(this.getClass()).retrieveRoles(id)).withSelfRel());
-        EntityModel.add(linkTo(methodOn(this.getClass()).retrieveAllRoles()).withRel("all-roles"));
+        EntityModel.add(linkTo(methodOn(this.getClass()).retrieveAllRoles(0,10)).withRel("all-roles"));
 
         return EntityModel;
     }

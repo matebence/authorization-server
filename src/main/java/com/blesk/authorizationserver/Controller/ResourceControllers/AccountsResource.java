@@ -3,6 +3,7 @@ package com.blesk.authorizationserver.Controller;
 import com.blesk.authorizationserver.Model.Accounts;
 import com.blesk.authorizationserver.Service.Accounts.AccountsServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,7 +11,9 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
@@ -26,10 +29,16 @@ public class AccountsResource {
         this.accountsService = accountsService;
     }
 
-    @GetMapping("/accounts")
-    @ResponseStatus(HttpStatus.OK)
-    public List<Accounts> retrieveAllAccounts() {
-        return accountsService.getAllAccounts();
+    @GetMapping("/accounts/page/{pageNumber}/limit/{pageSize}")
+    @ResponseStatus(HttpStatus.PARTIAL_CONTENT)
+    public CollectionModel<List<Accounts>> retrieveAllAccounts(@PathVariable int pageNumber, @PathVariable int pageSize) {
+        List<Accounts> accounts = accountsService.getAllAccounts(pageNumber, pageSize);
+        CollectionModel<List<Accounts>> collectionModel = new CollectionModel(accounts);
+
+        collectionModel.add(linkTo(methodOn(this.getClass()).retrieveAllAccounts(pageNumber, pageSize)).withSelfRel());
+        collectionModel.add(linkTo(methodOn(this.getClass()).retrieveAllAccounts(++pageNumber ,pageSize)).withRel("next-range"));
+
+        return collectionModel;
     }
 
     @GetMapping("/accounts/{id}")
@@ -37,11 +46,11 @@ public class AccountsResource {
     public EntityModel<Accounts> retrieveAccounts(@PathVariable long id) {
         Accounts accounts = accountsService.getAccount(id);
 
-        EntityModel<Accounts> EntityModel = new EntityModel<Accounts>(accounts);
-        EntityModel.add(linkTo(methodOn(this.getClass()).retrieveAccounts(id)).withSelfRel());
-        EntityModel.add(linkTo(methodOn(this.getClass()).retrieveAllAccounts()).withRel("all-accounts"));
+        EntityModel<Accounts> entityModel = new EntityModel<Accounts>(accounts);
+        entityModel.add(linkTo(methodOn(this.getClass()).retrieveAccounts(id)).withSelfRel());
+        entityModel.add(linkTo(methodOn(this.getClass()).retrieveAllAccounts(0 ,10)).withRel("all-accounts"));
 
-        return EntityModel;
+        return entityModel;
     }
 
     @DeleteMapping("/accounts/{id}")
@@ -69,5 +78,21 @@ public class AccountsResource {
         }
         accountsService.updateAccount(accounts);
         return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/accounts/search/page/{pageNumber}")
+    @ResponseStatus(HttpStatus.OK)
+    public CollectionModel<List<Accounts>> searchForAccounts(@PathVariable int pageNumber, @RequestBody HashMap<String, HashMap<String, String>> search) {
+        Map<String, Object> accounts = accountsService.searchForAccount(search, pageNumber);
+        CollectionModel<List<Accounts>> collectionModel = new CollectionModel((List<Accounts>)accounts.get("results"));
+
+        collectionModel.add(linkTo(methodOn(this.getClass()).searchForAccounts(pageNumber, search)).withSelfRel());
+        if(accounts.get("hasPrev") != null){
+            collectionModel.add(linkTo(methodOn(this.getClass()).searchForAccounts(--pageNumber, search)).withRel("hasPrev"));
+        }
+        if(accounts.get("hasNext") != null){
+            collectionModel.add(linkTo(methodOn(this.getClass()).searchForAccounts(++pageNumber, search)).withRel("hasNext"));
+        }
+        return collectionModel;
     }
 }
