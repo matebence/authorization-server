@@ -1,4 +1,4 @@
-package com.blesk.authorizationserver.Exceptions;
+package com.blesk.authorizationserver.Exceptions.Response;
 
 import java.util.Date;
 
