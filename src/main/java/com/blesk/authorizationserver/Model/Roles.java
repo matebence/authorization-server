@@ -8,8 +8,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "roles")
@@ -20,14 +20,14 @@ public class Roles {
     @Column(name = "role_id")
     private Long roleId;
 
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.LAZY)
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.EAGER)
     @JoinTable(name="role_privilege_items", joinColumns=@JoinColumn(name="role_id"),
             inverseJoinColumns=@JoinColumn(name="privilege_id"))
-    private List<Privileges> privileges = new ArrayList<Privileges>();
+    private Set<Privileges> privileges = new HashSet<Privileges>();
 
     @JsonIgnore
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, mappedBy = "roles")
-    private List<Accounts> accounts = new ArrayList<Accounts>();
+    private Set<Accounts> accounts = new HashSet<Accounts>();
 
     @NotNull(message = Messages.ROLES_NOT_NULL)
     @Size(min = 3, max = 255, message = Messages.ROLES_SIZE)
@@ -70,19 +70,19 @@ public class Roles {
         this.roleId = roleId;
     }
 
-    public List<Privileges> getPrivileges() {
+    public Set<Privileges> getPrivileges() {
         return privileges;
     }
 
-    public void setPrivileges(List<Privileges> privileges) {
+    public void setPrivileges(Set<Privileges> privileges) {
         this.privileges = privileges;
     }
 
-    public List<Accounts> getAccounts() {
+    public Set<Accounts> getAccounts() {
         return accounts;
     }
 
-    public void setAccounts(List<Accounts> accounts) {
+    public void setAccounts(Set<Accounts> accounts) {
         this.accounts = accounts;
     }
 

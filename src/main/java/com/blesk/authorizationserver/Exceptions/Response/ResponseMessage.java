@@ -1,32 +1,27 @@
 package com.blesk.authorizationserver.Exceptions.Response;
 
-import java.util.Date;
+public class ResponseMessage {
 
-public class ErrorMessage {
-
-    private Date timestamp;
+    private String timestamp;
 
     private String message;
 
-    private String details;
-
     private boolean error;
 
-    public ErrorMessage() {
+    public ResponseMessage() {
     }
 
-    public ErrorMessage(Date timestamp, String message, String details) {
+    public ResponseMessage(String timestamp, String message) {
         this.timestamp = timestamp;
         this.message = message;
-        this.details = details;
         this.error = true;
     }
 
-    public Date getTimestamp() {
+    public String getTimestamp() {
         return timestamp;
     }
 
-    public void setTimestamp(Date timestamp) {
+    public void setTimestamp(String timestamp) {
         this.timestamp = timestamp;
     }
 
@@ -36,14 +31,6 @@ public class ErrorMessage {
 
     public void setMessage(String message) {
         this.message = message;
-    }
-
-    public String getDetails() {
-        return details;
-    }
-
-    public void setDetails(String details) {
-        this.details = details;
     }
 
     public boolean isError() {
@@ -56,10 +43,9 @@ public class ErrorMessage {
 
     @Override
     public String toString() {
-        return "ErrorMessage{" +
+        return "ResponseMessage{" +
                 "timestamp=" + timestamp +
                 ", message='" + message + '\'' +
-                ", details='" + details + '\'' +
                 ", error=" + error +
                 '}';
     }

@@ -2,20 +2,25 @@ package com.blesk.authorizationserver.Service.Accounts;
 
 import com.blesk.authorizationserver.DAO.Accounts.AccountsDAOImpl;
 import com.blesk.authorizationserver.DAO.Roles.RolesDAOImpl;
+import com.blesk.authorizationserver.DTO.JwtAcoounts;
 import com.blesk.authorizationserver.Exceptions.AuthorizationServerException;
 import com.blesk.authorizationserver.Model.Accounts;
+import com.blesk.authorizationserver.Model.Privileges;
 import com.blesk.authorizationserver.Model.Roles;
 import com.blesk.authorizationserver.Values.Criteria;
 import com.blesk.authorizationserver.Values.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
-public class AccountsServiceImpl implements AccountsService {
+public class AccountsServiceImpl implements AccountsService, UserDetailsService {
 
     private AccountsDAOImpl accountDAO;
     private RolesDAOImpl roleDAO;
@@ -27,11 +32,11 @@ public class AccountsServiceImpl implements AccountsService {
     }
 
     @Override
-    public Accounts createAccount(Accounts accounts, String[] role) {
-        List<Roles> roles = roleDAO.getListOfRoles(role);
-        if (roles.isEmpty())
+    public Accounts createAccount(Accounts accounts, ArrayList<String> roles) {
+        Set<Roles> assignedRoles = roleDAO.getListOfRoles(roles);
+        if (assignedRoles.isEmpty())
             throw new AuthorizationServerException(Messages.CREATE_GET_ACCOUNT);
-        accounts.setRoles(roles);
+        accounts.setRoles(assignedRoles);
         if (accountDAO.save(accounts).getAccountId() == null)
             throw new AuthorizationServerException(Messages.CREATE_ACCOUNT);
         return accounts;
@@ -75,6 +80,10 @@ public class AccountsServiceImpl implements AccountsService {
         Accounts accounts = accountDAO.getAccountInformations(userName);
         if (accounts == null)
             throw new AuthorizationServerException(Messages.GET_ACCOUNT_INFORMATION);
+        if (accounts.getRoles().isEmpty()){
+            throw new AuthorizationServerException(Messages.GET_ROLES_TO_ACCOUNT);
+        }
+
         return accounts;
     }
 
@@ -89,5 +98,22 @@ public class AccountsServiceImpl implements AccountsService {
             throw new AuthorizationServerException(Messages.SEARCH_FOR_ACCOUNT);
 
         return accounts;
+    }
+
+    @Override
+    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+        Accounts accounts = this.getAccountInformations(userName);
+        if( accounts == null){
+            throw new UsernameNotFoundException(Messages.GET_ACCOUNT_INFORMATION);
+        }
+        Collection<GrantedAuthority> authorities = new ArrayList<>();
+        for (Roles role: accounts.getRoles()){
+            for (Privileges privilege: role.getPrivileges()){
+                authorities.add(new SimpleGrantedAuthority(privilege.getName()));
+            }
+        }
+        accounts.setGrantedAuthorities(authorities);
+
+        return new JwtAcoounts(accounts);
     }
 }

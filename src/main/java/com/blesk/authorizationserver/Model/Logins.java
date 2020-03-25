@@ -20,7 +20,7 @@ public class Logins {
     private Accounts account;
 
     @Column(name = "no_trys", nullable=false)
-    private int noTrys;
+    private Integer noTrys;
 
     @Column(name = "last_login", nullable=false)
     private java.sql.Timestamp lastLogin;
@@ -47,11 +47,11 @@ public class Logins {
         this.account = account;
     }
 
-    public int getNoTrys() {
+    public Integer getNoTrys() {
         return noTrys;
     }
 
-    public void setNoTrys(int noTrys) {
+    public void setNoTrys(Integer noTrys) {
         this.noTrys = noTrys;
     }
 

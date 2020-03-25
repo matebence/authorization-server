@@ -7,13 +7,13 @@ VALUES (1, 0, CURRENT_TIMESTAMP, '192.168.99.100');
 INSERT INTO roles (name, created_by, created_at, is_deleted)
 VALUES ('ADMIN_ROLE', 1, CURRENT_TIMESTAMP, FALSE);
 INSERT INTO privileges (name, created_by, created_at ,is_deleted)
-VALUES ('CREATE_NOTE', 1, CURRENT_TIMESTAMP, FALSE);
+VALUES ('CREATE_TABLE_NAME', 1, CURRENT_TIMESTAMP, FALSE);
 INSERT INTO privileges (name, created_by, created_at, is_deleted)
-VALUES ('READ_NOTE', 1, CURRENT_TIMESTAMP, FALSE);
+VALUES ('READ_TABLE_NAME', 1, CURRENT_TIMESTAMP, FALSE);
 INSERT INTO privileges (name, created_by, created_at, is_deleted)
-VALUES ('UPDATE_NOTE', 1, CURRENT_TIMESTAMP, FALSE);
+VALUES ('UPDATE_TABLE_NAME', 1, CURRENT_TIMESTAMP, FALSE);
 INSERT INTO privileges (name, created_by, created_at, is_deleted)
-VALUES ('DELETE_NOTE', 1, CURRENT_TIMESTAMP, FALSE);
+VALUES ('DELETE_TABLE_NAME', 1, CURRENT_TIMESTAMP, FALSE);
 INSERT INTO role_privilege_items (role_id, privilege_id)
 VALUES (1, 1);
 INSERT INTO role_privilege_items (role_id, privilege_id)

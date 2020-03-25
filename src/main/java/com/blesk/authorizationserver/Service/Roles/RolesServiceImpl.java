@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 public class RolesServiceImpl implements RolesService {
@@ -69,8 +70,8 @@ public class RolesServiceImpl implements RolesService {
     }
 
     @Override
-    public List<Privileges> getRolePrivileges(String roleName) {
-        List<Privileges> privileges = roleDAO.getPrivilegesAssignedToRole(roleName);
+    public Set<Privileges> getRolePrivileges(String roleName) {
+        Set<Privileges> privileges = roleDAO.getPrivilegesAssignedToRole(roleName);
         if (privileges.isEmpty())
             throw new AuthorizationServerException(String.format(Messages.GET_ROLE_PRIVILEGES, roleName));
         return privileges;

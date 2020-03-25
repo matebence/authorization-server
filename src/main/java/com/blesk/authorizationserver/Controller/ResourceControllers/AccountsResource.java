@@ -12,6 +12,7 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -62,8 +63,8 @@ public class AccountsResource {
 
     @PostMapping("/accounts")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Object> createAccounts(@Valid @RequestBody Accounts accounts) {
-        Accounts account = accountsService.createAccount(accounts, new String[]{"ROLE_ADMIN"});
+    public ResponseEntity<Object> createAccounts(@Valid @RequestBody Accounts accounts, @RequestBody ArrayList<String> roles) {
+        Accounts account = accountsService.createAccount(accounts, roles);
 
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(account.getAccountId()).toUri();

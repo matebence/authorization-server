@@ -6,6 +6,12 @@ public class Messages {
     public static final String REQUEST_BODY_NOT_FOUND_EXCEPTION = "Prázdna požiadavka";
     public static final String PAGE_NOT_FOUND_EXCEPTION = "Je nám ľúto, ale požadovaná stránka nebola nájdená";
     public static final String NULL_POINTER_EXCEPTION = "Ľutujeme, ale nastala chyba";
+    public static final String INTERNAL_AUTH_EXCEPTION = "Neúspešné prihlásenie";
+    public static final String INVALID_GRANT_EXCEPTION = "Nesprávne prihlasovacie údaje";
+    public static final String UNSUPPORTED_GRANT_EXPCEPTION = "Chyba pri prihlásení";
+    public static final String INVALID_REQUEST_EXCEPTION = "Chyba pri prihlásení";
+    public static final String AUTH_REQUIRED_EXCEPTION = "Prístup odmietnutý";
+    public static final String OAUTH_EXPCETION = "Lutujeme, ale nastala chyba";
     public static final String SQL_EXCEPTION = "Operácia sa neuskutočnila";
     public static final String EXCEPTION = "Nastala neočakávaná chyba";
     public static final String PAGINATION_EXCEPTION = "Stránkovanie nie je nastavené";
@@ -35,6 +41,7 @@ public class Messages {
     public static final String GET_ACCOUNT = "Ľutujeme, účet neexistuje";
     public static final String GET_ALL_ACCOUNTS = "Nenašiel sa žiadný účet";
     public static final String GET_ACCOUNT_INFORMATION = "Ľutujeme, účet neexistuje";
+    public static final String GET_ROLES_TO_ACCOUNT = "Ľutujeme, chyba účtu";
     public static final String SEARCH_FOR_ACCOUNT = "Kritériám nevyhoveli žiadné záznamy";
 
     public static final String ACCOUNTS_USER_ID = "Identifikačné číslo používatela nebol nastavení";

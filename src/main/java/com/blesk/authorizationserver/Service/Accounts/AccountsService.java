@@ -2,13 +2,14 @@ package com.blesk.authorizationserver.Service.Accounts;
 
 import com.blesk.authorizationserver.Model.Accounts;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public interface AccountsService {
 
-    Accounts createAccount(Accounts accounts, String[] role);
+    Accounts createAccount(Accounts accounts, ArrayList<String> names);
 
     boolean deleteAccount(Long accountId);
 

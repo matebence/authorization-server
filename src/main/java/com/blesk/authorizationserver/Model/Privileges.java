@@ -8,8 +8,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "privileges")
@@ -22,7 +22,7 @@ public class Privileges {
 
     @JsonIgnore
     @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, mappedBy = "privileges", fetch = FetchType.LAZY)
-    private List<Roles> roles = new ArrayList<Roles>();
+    private Set<Roles> roles = new HashSet<Roles>();
 
     @NotNull(message = Messages.PRIVILEGES_NOT_NULL)
     @Size(min = 3, max = 255, message = Messages.PRIVILEGES_SIZE)
@@ -65,11 +65,11 @@ public class Privileges {
         this.privilegeId = privilegeId;
     }
 
-    public List<Roles> getRoles() {
+    public Set<Roles> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<Roles> roles) {
+    public void setRoles(Set<Roles> roles) {
         this.roles = roles;
     }
 

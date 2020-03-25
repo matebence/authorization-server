@@ -10,7 +10,9 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public class RolesDAOImpl extends DAOImpl<Roles> implements RolesDAO {
@@ -19,7 +21,7 @@ public class RolesDAOImpl extends DAOImpl<Roles> implements RolesDAO {
     private EntityManager entityManager;
 
     @Override
-    public List<Roles> getListOfRoles(String[] names) {
+    public Set<Roles> getListOfRoles(ArrayList<String> names) {
         Session session = entityManager.unwrap(Session.class);
 
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
@@ -35,7 +37,7 @@ public class RolesDAOImpl extends DAOImpl<Roles> implements RolesDAO {
         }
 
         select.where(predicates.toArray(new Predicate[]{}));
-        return entityManager.createQuery(select).getResultList();
+        return new HashSet<Roles>(entityManager.createQuery(select).getResultList());
     }
 
     @Override
@@ -49,7 +51,7 @@ public class RolesDAOImpl extends DAOImpl<Roles> implements RolesDAO {
     }
 
     @Override
-    public List<Privileges> getPrivilegesAssignedToRole(String name) {
+    public Set<Privileges> getPrivilegesAssignedToRole(String name) {
         return getRoleByName(name).getPrivileges();
     }
 }

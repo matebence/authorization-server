@@ -4,6 +4,7 @@ import com.blesk.authorizationserver.Model.Privileges;
 import com.blesk.authorizationserver.Model.Roles;
 
 import java.util.List;
+import java.util.Set;
 
 public interface RolesService {
 
@@ -19,5 +20,5 @@ public interface RolesService {
 
     Roles getRoleByName(String roleName);
 
-    List<Privileges> getRolePrivileges(String roleName);
+    Set<Privileges> getRolePrivileges(String roleName);
 }

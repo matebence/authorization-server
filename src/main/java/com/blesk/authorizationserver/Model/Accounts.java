@@ -1,6 +1,7 @@
 package com.blesk.authorizationserver.Model;
 
 import com.blesk.authorizationserver.Values.Messages;
+import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
@@ -19,10 +20,10 @@ public class Accounts {
     @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER,  mappedBy="account")
     private Logins login;
 
-    @ManyToMany(cascade={CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.LAZY)
+    @ManyToMany(cascade={CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.EAGER)
     @JoinTable(name="account_role_items", joinColumns=@JoinColumn(name="user_id"),
             inverseJoinColumns=@JoinColumn(name="role_id"))
-    private List<Roles> roles = new ArrayList<Roles>();
+    private Set<Roles> roles = new HashSet<>();
 
     @NotNull(message = Messages.ACCOUNTS_USER_ID)
     @Positive(message = Messages.ENTITY_IDS)
@@ -41,10 +42,10 @@ public class Accounts {
     @PositiveOrZero(message = Messages.ACCOUNTS_BALANCE_POSITIVE)
     @Max(value = 10000, message = Messages.ACCOUNTS_BALANCE_MAX)
     @Column(name = "balance", nullable=false)
-    private double balance;
+    private Double balance;
 
     @Column(name = "is_activated", nullable=false)
-    private boolean isActivated;
+    private Boolean isActivated;
 
     @Column(name = "is_deleted", nullable=false)
     private Boolean isDeleted;
@@ -71,6 +72,9 @@ public class Accounts {
     @Column(name = "deleted_at")
     private java.sql.Timestamp deletedAt;
 
+    @Transient
+    private Collection<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+
     public Accounts() {
     }
 
@@ -90,11 +94,11 @@ public class Accounts {
         this.login = login;
     }
 
-    public List<Roles> getRoles() {
+    public Set<Roles> getRoles() {
         return roles;
     }
 
-    public void setRoles(List<Roles> roles) {
+    public void setRoles(Set<Roles> roles) {
         this.roles = roles;
     }
 
@@ -122,19 +126,19 @@ public class Accounts {
         this.password = password;
     }
 
-    public double getBalance() {
+    public Double getBalance() {
         return balance;
     }
 
-    public void setBalance(double balance) {
+    public void setBalance(Double balance) {
         this.balance = balance;
     }
 
-    public boolean isActivated() {
+    public Boolean getActivated() {
         return isActivated;
     }
 
-    public void setActivated(boolean activated) {
+    public void setActivated(Boolean activated) {
         isActivated = activated;
     }
 
@@ -194,6 +198,14 @@ public class Accounts {
         this.deletedAt = deletedAt;
     }
 
+    public Collection<GrantedAuthority> getGrantedAuthorities() {
+        return grantedAuthorities;
+    }
+
+    public void setGrantedAuthorities(Collection<GrantedAuthority> grantedAuthorities) {
+        this.grantedAuthorities = grantedAuthorities;
+    }
+
     @PrePersist
     protected void prePersist() {
         this.balance = 0.00;
@@ -225,6 +237,7 @@ public class Accounts {
                 ", updatedAt=" + updatedAt +
                 ", deletedBy=" + deletedBy +
                 ", deletedAt=" + deletedAt +
+                ", grantedAuthorities=" + grantedAuthorities +
                 '}';
     }
 }
