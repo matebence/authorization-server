@@ -24,6 +24,7 @@ config:
         client-secret: 04ed73c86f2d48e9789fa2d2bae6acf78bcd9b431d676e5f6d9c9c9a28de29a3
         access-token-validity: 3600
         refresh-token-validity: 18000
+        max-no-try: 3
         private-key: -----BEGIN RSA PRIVATE KEY-----
                      MIIEowIBAAKCAQEAwySCnVbkvES/mMHJllnNM5lQ9m26uXbbJzohBhCQyRe/wvuC
                      1UqXDNd45VsgGWk2zZ9/36EH0DZLrrTMR487Xqa+/OWm1ZDlNRKJDBcHv/WWcx1X

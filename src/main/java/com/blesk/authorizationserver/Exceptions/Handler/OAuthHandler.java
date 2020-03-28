@@ -1,5 +1,6 @@
 package com.blesk.authorizationserver.Exceptions.Handler;
 
+import com.blesk.authorizationserver.Exceptions.AuthorizationServerException;
 import com.blesk.authorizationserver.Exceptions.OAuthException;
 import com.blesk.authorizationserver.Values.Messages;
 import org.springframework.http.HttpStatus;
@@ -14,8 +15,12 @@ import org.springframework.security.oauth2.provider.error.WebResponseExceptionTr
 public class OAuthHandler implements WebResponseExceptionTranslator {
 
     @Override
-    public ResponseEntity<OAuth2Exception> translate(Exception exception){
-        if (exception instanceof InternalAuthenticationServiceException) {
+    public ResponseEntity<OAuth2Exception> translate(Exception exception) {
+        if (exception.getCause() instanceof AuthorizationServerException) {
+            return ResponseEntity
+                    .status(HttpStatus.UNAUTHORIZED)
+                    .body(new OAuthException(exception.getMessage()));
+        } else if (exception instanceof InternalAuthenticationServiceException) {
             return ResponseEntity
                     .status(HttpStatus.UNAUTHORIZED)
                     .body(new OAuthException(Messages.INTERNAL_AUTH_EXCEPTION));
@@ -23,7 +28,7 @@ public class OAuthHandler implements WebResponseExceptionTranslator {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body(new OAuthException(Messages.INVALID_GRANT_EXCEPTION));
-        }else if (exception instanceof UnsupportedGrantTypeException) {
+        } else if (exception instanceof UnsupportedGrantTypeException) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
                     .body(new OAuthException(Messages.UNSUPPORTED_GRANT_EXPCEPTION));

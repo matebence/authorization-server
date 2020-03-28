@@ -1,13 +1,16 @@
 package com.blesk.authorizationserver.Model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
 
-@Entity
+@Entity(name = "logins")
 @Table(name = "logins")
-public class Logins {
+public class Logins implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,7 +18,8 @@ public class Logins {
     private Long loginId;
 
     @JsonIgnore
-    @OneToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH})
+    @OneToOne(cascade = CascadeType.MERGE, orphanRemoval = true)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     @JoinColumn(name="account_id", nullable = false)
     private Accounts account;
 

@@ -1,37 +1,42 @@
-package com.blesk.authorizationserver.Model;
+package com.blesk.authorizationserver.Model.Preferences;
 
+import com.blesk.authorizationserver.Model.Accounts;
 import com.blesk.authorizationserver.Values.Messages;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
-import javax.validation.constraints.Size;
-import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.HashSet;
-import java.util.Set;
 
-@Entity(name = "privileges")
-@Table(name = "privileges")
-public class Privileges implements Serializable {
+@Entity(name = "AccountPreferenceItems")
+@Table(name = "account_preference_items")
+public class AccountPreferenceItems {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "privilege_id")
-    private Long privilegeId;
+    @EmbeddedId
+    private AccountPreferenceItemsId id;
 
     @JsonIgnore
-    @ManyToMany(cascade = CascadeType.MERGE, mappedBy = "privileges", fetch = FetchType.LAZY)
-    private Set<Roles> roles = new HashSet<Roles>();
+    @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("accountId")
+    private Accounts accounts;
 
-    @NotNull(message = Messages.PRIVILEGES_NOT_NULL)
-    @Size(min = 3, max = 255, message = Messages.PRIVILEGES_SIZE)
-    @Column(name = "name", nullable=false, unique = true)
-    private String name;
+    @JsonIgnore
+    @ManyToOne(fetch = FetchType.LAZY)
+    @MapsId("preferenceId")
+    private Preferences preferences;
+
+    @Column(name = "is_set", nullable=true)
+    private boolean isSet;
+
+    @Column(name = "content", nullable=true)
+    private String content;
+
+    @Column(name = "value", nullable=true)
+    private int value;
 
     @Column(name = "is_deleted", nullable=false)
-    private Boolean isDeleted = false;
+    private Boolean isDeleted;
 
     @NotNull(message = Messages.ENTITY_CREATOR_ID)
     @Positive(message = Messages.ENTITY_IDS)
@@ -55,31 +60,55 @@ public class Privileges implements Serializable {
     @Column(name = "deleted_at")
     private java.sql.Timestamp deletedAt;
 
-    public Privileges() {
+    public AccountPreferenceItems() {
     }
 
-    public Long getPrivilegeId() {
-        return privilegeId;
+    public AccountPreferenceItemsId getId() {
+        return id;
     }
 
-    public void setPrivilegeId(Long privilegeId) {
-        this.privilegeId = privilegeId;
+    public void setId(AccountPreferenceItemsId id) {
+        this.id = id;
     }
 
-    public Set<Roles> getRoles() {
-        return roles;
+    public Accounts getAccounts() {
+        return accounts;
     }
 
-    public void setRoles(Set<Roles> roles) {
-        this.roles = roles;
+    public void setAccounts(Accounts accounts) {
+        this.accounts = accounts;
     }
 
-    public String getName() {
-        return name;
+    public Preferences getPreferences() {
+        return preferences;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setPreferences(Preferences preferences) {
+        this.preferences = preferences;
+    }
+
+    public boolean isSet() {
+        return isSet;
+    }
+
+    public void setSet(boolean set) {
+        isSet = set;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public int getValue() {
+        return value;
+    }
+
+    public void setValue(int value) {
+        this.value = value;
     }
 
     public Boolean getDeleted() {
@@ -151,10 +180,13 @@ public class Privileges implements Serializable {
 
     @Override
     public String toString() {
-        return "Privileges{" +
-                "privilegeId=" + privilegeId +
-                ", roles=" + roles +
-                ", name='" + name + '\'' +
+        return "AccountPreferenceItems{" +
+                "id=" + id +
+                ", accounts=" + accounts +
+                ", preferences=" + preferences +
+                ", isSet=" + isSet +
+                ", content='" + content + '\'' +
+                ", value=" + value +
                 ", isDeleted=" + isDeleted +
                 ", createdBy=" + createdBy +
                 ", createdAt=" + createdAt +

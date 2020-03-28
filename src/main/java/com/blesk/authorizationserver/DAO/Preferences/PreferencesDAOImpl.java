@@ -1,7 +1,7 @@
-package com.blesk.authorizationserver.DAO.Privileges;
+package com.blesk.authorizationserver.DAO.Preferences;
 
 import com.blesk.authorizationserver.DAO.DAOImpl;
-import com.blesk.authorizationserver.Model.Privileges;
+import com.blesk.authorizationserver.Model.Preferences.Preferences;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
 
@@ -13,18 +13,18 @@ import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
 @Repository
-public class PrivilegesDAOImpl extends DAOImpl<Privileges> implements PrivilegesDAO {
+public class PreferencesDAOImpl extends DAOImpl<Preferences> implements PreferencesDAO {
 
     @PersistenceContext
     private EntityManager entityManager;
 
     @Override
     @Transactional
-    public Privileges getPrivilegeByName(String name) {
+    public Preferences getPreferenceByName(String name) {
         Session session = this.entityManager.unwrap(Session.class);
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-        CriteriaQuery<Privileges> criteriaQuery = criteriaBuilder.createQuery(Privileges.class);
-        Root<Privileges> root = criteriaQuery.from(Privileges.class);
+        CriteriaQuery<Preferences> criteriaQuery = criteriaBuilder.createQuery(Preferences.class);
+        Root<Preferences> root = criteriaQuery.from(Preferences.class);
         return this.entityManager.createQuery(criteriaQuery
                 .where(criteriaBuilder.equal(root.get("name"), name))).getSingleResult();
     }

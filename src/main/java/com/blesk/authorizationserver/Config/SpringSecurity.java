@@ -32,12 +32,16 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter implements Appl
     @Autowired
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(accountsService).passwordEncoder(encoder());
+        auth.userDetailsService(this.accountsService).passwordEncoder(encoder());
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests().anyRequest().authenticated()
+        http.authorizeRequests()
+                .antMatchers("/signin").permitAll()
+                .antMatchers("/signup").permitAll()
+                .antMatchers("/forgetpassword").permitAll()
+                .anyRequest().authenticated()
                 .and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER)
                 .and().exceptionHandling().authenticationEntryPoint(authenticationEntryPoint());
     }

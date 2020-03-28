@@ -22,7 +22,7 @@ public class RolesDAOImpl extends DAOImpl<Roles> implements RolesDAO {
 
     @Override
     public Set<Roles> getListOfRoles(ArrayList<String> names) {
-        Session session = entityManager.unwrap(Session.class);
+        Session session = this.entityManager.unwrap(Session.class);
 
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
         CriteriaQuery<Roles> criteriaQuery = criteriaBuilder.createQuery(Roles.class);
@@ -37,16 +37,16 @@ public class RolesDAOImpl extends DAOImpl<Roles> implements RolesDAO {
         }
 
         select.where(predicates.toArray(new Predicate[]{}));
-        return new HashSet<Roles>(entityManager.createQuery(select).getResultList());
+        return new HashSet<Roles>(this.entityManager.createQuery(select).getResultList());
     }
 
     @Override
     public Roles getRoleByName(String name) {
-        Session session = entityManager.unwrap(Session.class);
+        Session session = this.entityManager.unwrap(Session.class);
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
         CriteriaQuery<Roles> criteriaQuery = criteriaBuilder.createQuery(Roles.class);
         Root<Roles> root = criteriaQuery.from(Roles.class);
-        return entityManager.createQuery(criteriaQuery
+        return this.entityManager.createQuery(criteriaQuery
                 .where(criteriaBuilder.equal(root.get("name"), name))).getSingleResult();
     }
 

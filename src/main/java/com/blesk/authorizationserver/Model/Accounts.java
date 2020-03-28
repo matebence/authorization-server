@@ -1,65 +1,65 @@
 package com.blesk.authorizationserver.Model;
 
+import com.blesk.authorizationserver.Model.Preferences.AccountPreferenceItems;
 import com.blesk.authorizationserver.Values.Messages;
 import org.springframework.security.core.GrantedAuthority;
 
 import javax.persistence.*;
 import javax.validation.constraints.*;
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.*;
 
-@Entity
+@Entity(name = "accounts")
 @Table(name = "accounts")
-public class Accounts {
+public class Accounts implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "account_id")
     private Long accountId;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER,  mappedBy="account")
+    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER, mappedBy = "account")
     private Logins login;
 
-    @ManyToMany(cascade={CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.EAGER)
-    @JoinTable(name="account_role_items", joinColumns=@JoinColumn(name="user_id"),
-            inverseJoinColumns=@JoinColumn(name="role_id"))
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
+    @JoinTable(name = "account_role_items", joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<Roles> roles = new HashSet<>();
 
-    @NotNull(message = Messages.ACCOUNTS_USER_ID)
-    @Positive(message = Messages.ENTITY_IDS)
-    @Column(name = "user_id", nullable=false, unique = true)
-    private Long userId;
+    @OneToMany(mappedBy = "preferences", cascade = CascadeType.MERGE)
+    private Set<AccountPreferenceItems> accountPreferenceItems = new HashSet<>();
 
     @NotNull(message = Messages.ACCOUNTS_USER_NAME_NULL)
     @Size(min = 5, max = 255, message = Messages.ACCOUNTS_USER_NAME_LENGHT)
-    @Column(name = "user_name", nullable=false, unique = true)
+    @Column(name = "user_name", nullable = false, unique = true)
     private String userName;
 
     @NotNull(message = Messages.ACCOUNTS_PASSWORD)
-    @Column(name = "password", nullable=false)
+    @Column(name = "password", nullable = false)
     private String password;
 
     @PositiveOrZero(message = Messages.ACCOUNTS_BALANCE_POSITIVE)
     @Max(value = 10000, message = Messages.ACCOUNTS_BALANCE_MAX)
-    @Column(name = "balance", nullable=false)
+    @Column(name = "balance", nullable = false)
     private Double balance;
 
-    @Column(name = "is_activated", nullable=false)
+    @Column(name = "is_activated", nullable = false)
     private Boolean isActivated;
 
-    @Column(name = "is_deleted", nullable=false)
+    @Column(name = "is_deleted", nullable = false)
     private Boolean isDeleted;
 
-    @NotNull(message = Messages.ENTITY__CREATOR_ID)
+    @NotNull(message = Messages.ENTITY_CREATOR_ID)
     @Positive(message = Messages.ENTITY_IDS)
-    @Column(name = "created_by", nullable=false)
+    @Column(name = "created_by", nullable = false)
     private Long createdBy;
 
-    @Column(name = "created_at", updatable=false, nullable=false)
+    @Column(name = "created_at", updatable = false, nullable = false)
     private java.sql.Timestamp createdAt;
 
     @Positive(message = Messages.ENTITY_IDS)
-    @Column(name = "updated_by", updatable=false)
+    @Column(name = "updated_by", updatable = false)
     private Long updatedBy;
 
     @Column(name = "updated_at")
@@ -100,14 +100,6 @@ public class Accounts {
 
     public void setRoles(Set<Roles> roles) {
         this.roles = roles;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
     }
 
     public String getUserName() {
@@ -225,7 +217,6 @@ public class Accounts {
                 "accountId=" + accountId +
                 ", login=" + login +
                 ", roles=" + roles +
-                ", userId=" + userId +
                 ", userName='" + userName + '\'' +
                 ", password='" + password + '\'' +
                 ", balance=" + balance +

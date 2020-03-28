@@ -3,14 +3,14 @@ package com.blesk.authorizationserver.DTO;
 import com.blesk.authorizationserver.Model.Accounts;
 import org.springframework.security.core.userdetails.User;
 
-public class JwtAcoounts extends User {
+public class JwtResponse extends User {
 
     private Long accountId;
     private String userName;
     private Double balance;
     private Boolean isActivated;
 
-    public JwtAcoounts(Accounts accounts) {
+    public JwtResponse(Accounts accounts) {
         super(accounts.getUserName(), accounts.getPassword(), accounts.getGrantedAuthorities());
         this.accountId = accounts.getAccountId();
         this.userName = accounts.getUserName();
@@ -52,7 +52,7 @@ public class JwtAcoounts extends User {
 
     @Override
     public String toString() {
-        return "JwtAcoounts{" +
+        return "JwtResponse{" +
                 "accountId=" + accountId +
                 ", userName='" + userName + '\'' +
                 ", balance=" + balance +

@@ -31,7 +31,7 @@ public class RolesResource {
     @GetMapping("/roles/page/{pageNumber}/limit/{pageSize}")
     @ResponseStatus(HttpStatus.PARTIAL_CONTENT)
     public CollectionModel<List<Roles>> retrieveAllRoles(@PathVariable int pageNumber, @PathVariable int pageSize) {
-        List<Roles> roles = rolesService.getAllRoles(pageNumber, pageSize);
+        List<Roles> roles = this.rolesService.getAllRoles(pageNumber, pageSize);
         CollectionModel<List<Roles>> collectionModel = new CollectionModel(roles);
 
         collectionModel.add(linkTo(methodOn(this.getClass()).retrieveAllRoles(pageNumber, pageSize)).withSelfRel());
@@ -40,42 +40,42 @@ public class RolesResource {
         return collectionModel;
     }
 
-    @GetMapping("/roles/{id}")
+    @GetMapping("/roles/{roleId}")
     @ResponseStatus(HttpStatus.OK)
-    public EntityModel<Roles> retrieveRoles(@PathVariable long id) {
-        Roles roles = rolesService.getRole(id);
+    public EntityModel<Roles> retrieveRoles(@PathVariable long roleId) {
+        Roles roles = this.rolesService.getRole(roleId);
 
         EntityModel<Roles> EntityModel = new EntityModel<Roles>(roles);
-        EntityModel.add(linkTo(methodOn(this.getClass()).retrieveRoles(id)).withSelfRel());
+        EntityModel.add(linkTo(methodOn(this.getClass()).retrieveRoles(roleId)).withSelfRel());
         EntityModel.add(linkTo(methodOn(this.getClass()).retrieveAllRoles(0,10)).withRel("all-roles"));
 
         return EntityModel;
     }
 
-    @DeleteMapping("/roles/{id}")
+    @DeleteMapping("/roles/{roleId}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteRoles(@PathVariable long id) {
-        rolesService.deleteRole(id);
+    public void deleteRoles(@PathVariable long roleId) {
+        this.rolesService.deleteRole(roleId);
     }
 
     @PostMapping("/roles")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Object> createRoles(@Valid @RequestBody Roles roles) {
-        Roles role = rolesService.createRole(roles);
+        Roles role = this.rolesService.createRole(roles);
 
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{roleId}")
                 .buildAndExpand(role.getRoleId()).toUri();
 
         return ResponseEntity.created(location).build();
     }
 
-    @PutMapping("/roles/{id}")
+    @PutMapping("/roles/{roleId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> updateRoles(@Valid @RequestBody Roles roles, @PathVariable long id) {
-        if (rolesService.getRole(id) != null) {
-            roles.setRoleId(id);
+    public ResponseEntity<Object> updateRoles(@Valid @RequestBody Roles roles, @PathVariable long roleId) {
+        if (this.rolesService.getRole(roleId) != null) {
+            roles.setRoleId(roleId);
         }
-        rolesService.updateRole(roles);
+        this.rolesService.updateRole(roles);
         return ResponseEntity.noContent().build();
     }
 }

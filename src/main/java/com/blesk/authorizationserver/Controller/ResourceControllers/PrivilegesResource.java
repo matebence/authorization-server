@@ -31,7 +31,7 @@ public class PrivilegesResource {
     @GetMapping("/privileges/page/{pageNumber}/limit/{pageSize}")
     @ResponseStatus(HttpStatus.PARTIAL_CONTENT)
     public CollectionModel<List<Privileges>> retrieveAllPrivileges(@PathVariable int pageNumber, @PathVariable int pageSize) {
-        List<Privileges> privileges = privilegesService.getAllPrivileges(pageNumber, pageSize);
+        List<Privileges> privileges = this.privilegesService.getAllPrivileges(pageNumber, pageSize);
         CollectionModel<List<Privileges>> collectionModel = new CollectionModel(privileges);
 
         collectionModel.add(linkTo(methodOn(this.getClass()).retrieveAllPrivileges(pageNumber, pageSize)).withSelfRel());
@@ -40,42 +40,42 @@ public class PrivilegesResource {
         return collectionModel;
     }
 
-    @GetMapping("/privileges/{id}")
+    @GetMapping("/privileges/{privilegeId}")
     @ResponseStatus(HttpStatus.OK)
-    public EntityModel<Privileges> retrievePrivileges(@PathVariable long id) {
-        Privileges privileges = privilegesService.getPrivilege(id);
+    public EntityModel<Privileges> retrievePrivileges(@PathVariable long privilegeId) {
+        Privileges privileges = this.privilegesService.getPrivilege(privilegeId);
 
         EntityModel<Privileges> EntityModel = new EntityModel<Privileges>(privileges);
-        EntityModel.add(linkTo(methodOn(this.getClass()).retrievePrivileges(id)).withSelfRel());
+        EntityModel.add(linkTo(methodOn(this.getClass()).retrievePrivileges(privilegeId)).withSelfRel());
         EntityModel.add(linkTo(methodOn(this.getClass()).retrieveAllPrivileges(0 ,10)).withRel("all-privileges"));
 
         return EntityModel;
     }
 
-    @DeleteMapping("/privileges/{id}")
+    @DeleteMapping("/privileges/{privilegeId}")
     @ResponseStatus(HttpStatus.OK)
-    public void deletePrivileges(@PathVariable long id) {
-        privilegesService.deletePrivilege(id);
+    public void deletePrivileges(@PathVariable long privilegeId) {
+        this.privilegesService.deletePrivilege(privilegeId);
     }
 
     @PostMapping("/privileges")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Object> createPrivileges(@Valid @RequestBody Privileges privileges) {
-        Privileges privilege = privilegesService.createPrivilege(privileges);
+        Privileges privilege = this.privilegesService.createPrivilege(privileges);
 
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{privilegeId}")
                 .buildAndExpand(privilege.getPrivilegeId()).toUri();
 
         return ResponseEntity.created(location).build();
     }
 
-    @PutMapping("/privileges/{id}")
+    @PutMapping("/privileges/{privilegeId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> updatePrivileges(@Valid @RequestBody Privileges privileges, @PathVariable long id) {
-        if (privilegesService.getPrivilege(id) != null) {
-            privileges.setPrivilegeId(id);
+    public ResponseEntity<Object> updatePrivileges(@Valid @RequestBody Privileges privileges, @PathVariable long privilegeId) {
+        if (this.privilegesService.getPrivilege(privilegeId) != null) {
+            privileges.setPrivilegeId(privilegeId);
         }
-        privilegesService.updatePrivilege(privileges);
+        this.privilegesService.updatePrivilege(privileges);
         return ResponseEntity.noContent().build();
     }
 }

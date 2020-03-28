@@ -12,7 +12,7 @@ public interface PrivilegesService {
 
     boolean updatePrivilege(Privileges privileges);
 
-    Privileges getPrivilege(Long Id);
+    Privileges getPrivilege(Long privilegeId);
 
     List<Privileges> getAllPrivileges(int pageNumber, int pageSize);
 

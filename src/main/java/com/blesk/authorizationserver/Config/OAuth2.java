@@ -6,14 +6,19 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
+import org.springframework.security.oauth2.provider.token.TokenStore;
+import org.springframework.security.oauth2.provider.token.store.JdbcTokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
-import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+
+import javax.sql.DataSource;
 
 @Configuration
 public class OAuth2 extends AuthorizationServerConfigurerAdapter {
@@ -42,9 +47,12 @@ public class OAuth2 extends AuthorizationServerConfigurerAdapter {
 
     private PasswordEncoder passwordEncoder;
 
+    private DataSource dataSource;
+
     @Autowired
-    public OAuth2(PasswordEncoder passwordEncoder){
+    public OAuth2(PasswordEncoder passwordEncoder, DataSource dataSource) {
         this.passwordEncoder = passwordEncoder;
+        this.dataSource = dataSource;
     }
 
     @Override
@@ -54,29 +62,38 @@ public class OAuth2 extends AuthorizationServerConfigurerAdapter {
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.inMemory().withClient(clientId).secret(passwordEncoder.encode(clientSecret))
+        clients.jdbc(dataSource).withClient(this.clientId).secret(this.passwordEncoder.encode(this.clientSecret))
                 .scopes("trust")
                 .authorizedGrantTypes("password", "refresh_token")
-                .accessTokenValiditySeconds(Integer.parseInt(accessTokenValidity))
-                .refreshTokenValiditySeconds(Integer.parseInt(refreshTokenValidity));
+                .accessTokenValiditySeconds(Integer.parseInt(this.accessTokenValidity))
+                .refreshTokenValiditySeconds(Integer.parseInt(this.refreshTokenValidity));
     }
 
     @Override
-    public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-        endpoints.authenticationManager(authenticationManager).tokenStore(tokenStore())
-                .accessTokenConverter(tokenEnhancer()).pathMapping("/oauth/login", "app/login").exceptionTranslator(new OAuthHandler());
+    public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
+        endpoints.authenticationManager(this.authenticationManager).tokenStore(tokenStore())
+                .accessTokenConverter(tokenEnhancer()).pathMapping("/oauth/token", "/signin").exceptionTranslator(new OAuthHandler());
     }
 
     @Bean
-    public JwtTokenStore tokenStore() {
-        return new JwtTokenStore(tokenEnhancer());
+    @Primary
+    public DefaultTokenServices tokenServices() {
+        DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
+        defaultTokenServices.setTokenStore(tokenStore());
+        defaultTokenServices.setSupportRefreshToken(true);
+        return defaultTokenServices;
+    }
+
+    @Bean
+    public TokenStore tokenStore() {
+        return new JdbcTokenStore(dataSource);
     }
 
     @Bean
     public JwtAccessTokenConverter tokenEnhancer() {
-        JwtAccessTokenConverter converter = new JwtAccessToken();
-        converter.setSigningKey(privateKey);
-        converter.setVerifierKey(publicKey);
+        JwtAccessTokenConverter converter = new JwtConverter();
+        converter.setSigningKey(this.privateKey);
+        converter.setVerifierKey(this.publicKey);
         return converter;
     }
 }

@@ -15,7 +15,7 @@ public interface AccountsService {
 
     boolean updateAccount(Accounts accounts);
 
-    Accounts getAccount(Long id);
+    Accounts getAccount(Long accountId);
 
     List<Accounts> getAllAccounts(int pageNumber, int pageSize);
 

@@ -34,7 +34,7 @@ public class AccountsResource {
     @GetMapping("/accounts/page/{pageNumber}/limit/{pageSize}")
     @ResponseStatus(HttpStatus.PARTIAL_CONTENT)
     public CollectionModel<List<Accounts>> retrieveAllAccounts(@PathVariable int pageNumber, @PathVariable int pageSize) {
-        List<Accounts> accounts = accountsService.getAllAccounts(pageNumber, pageSize);
+        List<Accounts> accounts = this.accountsService.getAllAccounts(pageNumber, pageSize);
         CollectionModel<List<Accounts>> collectionModel = new CollectionModel(accounts);
 
         collectionModel.add(linkTo(methodOn(this.getClass()).retrieveAllAccounts(pageNumber, pageSize)).withSelfRel());
@@ -43,49 +43,49 @@ public class AccountsResource {
         return collectionModel;
     }
 
-    @GetMapping("/accounts/{id}")
+    @GetMapping("/accounts/{accountId}")
     @ResponseStatus(HttpStatus.OK)
-    public EntityModel<Accounts> retrieveAccounts(@PathVariable long id) {
-        Accounts accounts = accountsService.getAccount(id);
+    public EntityModel<Accounts> retrieveAccounts(@PathVariable long accountId) {
+        Accounts accounts = this.accountsService.getAccount(accountId);
 
         EntityModel<Accounts> entityModel = new EntityModel<Accounts>(accounts);
-        entityModel.add(linkTo(methodOn(this.getClass()).retrieveAccounts(id)).withSelfRel());
+        entityModel.add(linkTo(methodOn(this.getClass()).retrieveAccounts(accountId)).withSelfRel());
         entityModel.add(linkTo(methodOn(this.getClass()).retrieveAllAccounts(0, 10)).withRel("all-accounts"));
 
         return entityModel;
     }
 
-    @DeleteMapping("/accounts/{id}")
+    @DeleteMapping("/accounts/{accountId}")
     @ResponseStatus(HttpStatus.OK)
-    public void deleteAccounts(@PathVariable long id) {
-        accountsService.deleteAccount(id);
+    public void deleteAccounts(@PathVariable long accountId) {
+        this.accountsService.deleteAccount(accountId);
     }
 
     @PostMapping("/accounts")
     @ResponseStatus(HttpStatus.CREATED)
     public ResponseEntity<Object> createAccounts(@Valid @RequestBody Accounts accounts, @RequestBody ArrayList<String> roles) {
-        Accounts account = accountsService.createAccount(accounts, roles);
+        Accounts account = this.accountsService.createAccount(accounts, roles);
 
-        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+        URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{preferenceId}")
                 .buildAndExpand(account.getAccountId()).toUri();
 
         return ResponseEntity.created(location).build();
     }
 
-    @PutMapping("/accounts/{id}")
+    @PutMapping("/accounts/{accountId}")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<Object> updateAccounts(@Valid @RequestBody Accounts accounts, @PathVariable long id) {
-        if (accountsService.getAccount(id) != null) {
-            accounts.setAccountId(id);
+    public ResponseEntity<Object> updateAccounts(@Valid @RequestBody Accounts accounts, @PathVariable long accountId) {
+        if (this.accountsService.getAccount(accountId) != null) {
+            accounts.setAccountId(accountId);
         }
-        accountsService.updateAccount(accounts);
+        this.accountsService.updateAccount(accounts);
         return ResponseEntity.noContent().build();
     }
 
     @PostMapping("/accounts/search")
     @ResponseStatus(HttpStatus.OK)
     public CollectionModel<List<Accounts>> searchForAccounts(@RequestBody HashMap<String, HashMap<String, String>> search) {
-        Map<String, Object> accounts = accountsService.searchForAccount(search);
+        Map<String, Object> accounts = this.accountsService.searchForAccount(search);
 
         CollectionModel<List<Accounts>> collectionModel = new CollectionModel((List<Accounts>) accounts.get("results"));
         collectionModel.add(linkTo(methodOn(this.getClass()).searchForAccounts(search)).withSelfRel());

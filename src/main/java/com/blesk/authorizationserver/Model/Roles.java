@@ -7,26 +7,27 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Positive;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
+@Entity(name = "roles")
 @Table(name = "roles")
-public class Roles {
+public class Roles implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "role_id")
     private Long roleId;
 
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, fetch = FetchType.EAGER)
+    @ManyToMany(cascade = CascadeType.MERGE, fetch = FetchType.EAGER)
     @JoinTable(name="role_privilege_items", joinColumns=@JoinColumn(name="role_id"),
             inverseJoinColumns=@JoinColumn(name="privilege_id"))
     private Set<Privileges> privileges = new HashSet<Privileges>();
 
     @JsonIgnore
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH}, mappedBy = "roles")
+    @ManyToMany(cascade = CascadeType.MERGE, mappedBy = "roles")
     private Set<Accounts> accounts = new HashSet<Accounts>();
 
     @NotNull(message = Messages.ROLES_NOT_NULL)
@@ -37,7 +38,7 @@ public class Roles {
     @Column(name = "is_deleted", nullable=false)
     private Boolean isDeleted = false;
 
-    @NotNull(message = Messages.ENTITY__CREATOR_ID)
+    @NotNull(message = Messages.ENTITY_CREATOR_ID)
     @Positive(message = Messages.ENTITY_IDS)
     @Column(name = "created_by", nullable=false)
     private Long createdBy;

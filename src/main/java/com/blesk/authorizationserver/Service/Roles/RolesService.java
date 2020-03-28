@@ -14,7 +14,7 @@ public interface RolesService {
 
     boolean updateRole(Roles roles);
 
-    Roles getRole(Long id);
+    Roles getRole(Long roleId);
 
     List<Roles> getAllRoles(int pageNumber, int pageSize);
 

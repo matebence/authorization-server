@@ -22,11 +22,11 @@ public class AccountsDAOImpl extends DAOImpl<Accounts> implements AccountsDAO {
     @Override
     @Transactional
     public Accounts getAccountInformations(String userName) {
-        Session session = entityManager.unwrap(Session.class);
+        Session session = this.entityManager.unwrap(Session.class);
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
         CriteriaQuery<Accounts> criteriaQuery = criteriaBuilder.createQuery(Accounts.class);
         Root<Accounts> root = criteriaQuery.from(Accounts.class);
-        return entityManager.createQuery(criteriaQuery
+        return this.entityManager.createQuery(criteriaQuery
                 .where(criteriaBuilder.equal(root.get("userName"), userName))).getSingleResult();
     }
 
@@ -35,7 +35,7 @@ public class AccountsDAOImpl extends DAOImpl<Accounts> implements AccountsDAO {
     public Map<String, Object> searchBy(HashMap<String, HashMap<String, String>> criterias, int pageNumber) {
         final int PAGE_SIZE = 10;
 
-        CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+        CriteriaBuilder criteriaBuilder = this.entityManager.getCriteriaBuilder();
         CriteriaQuery<Accounts> criteriaQuery = criteriaBuilder.createQuery(Accounts.class);
         Root<Accounts> root = criteriaQuery.from(Accounts.class);
 
@@ -64,7 +64,7 @@ public class AccountsDAOImpl extends DAOImpl<Accounts> implements AccountsDAO {
             select.where(predicates.toArray(new Predicate[]{}));
         }
 
-        TypedQuery<Accounts> typedQuery = entityManager.createQuery(select);
+        TypedQuery<Accounts> typedQuery = this.entityManager.createQuery(select);
         if (criterias.get(Criteria.PAGINATION) != null) {
             typedQuery.setFirstResult(pageNumber);
             typedQuery.setMaxResults(PAGE_SIZE);

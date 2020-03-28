@@ -2,9 +2,6 @@ package com.blesk.authorizationserver.DAO;
 
 import org.hibernate.Session;
 import org.hibernate.query.Query;
-import org.hibernate.resource.transaction.spi.TransactionStatus;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.EntityManager;
@@ -18,22 +15,19 @@ import java.util.*;
 @Repository
 public class DAOImpl<T> implements DAO<T> {
 
-    private Logger logger = LoggerFactory.getLogger(this.getClass());
-
     @PersistenceContext
     private EntityManager entityManager;
 
     @Override
     @Transactional
     public T save(T t) {
-        Session session = entityManager.unwrap(Session.class);
+        Session session = this.entityManager.unwrap(Session.class);
         try {
             session.save(t);
         } catch (Exception e) {
-            logger.info(e.getMessage());
-        } finally {
             session.clear();
             session.close();
+            return null;
         }
         return t;
     }
@@ -41,48 +35,46 @@ public class DAOImpl<T> implements DAO<T> {
     @Override
     @Transactional
     public boolean update(T t) {
-        Session session = entityManager.unwrap(Session.class);
+        Session session = this.entityManager.unwrap(Session.class);
         try {
             session.update(t);
         } catch (Exception e) {
-            logger.info(e.getMessage());
-        } finally {
             session.clear();
             session.close();
+            return false;
         }
-        return session.getTransaction().getStatus() == TransactionStatus.COMMITTED;
+        return true;
     }
 
     @Override
     @Transactional
     public boolean delete(T t) {
-        Session session = entityManager.unwrap(Session.class);
+        Session session = this.entityManager.unwrap(Session.class);
         try {
             session.delete(t);
         } catch (Exception e) {
-            logger.info(e.getMessage());
-        } finally {
             session.clear();
             session.close();
+            return false;
         }
-        return session.getTransaction().getStatus() == TransactionStatus.COMMITTED;
+        return true;
     }
 
     @Override
     @Transactional
     public T get(Class c, Long id) {
-        Session session = entityManager.unwrap(Session.class);
+        Session session = this.entityManager.unwrap(Session.class);
         return (T) session.get(c, id);
     }
 
     @Transactional
     public List getAll(Class c, int pageNumber, int pageSize) {
-        Session session = entityManager.unwrap(Session.class);
+        Session session = this.entityManager.unwrap(Session.class);
         CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
 
         CriteriaQuery<Long> countCriteria = criteriaBuilder.createQuery(Long.class);
         countCriteria.select(criteriaBuilder.count(countCriteria.from(c)));
-        Long count = entityManager.createQuery(countCriteria).getSingleResult();
+        Long count = this.entityManager.createQuery(countCriteria).getSingleResult();
 
         if (pageNumber > Math.floor(count.intValue() / pageSize)) {
             return Collections.emptyList();

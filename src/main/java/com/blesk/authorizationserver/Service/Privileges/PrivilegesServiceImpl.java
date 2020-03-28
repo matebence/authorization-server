@@ -21,31 +21,31 @@ public class PrivilegesServiceImpl implements PrivilegesService {
 
     @Override
     public Privileges createPrivilege(Privileges privileges) {
-        if (privilegeDAO.save(privileges).getPrivilegeId() == null)
+        if (this.privilegeDAO.save(privileges).getPrivilegeId() == null)
             throw new AuthorizationServerException(Messages.CREATE_PRIVILEGE);
         return privileges;
     }
 
     @Override
     public boolean deletePrivilege(Long privilegeId) {
-        Privileges privileges = privilegeDAO.get(Privileges.class, privilegeId);
+        Privileges privileges = this.privilegeDAO.get(Privileges.class, privilegeId);
         if(privileges == null)
             throw new AuthorizationServerException(Messages.DELETE_GET_PRIVILEGE);
-        if (!privilegeDAO.delete(privileges))
+        if (!this.privilegeDAO.delete(privileges))
             throw new AuthorizationServerException(Messages.DELETE_PRIVILEGE);
         return true;
     }
 
     @Override
     public boolean updatePrivilege(Privileges privileges) {
-        if (!privilegeDAO.update(privileges))
+        if (!this.privilegeDAO.update(privileges))
             throw new AuthorizationServerException(Messages.UPDATE_PRIVILEGE);
         return true;
     }
 
     @Override
-    public Privileges getPrivilege(Long id) {
-        Privileges privilege = privilegeDAO.get(Privileges.class, id);
+    public Privileges getPrivilege(Long privilegeId) {
+        Privileges privilege = this.privilegeDAO.get(Privileges.class, privilegeId);
         if(privilege == null)
             throw new AuthorizationServerException(Messages.GET_PRIVILEGE);
         return privilege;
@@ -53,7 +53,7 @@ public class PrivilegesServiceImpl implements PrivilegesService {
 
     @Override
     public List<Privileges> getAllPrivileges(int pageNumber, int pageSize) {
-        List<Privileges> privileges = privilegeDAO.getAll(Privileges.class, pageNumber, pageSize);
+        List<Privileges> privileges = this.privilegeDAO.getAll(Privileges.class, pageNumber, pageSize);
         if(privileges == null)
             throw new AuthorizationServerException(Messages.GET_ALL_PRIVILEGES);
         return privileges;
@@ -61,7 +61,7 @@ public class PrivilegesServiceImpl implements PrivilegesService {
 
     @Override
     public Privileges getPrivilegeByName(String privilegeName) {
-        Privileges privilege = privilegeDAO.getPrivilegeByName(privilegeName);
+        Privileges privilege = this.privilegeDAO.getPrivilegeByName(privilegeName);
         if(privilege == null)
             throw new AuthorizationServerException(Messages.GET_PRIVILEGE_BY_NAME);
         return privilege;
