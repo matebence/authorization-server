@@ -1,6 +1,5 @@
-package com.blesk.authorizationserver.Config;
+package com.blesk.authorizationserver.DTO;
 
-import com.blesk.authorizationserver.DTO.JwtAcoounts;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -18,8 +17,6 @@ public class JwtAccessToken extends JwtAccessTokenConverter {
 
         if (user.getAccountId() != null)
             data.put("accountId", user.getAccountId());
-        if (user.getUserId() != null)
-            data.put("userId", user.getUserId());
         if (user.getUserName() != null)
             data.put("userName", user.getUserName());
         if (user.getBalance() != null)

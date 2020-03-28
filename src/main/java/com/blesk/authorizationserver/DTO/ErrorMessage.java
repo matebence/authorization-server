@@ -1,4 +1,4 @@
-package com.blesk.authorizationserver.Exceptions.Response;
+package com.blesk.authorizationserver.DTO;
 
 public class ResponseMessage {
 

@@ -6,7 +6,6 @@ import org.springframework.security.core.userdetails.User;
 public class JwtAcoounts extends User {
 
     private Long accountId;
-    private Long userId;
     private String userName;
     private Double balance;
     private Boolean isActivated;
@@ -14,7 +13,6 @@ public class JwtAcoounts extends User {
     public JwtAcoounts(Accounts accounts) {
         super(accounts.getUserName(), accounts.getPassword(), accounts.getGrantedAuthorities());
         this.accountId = accounts.getAccountId();
-        this.userId = accounts.getUserId();
         this.userName = accounts.getUserName();
         this.balance = accounts.getBalance();
         this.isActivated = accounts.getActivated();
@@ -26,14 +24,6 @@ public class JwtAcoounts extends User {
 
     public void setAccountId(Long accountId) {
         this.accountId = accountId;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
     }
 
     public String getUserName() {
@@ -64,7 +54,6 @@ public class JwtAcoounts extends User {
     public String toString() {
         return "JwtAcoounts{" +
                 "accountId=" + accountId +
-                ", userId=" + userId +
                 ", userName='" + userName + '\'' +
                 ", balance=" + balance +
                 ", isActivated=" + isActivated +
