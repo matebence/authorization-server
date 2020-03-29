@@ -4,6 +4,7 @@ import com.blesk.authorizationserver.DAO.Accounts.AccountsDAOImpl;
 import com.blesk.authorizationserver.DAO.Roles.RolesDAOImpl;
 import com.blesk.authorizationserver.DTO.JwtResponse;
 import com.blesk.authorizationserver.Exceptions.AuthorizationServerException;
+import com.blesk.authorizationserver.Listeners.LoginAttemptService;
 import com.blesk.authorizationserver.Model.Accounts;
 import com.blesk.authorizationserver.Model.Privileges;
 import com.blesk.authorizationserver.Model.Roles;
@@ -18,6 +19,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.*;
 
 @Service
@@ -30,10 +32,24 @@ public class AccountsServiceImpl implements AccountsService, UserDetailsService 
 
     private RolesDAOImpl roleDAO;
 
+    private LoginAttemptService loginAttemptService;
+
+    private HttpServletRequest request;
+
     @Autowired
-    public AccountsServiceImpl(AccountsDAOImpl accountDAO, RolesDAOImpl roleDAO) {
+    public AccountsServiceImpl(AccountsDAOImpl accountDAO, RolesDAOImpl roleDAO, LoginAttemptService loginAttemptService, HttpServletRequest request) {
         this.accountDAO = accountDAO;
         this.roleDAO = roleDAO;
+        this.loginAttemptService = loginAttemptService;
+        this.request = request;
+    }
+
+    private String getClientIP() {
+        String xfHeader = request.getHeader("X-Forwarded-For");
+        if (xfHeader == null){
+            return request.getRemoteAddr();
+        }
+        return xfHeader.split(",")[0];
     }
 
     @Override
@@ -85,7 +101,7 @@ public class AccountsServiceImpl implements AccountsService, UserDetailsService 
         Accounts accounts = this.accountDAO.getAccountInformations(userName);
         if (accounts == null)
             throw new AuthorizationServerException(Messages.GET_ACCOUNT_INFORMATION);
-        if (accounts.getRoles().isEmpty()){
+        if (accounts.getRoles().isEmpty()) {
             throw new AuthorizationServerException(Messages.GET_ROLES_TO_ACCOUNT);
         }
 
@@ -107,14 +123,15 @@ public class AccountsServiceImpl implements AccountsService, UserDetailsService 
 
     @Override
     public UserDetails loadUserByUsername(String userName) {
-        Accounts accounts = this.getAccountInformations(userName);
-        if((accounts.getLogin().getNoTrys() >= Integer.parseInt(maxNoTrys))){
+        String ip = getClientIP();
+        if (loginAttemptService.isBlocked(ip)) {
             throw new AuthorizationServerException(Messages.BLOCKED_EXCEPTION);
         }
 
+        Accounts accounts = this.getAccountInformations(userName);
         Collection<GrantedAuthority> authorities = new ArrayList<>();
-        for (Roles role: accounts.getRoles()){
-            for (Privileges privilege: role.getPrivileges()){
+        for (Roles role : accounts.getRoles()) {
+            for (Privileges privilege : role.getPrivileges()) {
                 authorities.add(new SimpleGrantedAuthority(privilege.getName()));
             }
         }

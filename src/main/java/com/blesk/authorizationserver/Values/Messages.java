@@ -15,7 +15,7 @@ public class Messages {
     public static final String SQL_EXCEPTION = "Operácia sa neuskutočnila";
     public static final String EXCEPTION = "Nastala neočakávaná chyba";
     public static final String PAGINATION_EXCEPTION = "Stránkovanie nie je nastavené";
-    public static final String BLOCKED_EXCEPTION = "Účet bol zablokovaný";
+    public static final String BLOCKED_EXCEPTION = "Účet bol zablokovaný na 24h";
     public static final String LOGOUT_EXCEPTION = "Pri odhlásení nastala chyba";
 
     public static final String CREATE_ROLE = "Vytvorenie roli sa nepodarilo";
