@@ -3,7 +3,6 @@ package com.blesk.authorizationserver.Controller;
 import com.blesk.authorizationserver.DTO.ResponseMessage;
 import com.blesk.authorizationserver.Exceptions.AuthorizationServerException;
 import com.blesk.authorizationserver.Model.Accounts;
-import com.blesk.authorizationserver.Service.Accounts.AccountsServiceImpl;
 import com.blesk.authorizationserver.Values.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,7 +14,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
-import java.net.URISyntaxException;
 import java.util.HashMap;
 
 @RestController

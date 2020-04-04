@@ -21,7 +21,7 @@ import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenCo
 import javax.sql.DataSource;
 
 @Configuration
-public class OAuth2 extends AuthorizationServerConfigurerAdapter {
+public class OAuth2Authorization extends AuthorizationServerConfigurerAdapter {
 
     @Value("${config.oauth2.client-id}")
     private String clientId;
@@ -50,7 +50,7 @@ public class OAuth2 extends AuthorizationServerConfigurerAdapter {
     private DataSource dataSource;
 
     @Autowired
-    public OAuth2(PasswordEncoder passwordEncoder, DataSource dataSource) {
+    public OAuth2Authorization(PasswordEncoder passwordEncoder, DataSource dataSource) {
         this.passwordEncoder = passwordEncoder;
         this.dataSource = dataSource;
     }

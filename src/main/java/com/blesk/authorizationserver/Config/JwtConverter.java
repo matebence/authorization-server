@@ -17,9 +17,9 @@ public class JwtConverter extends JwtAccessTokenConverter {
         Map<String, Object> data = new LinkedHashMap<>(accessToken.getAdditionalInformation());
 
         if (user.getAccountId() != null)
-            data.put("accountId", user.getAccountId());
+            data.put("account_id", user.getAccountId());
         if (user.getUserName() != null)
-            data.put("userName", user.getUserName());
+            data.put("user_name", user.getUserName());
         if (user.getBalance() != null)
             data.put("balance", user.getBalance());
         if (user.isActivated() != null)
