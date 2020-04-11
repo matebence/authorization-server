@@ -4,26 +4,25 @@ import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.StdSerializer;
-import org.springframework.security.oauth2.common.exceptions.OAuth2Exception;
 
 import java.io.IOException;
 import java.sql.Timestamp;
 
-@JsonSerialize(using = OAuthExceptionSerializer.class)
-public class OAuthException extends OAuth2Exception {
-    public OAuthException(String msg) {
+@JsonSerialize(using = OAuth2ExceptionSerializer.class)
+public class OAuth2Exception extends org.springframework.security.oauth2.common.exceptions.OAuth2Exception {
+    public OAuth2Exception(String msg) {
         super(msg);
     }
 }
 
-class OAuthExceptionSerializer extends StdSerializer<OAuthException> {
+class OAuth2ExceptionSerializer extends StdSerializer<OAuth2Exception> {
 
-    public OAuthExceptionSerializer() {
-        super(OAuthException.class);
+    public OAuth2ExceptionSerializer() {
+        super(OAuth2Exception.class);
     }
 
     @Override
-    public void serialize(OAuthException value, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
+    public void serialize(OAuth2Exception value, JsonGenerator jsonGenerator, SerializerProvider serializerProvider) throws IOException {
         jsonGenerator.writeStartObject();
         jsonGenerator.writeStringField("timestamp", new Timestamp(System.currentTimeMillis()).toString());
         jsonGenerator.writeStringField("message", value.getMessage());

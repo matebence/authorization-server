@@ -1,6 +1,6 @@
-package com.blesk.authorizationserver.Exception.Handler;
+package com.blesk.authorizationserver.Handler;
 
-import com.blesk.authorizationserver.Values.Messages;
+import com.blesk.authorizationserver.Value.Messages;
 import net.minidev.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.AuthenticationException;

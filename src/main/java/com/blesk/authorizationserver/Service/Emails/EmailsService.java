@@ -1,8 +1,12 @@
-package com.blesk.authorizationserver.Service.Email;
+package com.blesk.authorizationserver.Service.Emails;
 
-import com.blesk.accountservice.Model.Accounts;
+import com.blesk.authorizationserver.Model.Accounts;
+
+import java.util.Map;
 
 public interface EmailsService {
 
-    void sendMessageToAccount(String subject, String text, Accounts accounts);
+    void sendMessage(String subject, String text, Accounts accounts);
+
+    void sendHtmlMesseage(String subject, String text, String htmlfile, Map<String, Object> variables, Accounts accounts);
 }

@@ -1,6 +1,6 @@
-package com.blesk.authorizationserver.DTO.RabbitMQ;
+package com.blesk.authorizationserver.Model;
 
-import com.blesk.authorizationserver.DTO.RabbitMQ.Preferences.AccountPreferenceItems;
+import com.blesk.authorizationserver.Model.Preferences.AccountPreferenceItems;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.springframework.security.core.GrantedAuthority;

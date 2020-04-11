@@ -1,8 +1,8 @@
 package com.blesk.authorizationserver.Handler;
 
 import com.blesk.authorizationserver.DTO.OAuth2.Response;
-import com.blesk.authorizationserver.Exception.AuthorizationServerException;
-import com.blesk.authorizationserver.Values.Messages;
+import com.blesk.authorizationserver.Exception.AuthorizationException;
+import com.blesk.authorizationserver.Value.Messages;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -23,7 +23,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @ControllerAdvice
-public class AuthorizationExceptionHandler {
+public class AuthorizationHandler {
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public final ResponseEntity<Response> handleTypeMismatchException() {
@@ -49,7 +49,7 @@ public class AuthorizationExceptionHandler {
         return new ResponseEntity<>(errorObj, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler(AuthorizationServerException.class)
+    @ExceptionHandler(AuthorizationException.class)
     public final ResponseEntity<Response> handleResourcesException(Exception ex) {
         Response errorObj = new Response(new Timestamp(System.currentTimeMillis()).toString(), ex.getMessage(), true);
         return new ResponseEntity<>(errorObj, new HttpHeaders(), HttpStatus.NOT_FOUND);

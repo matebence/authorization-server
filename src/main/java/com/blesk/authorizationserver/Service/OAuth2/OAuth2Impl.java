@@ -1,16 +1,18 @@
-package com.blesk.authorizationserver.Service;
+package com.blesk.authorizationserver.Service.OAuth2;
 
-import com.blesk.authorizationserver.DTO.OAuth2.Jwt;
-import com.blesk.authorizationserver.Exception.AuthorizationException;
+import com.blesk.authorizationserver.DTO.OAuth2.Account;
 import com.blesk.authorizationserver.Model.Accounts;
 import com.blesk.authorizationserver.Model.Privileges;
 import com.blesk.authorizationserver.Model.Roles;
+import com.blesk.authorizationserver.Exception.AuthorizationException;
+import com.blesk.authorizationserver.Service.Attempts.AttemptsServiceImpl;
+import com.blesk.authorizationserver.Service.Messages.MessagesServiceImpl;
+import com.blesk.authorizationserver.Utilities.Tools;
 import com.blesk.authorizationserver.Value.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,36 +20,28 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 @Service
-public class OAuth2DetailServiceImpl implements OAuth2DetailService {
+public class OAuth2Impl implements OAuth2 {
 
-    private LoginAttemptService loginAttemptService;
+    private AttemptsServiceImpl attemptServiceImpl;
 
-    private HttpServletRequest request;
+    private HttpServletRequest httpServletRequest;
+
+    private MessagesServiceImpl messagesService;
 
     @Autowired
-    public OAuth2DetailServiceImpl(LoginAttemptService loginAttemptService, HttpServletRequest request) {
-        this.loginAttemptService = loginAttemptService;
-        this.request = request;
+    public OAuth2Impl(AttemptsServiceImpl attemptServiceImpl, HttpServletRequest httpServletRequest, MessagesServiceImpl messagesService) {
+        this.attemptServiceImpl = attemptServiceImpl;
+        this.httpServletRequest = httpServletRequest;
+        this.messagesService = messagesService;
     }
 
     @Override
-    public String getClientIP() {
-        String xfHeader = request.getHeader("X-Forwarded-For");
-        if (xfHeader == null){
-            return request.getRemoteAddr();
-        }
-        return xfHeader.split(",")[0];
-    }
-
-    @Override
-    public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
-        String ip = getClientIP();
-        if (loginAttemptService.isBlocked(ip)) {
+    public UserDetails loadUserByUsername(String userName){
+        if (this.attemptServiceImpl.isBlocked(Tools.getClientIP(this.httpServletRequest))) {
             throw new AuthorizationException(Messages.BLOCKED_EXCEPTION);
         }
 
-        //Reaplce with API CALL
-        // Accounts accounts = this.getAccountInformations(userName);
+        Accounts accounts = this.messagesService.getAccountForVerification(userName);
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         for (Roles role : accounts.getRoles()) {
             for (Privileges privilege : role.getPrivileges()) {
@@ -56,6 +50,6 @@ public class OAuth2DetailServiceImpl implements OAuth2DetailService {
         }
         accounts.setGrantedAuthorities(authorities);
 
-        return new Jwt(accounts);
+        return new Account(accounts);
     }
 }

@@ -1,4 +1,8 @@
-package com.blesk.authorizationserver.DTO;
+package com.blesk.authorizationserver.DTO.OAuth2;
+
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+
+import java.util.HashMap;
 
 public class Response {
 
@@ -8,17 +12,24 @@ public class Response {
 
     private boolean error;
 
+    private HashMap<String, String> nav;
+
     public Response() {
     }
 
-    public Response(String timestamp, String message) {
+    {
+        this.nav = new HashMap<>();
+        this.nav.put("home", ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString());
+    }
+
+    public Response(String timestamp, String message, boolean error) {
         this.timestamp = timestamp;
         this.message = message;
-        this.error = true;
+        this.error = error;
     }
 
     public String getTimestamp() {
-        return timestamp;
+        return this.timestamp;
     }
 
     public void setTimestamp(String timestamp) {
@@ -26,7 +37,7 @@ public class Response {
     }
 
     public String getMessage() {
-        return message;
+        return this.message;
     }
 
     public void setMessage(String message) {
@@ -34,19 +45,28 @@ public class Response {
     }
 
     public boolean isError() {
-        return error;
+        return this.error;
     }
 
     public void setError(boolean error) {
         this.error = error;
     }
 
+    public HashMap getNav() {
+        return this.nav;
+    }
+
+    public void setNav(String name, String url) {
+        this.nav.put(name, url);
+    }
+
     @Override
     public String toString() {
         return "Response{" +
-                "timestamp=" + timestamp +
+                "timestamp='" + timestamp + '\'' +
                 ", message='" + message + '\'' +
                 ", error=" + error +
+                ", nav=" + nav +
                 '}';
     }
 }
