@@ -1,4 +1,4 @@
-package com.blesk.authorizationserver.Exceptions.Handler;
+package com.blesk.authorizationserver.Exception.Handler;
 
 import com.blesk.authorizationserver.Values.Messages;
 import net.minidev.json.JSONObject;

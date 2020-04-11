@@ -1,4 +1,4 @@
-package com.blesk.authorizationserver.Exceptions;
+package com.blesk.authorizationserver.Exception;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.SerializerProvider;

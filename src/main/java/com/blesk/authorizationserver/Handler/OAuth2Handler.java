@@ -1,7 +1,7 @@
-package com.blesk.authorizationserver.Exceptions.Handler;
+package com.blesk.authorizationserver.Handler;
 
-import com.blesk.authorizationserver.Exceptions.AuthorizationServerException;
-import com.blesk.authorizationserver.Exceptions.OAuthException;
+import com.blesk.authorizationserver.Exception.AuthorizationServerException;
+import com.blesk.authorizationserver.Exception.OAuthException;
 import com.blesk.authorizationserver.Values.Messages;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

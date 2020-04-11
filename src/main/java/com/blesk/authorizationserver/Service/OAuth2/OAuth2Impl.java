@@ -1,12 +1,11 @@
 package com.blesk.authorizationserver.Service;
 
-import com.blesk.authorizationserver.DTO.JwtResponse;
-import com.blesk.authorizationserver.Exceptions.AuthorizationServerException;
-import com.blesk.authorizationserver.Listeners.LoginAttemptService;
+import com.blesk.authorizationserver.DTO.OAuth2.Jwt;
+import com.blesk.authorizationserver.Exception.AuthorizationException;
 import com.blesk.authorizationserver.Model.Accounts;
 import com.blesk.authorizationserver.Model.Privileges;
 import com.blesk.authorizationserver.Model.Roles;
-import com.blesk.authorizationserver.Values.Messages;
+import com.blesk.authorizationserver.Value.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -44,7 +43,7 @@ public class OAuth2DetailServiceImpl implements OAuth2DetailService {
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
         String ip = getClientIP();
         if (loginAttemptService.isBlocked(ip)) {
-            throw new AuthorizationServerException(Messages.BLOCKED_EXCEPTION);
+            throw new AuthorizationException(Messages.BLOCKED_EXCEPTION);
         }
 
         //Reaplce with API CALL
@@ -57,6 +56,6 @@ public class OAuth2DetailServiceImpl implements OAuth2DetailService {
         }
         accounts.setGrantedAuthorities(authorities);
 
-        return new JwtResponse(accounts);
+        return new Jwt(accounts);
     }
 }

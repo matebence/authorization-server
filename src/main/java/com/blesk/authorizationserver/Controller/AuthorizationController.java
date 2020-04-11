@@ -1,9 +1,8 @@
 package com.blesk.authorizationserver.Controller;
 
-import com.blesk.authorizationserver.DTO.ResponseMessage;
-import com.blesk.authorizationserver.Exceptions.AuthorizationServerException;
+import com.blesk.authorizationserver.Exception.AuthorizationException;
 import com.blesk.authorizationserver.Model.Accounts;
-import com.blesk.authorizationserver.Values.Messages;
+import com.blesk.authorizationserver.Value.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +30,7 @@ public class OAuth2Controller {
     public ResponseEntity<Object> performSignout(HttpServletRequest httpServletRequest) {
         String authorization = httpServletRequest.getHeader("Authorization");
         if (authorization == null)
-            throw new AuthorizationServerException(Messages.LOGOUT_EXCEPTION);
+            throw new AuthorizationException(Messages.LOGOUT_EXCEPTION);
 
         String bearer = authorization.replace("Bearer", "").trim();
         OAuth2AccessToken accessToken = this.tokenStore.readAccessToken(bearer);

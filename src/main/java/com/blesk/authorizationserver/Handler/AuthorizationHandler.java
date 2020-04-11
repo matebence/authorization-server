@@ -1,7 +1,7 @@
-package com.blesk.authorizationserver.Exceptions.Handler;
+package com.blesk.authorizationserver.Handler;
 
-import com.blesk.authorizationserver.DTO.ErrorMessage;
-import com.blesk.authorizationserver.Exceptions.AuthorizationServerException;
+import com.blesk.authorizationserver.DTO.OAuth2.Response;
+import com.blesk.authorizationserver.Exception.AuthorizationServerException;
 import com.blesk.authorizationserver.Values.Messages;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
@@ -26,8 +26,8 @@ import java.util.stream.Collectors;
 public class AuthorizationExceptionHandler {
 
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
-    public final ResponseEntity<ErrorMessage> handleTypeMismatchException() {
-        ErrorMessage errorObj = new ErrorMessage(new Timestamp(System.currentTimeMillis()).toString(), Messages.TYPE_MISMATCH_EXCEPTION);
+    public final ResponseEntity<Response> handleTypeMismatchException() {
+        Response errorObj = new Response(new Timestamp(System.currentTimeMillis()).toString(), Messages.TYPE_MISMATCH_EXCEPTION, true);
         return new ResponseEntity<>(errorObj, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
@@ -44,44 +44,44 @@ public class AuthorizationExceptionHandler {
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
-    public final ResponseEntity<ErrorMessage> handleRequestBodyNotFoundException() {
-        ErrorMessage errorObj = new ErrorMessage(new Timestamp(System.currentTimeMillis()).toString(), Messages.REQUEST_BODY_NOT_FOUND_EXCEPTION);
+    public final ResponseEntity<Response> handleRequestBodyNotFoundException() {
+        Response errorObj = new Response(new Timestamp(System.currentTimeMillis()).toString(), Messages.REQUEST_BODY_NOT_FOUND_EXCEPTION, true);
         return new ResponseEntity<>(errorObj, new HttpHeaders(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(AuthorizationServerException.class)
-    public final ResponseEntity<ErrorMessage> handleResourcesException(Exception ex) {
-        ErrorMessage errorObj = new ErrorMessage(new Timestamp(System.currentTimeMillis()).toString(), ex.getMessage());
+    public final ResponseEntity<Response> handleResourcesException(Exception ex) {
+        Response errorObj = new Response(new Timestamp(System.currentTimeMillis()).toString(), ex.getMessage(), true);
         return new ResponseEntity<>(errorObj, new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(NoHandlerFoundException.class)
-    public final ResponseEntity<ErrorMessage> handleNotFoundError() {
-        ErrorMessage errorObj = new ErrorMessage(new Timestamp(System.currentTimeMillis()).toString(), Messages.PAGE_NOT_FOUND_EXCEPTION);
+    public final ResponseEntity<Response> handleNotFoundError() {
+        Response errorObj = new Response(new Timestamp(System.currentTimeMillis()).toString(), Messages.PAGE_NOT_FOUND_EXCEPTION, true);
         return new ResponseEntity<>(errorObj, new HttpHeaders(), HttpStatus.NOT_FOUND);
     }
 
     @ExceptionHandler(HttpRequestMethodNotSupportedException.class)
-    public final ResponseEntity<ErrorMessage> handlePageNotFoundException() {
-        ErrorMessage errorObj = new ErrorMessage(new Timestamp(System.currentTimeMillis()).toString(), Messages.PAGE_NOT_FOUND_EXCEPTION);
+    public final ResponseEntity<Response> handlePageNotFoundException() {
+        Response errorObj = new Response(new Timestamp(System.currentTimeMillis()).toString(), Messages.PAGE_NOT_FOUND_EXCEPTION, true);
         return new ResponseEntity<>(errorObj, new HttpHeaders(), HttpStatus.METHOD_NOT_ALLOWED);
     }
 
     @ExceptionHandler(NullPointerException.class)
-    public final ResponseEntity<ErrorMessage> handelNullPointerExceptions() {
-        ErrorMessage errorObj = new ErrorMessage(new Timestamp(System.currentTimeMillis()).toString(), Messages.NULL_POINTER_EXCEPTION);
+    public final ResponseEntity<Response> handelNullPointerExceptions() {
+        Response errorObj = new Response(new Timestamp(System.currentTimeMillis()).toString(), Messages.NULL_POINTER_EXCEPTION, true);
         return new ResponseEntity<>(errorObj, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(SQLException.class)
-    public final ResponseEntity<ErrorMessage> handleDatabaseExceptions() {
-        ErrorMessage errorObj = new ErrorMessage(new Timestamp(System.currentTimeMillis()).toString(), Messages.SQL_EXCEPTION);
+    public final ResponseEntity<Response> handleDatabaseExceptions() {
+        Response errorObj = new Response(new Timestamp(System.currentTimeMillis()).toString(), Messages.SQL_EXCEPTION, true);
         return new ResponseEntity<>(errorObj, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(Exception.class)
-    public final ResponseEntity<ErrorMessage> handleExceptions() {
-        ErrorMessage errorObj = new ErrorMessage(new Timestamp(System.currentTimeMillis()).toString(), Messages.EXCEPTION);
+    public final ResponseEntity<Response> handleExceptions() {
+        Response errorObj = new Response(new Timestamp(System.currentTimeMillis()).toString(), Messages.EXCEPTION, true);
         return new ResponseEntity<>(errorObj, new HttpHeaders(), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

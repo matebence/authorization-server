@@ -1,6 +1,6 @@
 package com.blesk.authorizationserver.DTO;
 
-public class ErrorMessage {
+public class Response {
 
     private String timestamp;
 
@@ -8,10 +8,10 @@ public class ErrorMessage {
 
     private boolean error;
 
-    public ErrorMessage() {
+    public Response() {
     }
 
-    public ErrorMessage(String timestamp, String message) {
+    public Response(String timestamp, String message) {
         this.timestamp = timestamp;
         this.message = message;
         this.error = true;
@@ -43,7 +43,7 @@ public class ErrorMessage {
 
     @Override
     public String toString() {
-        return "ErrorMessage{" +
+        return "Response{" +
                 "timestamp=" + timestamp +
                 ", message='" + message + '\'' +
                 ", error=" + error +

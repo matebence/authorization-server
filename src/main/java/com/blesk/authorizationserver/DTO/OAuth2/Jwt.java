@@ -1,6 +1,6 @@
 package com.blesk.authorizationserver.Config;
 
-import com.blesk.authorizationserver.DTO.JwtResponse;
+import com.blesk.authorizationserver.DTO.OAuth2.Jwt;
 import org.springframework.security.oauth2.common.DefaultOAuth2AccessToken;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.OAuth2Authentication;
@@ -13,17 +13,15 @@ public class JwtConverter extends JwtAccessTokenConverter {
 
     @Override
     public OAuth2AccessToken enhance(OAuth2AccessToken accessToken, OAuth2Authentication authentication) {
-        JwtResponse user = (JwtResponse) authentication.getPrincipal();
+        Jwt jwt = (Jwt) authentication.getPrincipal();
         Map<String, Object> data = new LinkedHashMap<>(accessToken.getAdditionalInformation());
 
-        if (user.getAccountId() != null)
-            data.put("account_id", user.getAccountId());
-        if (user.getUserName() != null)
-            data.put("user_name", user.getUserName());
-        if (user.getBalance() != null)
-            data.put("balance", user.getBalance());
-        if (user.isActivated() != null)
-            data.put("activated", user.isActivated());
+        if (jwt.getAccountId() != null)
+            data.put("account_id", jwt.getAccountId());
+        if (jwt.getUserName() != null)
+            data.put("user_name", jwt.getUserName());
+        if (jwt.isActivated() != null)
+            data.put("activated", jwt.isActivated());
 
         DefaultOAuth2AccessToken defaultOAuth2AccessToken = new DefaultOAuth2AccessToken(accessToken);
         defaultOAuth2AccessToken.setAdditionalInformation(data);

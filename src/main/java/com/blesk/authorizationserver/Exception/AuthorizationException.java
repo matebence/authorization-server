@@ -1,4 +1,4 @@
-package com.blesk.authorizationserver.Exceptions;
+package com.blesk.authorizationserver.Exception;
 
 public class AuthorizationServerException extends RuntimeException{
 
