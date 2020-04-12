@@ -23,9 +23,10 @@ public class Messages {
     public static final String RESET_PASSWORD_TOKEN_ERROR = "Ľutujeme, kľúč pre zabudnuté heslo je neplatný";
     public static final String LOGIN_DETAILS_RECORD_ERROR = "Aktualizovanie prihlasovacieho záznamu sa nepodarilo";
 
-    public static final String SIGNOUT_MESSAGE = "Boli ste úspešne odhlásený";
+    public static final String SERVER_ERROR = "Server je momentálne nedostupný";
+    public static final String SIGNOUT_SUCCESS = "Boli ste úspešne odhlásený";
+    public static final String SIGNUP_SUCCESS = "Registrácia prebehla úspešne, na Vami zvolenú emailovú adresu sme poslali aktivačný odkaz";
     public static final String SIGNUP_ERROR = "Registrácia bola neúspešná, skúste znova";
-    public static final String SIGNUP_MESSAGE = "Registrácia prebehla úspešne, na Vami zvolenú emailovú adresu sme poslali aktivačný odkaz";
+    public static final String FORGETPASSWORD_SUCCESS = "Postup obnovenia hesla Vám bol zaslaný na uvedenú emailovú adresu";
     public static final String FORGETPASSWORD_ERROR = "Pri postupe obnoveniu hesla nastala chyba";
-    public static final String FORGETPASSWORD_MESSAGE = "Postup obnovenia hesla Vám bol zaslaný na uvedenú emailovú adresu";
 }

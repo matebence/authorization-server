@@ -4,5 +4,5 @@ import java.util.Map;
 
 public interface HtmlMailer {
 
-    String generateMailHtml(String text, String htmlfile,  Map<String, Object> variables);
+    String generateMailHtml(String htmlfile,  Map<String, Object> variables);
 }

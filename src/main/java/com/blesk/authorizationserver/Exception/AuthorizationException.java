@@ -1,9 +1,8 @@
 package com.blesk.authorizationserver.Exception;
 
-public class AuthorizationException extends RuntimeException{
+public class AuthorizationException extends RuntimeException {
 
-    public AuthorizationException(String message)
-    {
+    public AuthorizationException(String message) {
         super(message);
     }
 }

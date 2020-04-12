@@ -10,6 +10,7 @@ import com.google.common.cache.LoadingCache;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 import java.sql.Timestamp;
 import java.util.concurrent.ExecutionException;
@@ -36,9 +37,13 @@ public class AttemptsServiceImpl implements AttemptsService {
     }
 
     public void loginSucceeded(String ip, Account account) {
+        Accounts accounts = new Accounts();
+        accounts.setAccountId(account.getAccountId());
+
         Logins logins = new Logins();
         logins.setLoginId(account.getLoginId());
         logins.setIpAddress(ip);
+        logins.setAccount(accounts);
         logins.setLastLogin(new Timestamp(System.currentTimeMillis()));
 
         this.messagesService.sendLoginDetailsToRecord(logins);
@@ -47,6 +52,7 @@ public class AttemptsServiceImpl implements AttemptsService {
 
     @Override
     public void loginSucceeded(String ip) {
+        throw new NotImplementedException();
     }
 
     @Override

@@ -19,7 +19,7 @@ public class HtmlMailerImpl implements HtmlMailer {
     }
 
     @Override
-    public String generateMailHtml(String text, String htmlfile,  Map<String, Object> variables) {
+    public String generateMailHtml(String htmlfile,  Map<String, Object> variables) {
         return this.templateEngine.process(htmlfile, new Context(Locale.getDefault(), variables));
     }
 }

@@ -17,6 +17,8 @@ public class Jwt extends JwtAccessTokenConverter {
 
         if (account.getAccountId() != null)
             data.put("account_id", account.getAccountId());
+        if (account.getAccountId() != null)
+            data.put("login_id", account.getLoginId());
         if (account.getUserName() != null)
             data.put("user_name", account.getUserName());
         if (account.isActivated() != null)

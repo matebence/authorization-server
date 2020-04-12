@@ -7,9 +7,10 @@ import com.blesk.authorizationserver.Model.Roles;
 import com.blesk.authorizationserver.Exception.AuthorizationException;
 import com.blesk.authorizationserver.Service.Attempts.AttemptsServiceImpl;
 import com.blesk.authorizationserver.Service.Messages.MessagesServiceImpl;
-import com.blesk.authorizationserver.Utilities.Tools;
+import com.blesk.authorizationserver.Utilitie.Tools;
 import com.blesk.authorizationserver.Value.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,6 +22,9 @@ import java.util.Collection;
 
 @Service
 public class OAuth2Impl implements OAuth2 {
+
+    @Value("${blesk.oauth2.prefix}")
+    private String oauthPrefix;
 
     private AttemptsServiceImpl attemptServiceImpl;
 
@@ -45,7 +49,7 @@ public class OAuth2Impl implements OAuth2 {
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         for (Roles role : accounts.getRoles()) {
             for (Privileges privilege : role.getPrivileges()) {
-                authorities.add(new SimpleGrantedAuthority(privilege.getName()));
+                authorities.add(new SimpleGrantedAuthority(this.oauthPrefix+privilege.getName()));
             }
         }
         accounts.setGrantedAuthorities(authorities);

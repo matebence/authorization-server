@@ -1,6 +1,6 @@
 package com.blesk.authorizationserver.Service.Emails;
 
-import com.blesk.authorizationserver.Component.HtmlMailer;
+import com.blesk.authorizationserver.Component.HtmlMailerImpl;
 import com.blesk.authorizationserver.Model.Accounts;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,10 +21,10 @@ public class EmailsServiceImpl implements EmailsService {
     private String from;
 
     private JavaMailSender emailSender;
-    private HtmlMailer htmlMailer;
+    private HtmlMailerImpl htmlMailer;
 
     @Autowired
-    public EmailsServiceImpl(JavaMailSender emailSender, HtmlMailer htmlMailer) {
+    public EmailsServiceImpl(JavaMailSender emailSender, HtmlMailerImpl htmlMailer) {
         this.emailSender = emailSender;
         this.htmlMailer = htmlMailer;
     }
@@ -33,7 +33,7 @@ public class EmailsServiceImpl implements EmailsService {
     public void sendMessage(String subject, String text, Accounts accounts) {
         try {
             SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
-            simpleMailMessage.setFrom(from);
+            simpleMailMessage.setFrom(this.from);
             simpleMailMessage.setTo(accounts.getEmail());
             simpleMailMessage.setSubject(subject);
             simpleMailMessage.setText(text);
@@ -45,14 +45,15 @@ public class EmailsServiceImpl implements EmailsService {
     }
 
     @Override
-    public void sendHtmlMesseage(String subject, String text, String htmlfile, Map<String, Object> variables, Accounts accounts) {
+    public void sendHtmlMesseage(String subject, String htmlfile, Map<String, Object> variables, Accounts accounts) {
         try {
             MimeMessage message = this.emailSender.createMimeMessage();
             MimeMessageHelper helper = new MimeMessageHelper(message);
 
+            helper.setFrom(this.from);
             helper.setTo(accounts.getEmail());
             helper.setSubject(subject);
-            helper.setText(this.htmlMailer.generateMailHtml(text, htmlfile, variables), true);
+            helper.setText(this.htmlMailer.generateMailHtml(htmlfile, variables), true);
 
             this.emailSender.send(message);
         } catch (MessagingException e) {

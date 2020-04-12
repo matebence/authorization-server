@@ -4,7 +4,7 @@ import com.blesk.authorizationserver.DTO.OAuth2.Account;
 import com.blesk.authorizationserver.DTO.OAuth2.Jwt;
 import com.blesk.authorizationserver.Handler.OAuth2Handler;
 import com.blesk.authorizationserver.Service.Attempts.AttemptsServiceImpl;
-import com.blesk.authorizationserver.Utilities.Tools;
+import com.blesk.authorizationserver.Utilitie.Tools;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;

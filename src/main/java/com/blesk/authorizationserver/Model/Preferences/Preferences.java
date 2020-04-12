@@ -1,9 +1,13 @@
 package com.blesk.authorizationserver.Model.Preferences;
 
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
+
 import java.io.Serializable;
 import java.util.HashSet;
 import java.util.Set;
 
+@JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, scope = Preferences.class)
 public class Preferences implements Serializable {
 
     private Long preferenceId;

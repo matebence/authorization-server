@@ -26,6 +26,8 @@ public class MessagesServiceImpl implements MessagesService {
     public Accounts getAccountForVerification(String userName) {
         Accounts accounts = this.amqpTemplate.convertSendAndReceiveAsType("blesk.verifyAccountExchange", "blesk.verifyAccountRoutingKey", userName, new AccountsReference());
         if (accounts == null)
+            throw new AuthorizationException(Messages.SERVER_ERROR);
+        if (accounts.getAccountId() == null)
             throw new AuthorizationException(Messages.ACCOUNT_VERIFICATION_ERROR);
         return accounts;
     }
@@ -34,6 +36,8 @@ public class MessagesServiceImpl implements MessagesService {
     public Accounts sendAccountForRegistration(Accounts accounts) {
         Accounts account = this.amqpTemplate.convertSendAndReceiveAsType("blesk.createAccountExchange", "blesk.createAccountRoutingKey", accounts, new AccountsReference());
         if (accounts == null)
+            throw new AuthorizationException(Messages.SERVER_ERROR);
+        if (accounts.getAccountId() == null)
             throw new AuthorizationException(Messages.ACCOUNT_REGISTRATION_ERROR);
         return account;
     }
@@ -42,6 +46,8 @@ public class MessagesServiceImpl implements MessagesService {
     public Passwords getResetTokenToRecoverAccount(String email) {
         Passwords passwords = this.amqpTemplate.convertSendAndReceiveAsType("blesk.forgetPasswordExchange", "blesk.forgetPasswordRoutingKey", email, new PasswordsReference());
         if (passwords == null)
+            throw new AuthorizationException(Messages.SERVER_ERROR);
+        if (passwords.getAccount() == null)
             throw new AuthorizationException(Messages.ACCOUNT_EMAIL_RECOVERY_ERROR);
         return passwords;
     }
@@ -50,6 +56,8 @@ public class MessagesServiceImpl implements MessagesService {
     public Boolean sendAccountToCreateNewPassword(Accounts accounts) {
         Boolean result = this.amqpTemplate.convertSendAndReceiveAsType("blesk.changePasswordExchange", "blesk.changePasswordRoutingKey", accounts, new AllowedReference());
         if (result == null)
+            throw new AuthorizationException(Messages.SERVER_ERROR);
+        if (result == Boolean.FALSE)
             throw new AuthorizationException(Messages.RESET_PASSWORD_TOKEN_ERROR);
         return result;
     }
@@ -58,6 +66,8 @@ public class MessagesServiceImpl implements MessagesService {
     public Boolean sendLoginDetailsToRecord(Logins logins) {
         Boolean result = this.amqpTemplate.convertSendAndReceiveAsType("blesk.lastLoginExchange", "blesk.lastLoginRoutingKey", logins, new AllowedReference());
         if (result == null)
+            throw new AuthorizationException(Messages.SERVER_ERROR);
+        if (result == Boolean.FALSE)
             throw new AuthorizationException(Messages.LOGIN_DETAILS_RECORD_ERROR);
         return result;
     }

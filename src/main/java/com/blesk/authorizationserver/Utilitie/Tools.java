@@ -1,4 +1,4 @@
-package com.blesk.authorizationserver.Utilities;
+package com.blesk.authorizationserver.Utilitie;
 
 import javax.servlet.http.HttpServletRequest;
 
