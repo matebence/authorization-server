@@ -17,16 +17,28 @@ public class Messages {
     public static final String BLOCKED_EXCEPTION = "Účet bol zablokovaný na 24h";
     public static final String LOGOUT_EXCEPTION = "Pri odhlásení nastala chyba";
 
+
+
     public static final String ACCOUNT_VERIFICATION_ERROR = "Ľutujeme, účet neexistuje";
-    public static final String ACCOUNT_REGISTRATION_ERROR = "Vytvorenie účtu sa nepodarilo";
+    public static final String LOGIN_DETAILS_ERROR = "Aktualizovanie prihlasovacieho záznamu sa nepodarilo";
+    public static final String ACTIVATION_TOKEN_VERIFY_ERROR = "Verifikácia aktivačného kľúču sa nepodarilo";
     public static final String ACCOUNT_EMAIL_RECOVERY_ERROR = "Ľutujeme, emailová adresa neexistuje";
-    public static final String RESET_PASSWORD_TOKEN_ERROR = "Ľutujeme, kľúč pre zabudnuté heslo je neplatný";
-    public static final String LOGIN_DETAILS_RECORD_ERROR = "Aktualizovanie prihlasovacieho záznamu sa nepodarilo";
+    public static final String PASSWORD_TOKEN_VERIFY_ERROR = "Verifikácia kľúču pre zabudnuté heslo sa nepodarilo";
+
+
 
     public static final String SERVER_ERROR = "Server je momentálne nedostupný";
     public static final String SIGNOUT_SUCCESS = "Boli ste úspešne odhlásený";
     public static final String SIGNUP_SUCCESS = "Registrácia prebehla úspešne, na Vami zvolenú emailovú adresu sme poslali aktivačný odkaz";
     public static final String SIGNUP_ERROR = "Registrácia bola neúspešná, skúste znova";
-    public static final String FORGETPASSWORD_SUCCESS = "Postup obnovenia hesla Vám bol zaslaný na uvedenú emailovú adresu";
-    public static final String FORGETPASSWORD_ERROR = "Pri postupe obnoveniu hesla nastala chyba";
+    public static final String FORGET_PASSWORD_SUCCESS = "Postup obnovenia hesla Vám bol zaslaný na uvedenú emailovú adresu";
+    public static final String PASSWORD_TOKEN_SUCCESS = "Pre dokončenie procesu zadajte nové heslo";
+    public static final String PASSWORD_TOKEN_ERROR = "Ľutujeme, kľúč pre zabudnuté heslo je neplatný";
+    public static final String ACTIVATION_TOKEN_SUCCESS = "Váš účet bol úspešne aktivovný, možete sa prihlásiť";
+    public static final String ACTIVATION_TOKEN_ERROR = "Počas aktivovanie úctu nastala chyba";
+
+
+
+    public static final String NO_MORE_INFORMATION = "Žiadné ďalšie informácie";
+    public static final String SIGNUP_BAD_DATA = "Údaje boli nesprávne vyplnené";
 }

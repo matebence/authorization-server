@@ -1,5 +1,6 @@
 package com.blesk.authorizationserver.DTO.OAuth2;
 
+import com.blesk.authorizationserver.Value.Messages;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.util.HashMap;
@@ -12,6 +13,8 @@ public class Response {
 
     private boolean error;
 
+    private HashMap<String, String> reason;
+
     private HashMap<String, String> nav;
 
     public Response() {
@@ -19,6 +22,8 @@ public class Response {
 
     {
         this.nav = new HashMap<>();
+        this.reason = new HashMap<>();
+        this.reason.put("info", Messages.NO_MORE_INFORMATION);
         this.nav.put("home", ServletUriComponentsBuilder.fromCurrentContextPath().build().toUriString());
     }
 
@@ -52,6 +57,14 @@ public class Response {
         this.error = error;
     }
 
+    public HashMap<String, String> getReason() {
+        return this.reason;
+    }
+
+    public void setReason(HashMap<String, String> reason) {
+        this.reason = reason;
+    }
+
     public HashMap getNav() {
         return this.nav;
     }
@@ -66,6 +79,7 @@ public class Response {
                 "timestamp='" + timestamp + '\'' +
                 ", message='" + message + '\'' +
                 ", error=" + error +
+                ", reason=" + reason +
                 ", nav=" + nav +
                 '}';
     }

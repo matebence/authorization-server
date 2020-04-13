@@ -45,7 +45,7 @@ public class OAuth2Impl implements OAuth2 {
             throw new AuthorizationException(Messages.BLOCKED_EXCEPTION);
         }
 
-        Accounts accounts = this.messagesService.getAccountForVerification(userName);
+        Accounts accounts = this.messagesService.sendAccountForVerification(userName);
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         for (Roles role : accounts.getRoles()) {
             for (Privileges privilege : role.getPrivileges()) {

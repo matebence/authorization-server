@@ -3,6 +3,7 @@ package com.blesk.authorizationserver.Controller;
 import com.blesk.authorizationserver.DTO.OAuth2.Response;
 import com.blesk.authorizationserver.Exception.AuthorizationException;
 import com.blesk.authorizationserver.Model.Accounts;
+import com.blesk.authorizationserver.Model.Activations;
 import com.blesk.authorizationserver.Model.Passwords;
 import com.blesk.authorizationserver.Service.Emails.EmailsServiceImpl;
 import com.blesk.authorizationserver.Service.Messages.MessagesServiceImpl;
@@ -68,13 +69,50 @@ public class AuthorizationController {
     @PostMapping(value = "/signup")
     @ResponseStatus(HttpStatus.CREATED)
     public Response performSignup(@RequestBody Accounts accounts) {
+        Response response = new Response();
+        response.setTimestamp(new Timestamp(System.currentTimeMillis()).toString());
         Accounts account = this.messagesService.sendAccountForRegistration(accounts);
-        if (account == null)
+
+        if (!account.getValidations().isEmpty()) {
+            response.setError(false);
+            response.setReason(account.getValidations());
+            response.setMessage(Messages.SIGNUP_BAD_DATA);
+            return response;
+        }
+        if (account.getAccountId() == null)
             throw new AuthorizationException(Messages.SIGNUP_ERROR);
 
-        Response response = new Response(new Timestamp(System.currentTimeMillis()).toString(), Messages.SIGNUP_SUCCESS, false);
+        Map<String, Object> variables = new HashMap<>();
+        variables.put("activationUrl", String.format(this.activationUrl, account.getAccountId(), account.getActivations().getToken()));
+        this.emailsService.sendHtmlMesseage("Registrácia", "signupactivation", variables, account);
+
         response.setNav("signin", ServletUriComponentsBuilder.fromCurrentContextPath().path("signin").toUriString());
         response.setNav("forgetpassword", ServletUriComponentsBuilder.fromCurrentContextPath().path("forgetpassword").toUriString());
+        response.setMessage(Messages.SIGNUP_SUCCESS);
+        response.setError(false);
+        return response;
+    }
+
+    @GetMapping(value = "signup/account/{accountId}/token/{token}")
+    @ResponseStatus(HttpStatus.OK)
+    public Response performAccountActivationTokenVerification(@PathVariable Long accountId, @PathVariable String token) {
+        Accounts accounts = new Accounts();
+        accounts.setAccountId(accountId);
+        Activations activations = new Activations();
+        activations.setToken(token);
+        accounts.setActivations(activations);
+
+        Response response = new Response();
+        response.setTimestamp(new Timestamp(System.currentTimeMillis()).toString());
+
+        if (this.messagesService.sendPasswordTokenToVerify(accounts)) {
+            response.setMessage(Messages.ACTIVATION_TOKEN_SUCCESS);
+            response.setError(true);
+        } else {
+            response.setMessage(Messages.ACTIVATION_TOKEN_ERROR);
+            response.setError(true);
+        }
+
         return response;
     }
 
@@ -84,15 +122,15 @@ public class AuthorizationController {
         if (accounts.get("email") == null)
             throw new AuthorizationException(Messages.REQUEST_BODY_NOT_FOUND_EXCEPTION);
 
-        Passwords passwords = this.messagesService.getResetTokenToRecoverAccount(accounts.get("email"));
-        if (passwords == null)
-            throw new AuthorizationException(Messages.FORGETPASSWORD_ERROR);
+        Passwords passwords = this.messagesService.getPasswordTokenToRecoverAccount(accounts.get("email"));
+        if (passwords.getAccount() == null)
+            throw new AuthorizationException(Messages.ACCOUNT_EMAIL_RECOVERY_ERROR);
 
         Map<String, Object> variables = new HashMap<>();
         variables.put("resetPasswordUrl", String.format(this.resetPasswordUrl, passwords.getAccount().getAccountId(), passwords.getToken()));
         this.emailsService.sendHtmlMesseage("Zabudnuté heslo", "forgetpassword", variables, passwords.getAccount());
 
-        Response response = new Response(new Timestamp(System.currentTimeMillis()).toString(), Messages.FORGETPASSWORD_SUCCESS, false);
+        Response response = new Response(new Timestamp(System.currentTimeMillis()).toString(), Messages.FORGET_PASSWORD_SUCCESS, false);
         response.setNav("signin", ServletUriComponentsBuilder.fromCurrentContextPath().path("signin").toUriString());
         response.setNav("signup", ServletUriComponentsBuilder.fromCurrentContextPath().path("signup").toUriString());
         return response;
@@ -100,7 +138,7 @@ public class AuthorizationController {
 
     @GetMapping(value = "/forgetpassword/account/{accountId}/token/{token}")
     @ResponseStatus(HttpStatus.OK)
-    public Response performPasswordRecovery(@PathVariable Long accountId, @PathVariable String token) {
+    public Response performPasswordResetTokenVerification(@PathVariable Long accountId, @PathVariable String token) {
         Accounts accounts = new Accounts();
         accounts.setAccountId(accountId);
         Passwords passwords = new Passwords();
@@ -110,11 +148,11 @@ public class AuthorizationController {
         Response response = new Response();
         response.setTimestamp(new Timestamp(System.currentTimeMillis()).toString());
 
-        if (this.messagesService.sendAccountToCreateNewPassword(accounts)) {
-            response.setMessage("Pre dokončenie procesu zadajte nové heslo");
+        if (this.messagesService.sendPasswordTokenToVerify(accounts)) {
+            response.setMessage(Messages.PASSWORD_TOKEN_SUCCESS);
             response.setError(false);
         } else {
-            response.setMessage("Ľutujeme, kľúč pre zabudnuté heslo je neplatný");
+            response.setMessage(Messages.PASSWORD_TOKEN_ERROR);
             response.setError(true);
         }
 

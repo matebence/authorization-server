@@ -26,15 +26,15 @@ public class AccountPreferenceItems implements Serializable {
 
     private Long createdBy;
 
-    private java.sql.Timestamp createdAt;
+    private Timestamp createdAt;
 
     private Long updatedBy;
 
-    private java.sql.Timestamp updatedAt;
+    private Timestamp updatedAt;
 
     private Long deletedBy;
 
-    private java.sql.Timestamp deletedAt;
+    private Timestamp deletedAt;
 
     public AccountPreferenceItems() {
     }

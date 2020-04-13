@@ -46,7 +46,7 @@ public class AttemptsServiceImpl implements AttemptsService {
         logins.setAccount(accounts);
         logins.setLastLogin(new Timestamp(System.currentTimeMillis()));
 
-        this.messagesService.sendLoginDetailsToRecord(logins);
+        this.messagesService.sendLoginDetails(logins);
         this.loadingCache.invalidate(ip);
     }
 

@@ -27,6 +27,21 @@ public class RabbitMQ {
     }
 
     @Bean
+    Queue lastLoginQueue() {
+        return new Queue("blesk.lastLoginQueue", false);
+    }
+
+    @Bean
+    DirectExchange lastLoginExchange() {
+        return new DirectExchange("blesk.lastLoginExchange");
+    }
+
+    @Bean
+    Binding lastLoginQueueBinding() {
+        return BindingBuilder.bind(lastLoginQueue()).to(lastLoginExchange()).with("blesk.lastLoginRoutingKey");
+    }
+
+    @Bean
     Queue createAccountQueue() {
         return new Queue("blesk.createAccountQueue", false);
     }
@@ -39,6 +54,21 @@ public class RabbitMQ {
     @Bean
     Binding createAccountQueueBinding() {
         return BindingBuilder.bind(createAccountQueue()).to(createAccountExchange()).with("blesk.createAccountRoutingKey");
+    }
+
+    @Bean
+    Queue verifyActivationTokenQueue() {
+        return new Queue("blesk.verifyActivationTokenQueue", false);
+    }
+
+    @Bean
+    DirectExchange verifyActivationTokenExchange() {
+        return new DirectExchange("blesk.verifyActivationTokenExchange");
+    }
+
+    @Bean
+    Binding verifyActivationTokenBinding() {
+        return BindingBuilder.bind(verifyActivationTokenQueue()).to(verifyActivationTokenExchange()).with("blesk.verifyActivationTokenRoutingKey");
     }
 
     @Bean
@@ -57,33 +87,18 @@ public class RabbitMQ {
     }
 
     @Bean
-    Queue changePasswordQueue() {
-        return new Queue("blesk.changePasswordQueue", false);
+    Queue verifyPasswordTokenQueue() {
+        return new Queue("blesk.verifyPasswordTokenQueue", false);
     }
 
     @Bean
-    DirectExchange changePasswordExchange() {
-        return new DirectExchange("blesk.changePasswordExchange");
+    DirectExchange verifyPasswordTokenExchange() {
+        return new DirectExchange("blesk.verifyPasswordTokenExchange");
     }
 
     @Bean
-    Binding changePasswordQueueBinding() {
-        return BindingBuilder.bind(changePasswordQueue()).to(changePasswordExchange()).with("blesk.changePasswordRoutingKey");
-    }
-
-    @Bean
-    Queue lastLoginQueue() {
-        return new Queue("blesk.lastLoginQueue", false);
-    }
-
-    @Bean
-    DirectExchange lastLoginExchange() {
-        return new DirectExchange("blesk.lastLoginExchange");
-    }
-
-    @Bean
-    Binding lastLoginQueueBinding() {
-        return BindingBuilder.bind(lastLoginQueue()).to(lastLoginExchange()).with("blesk.lastLoginRoutingKey");
+    Binding verifyPasswordTokenBinding() {
+        return BindingBuilder.bind(verifyPasswordTokenQueue()).to(verifyPasswordTokenExchange()).with("blesk.verifyPasswordTokenRoutingKey");
     }
 
     @Bean

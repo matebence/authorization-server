@@ -7,10 +7,7 @@ import org.springframework.security.core.GrantedAuthority;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, scope = Accounts.class)
 public class Accounts implements Serializable {
@@ -21,6 +18,8 @@ public class Accounts implements Serializable {
 
     private Passwords passwords;
 
+    private Activations activations;
+
     private Set<Roles> roles = new HashSet<>();
 
     private Set<AccountPreferenceItems> accountPreferenceItems = new HashSet<>();
@@ -30,8 +29,6 @@ public class Accounts implements Serializable {
     private String email;
 
     private String password;
-
-    private String confirmPassword;
 
     private Boolean isActivated;
 
@@ -48,6 +45,10 @@ public class Accounts implements Serializable {
     private Long deletedBy;
 
     private Timestamp deletedAt;
+
+    private String confirmPassword;
+
+    private HashMap<String, String> validations = new HashMap<>();
 
     private Collection<GrantedAuthority> grantedAuthorities = new ArrayList<>();
 
@@ -76,6 +77,14 @@ public class Accounts implements Serializable {
 
     public void setPasswords(Passwords passwords) {
         this.passwords = passwords;
+    }
+
+    public Activations getActivations() {
+        return this.activations;
+    }
+
+    public void setActivations(Activations activations) {
+        this.activations = activations;
     }
 
     public Set<Roles> getRoles() {
@@ -116,14 +125,6 @@ public class Accounts implements Serializable {
 
     public void setPassword(String password) {
         this.password = password;
-    }
-
-    public String getConfirmPassword() {
-        return this.confirmPassword;
-    }
-
-    public void setConfirmPassword(String confirmPassword) {
-        this.confirmPassword = confirmPassword;
     }
 
     public Boolean getActivated() {
@@ -190,8 +191,24 @@ public class Accounts implements Serializable {
         this.deletedAt = deletedAt;
     }
 
+    public String getConfirmPassword() {
+        return this.confirmPassword;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
+    }
+
+    public HashMap<String, String> getValidations() {
+        return this.validations;
+    }
+
+    public void setValidations(HashMap<String, String> validations) {
+        this.validations = validations;
+    }
+
     public Collection<GrantedAuthority> getGrantedAuthorities() {
-        return grantedAuthorities;
+        return this.grantedAuthorities;
     }
 
     public void setGrantedAuthorities(Collection<GrantedAuthority> grantedAuthorities) {

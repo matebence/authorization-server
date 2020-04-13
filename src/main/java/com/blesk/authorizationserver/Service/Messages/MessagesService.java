@@ -6,13 +6,15 @@ import com.blesk.authorizationserver.Model.Passwords;
 
 public interface MessagesService {
 
-    Accounts getAccountForVerification(String userName);
+    Accounts sendAccountForVerification(String userName);
+
+    Boolean sendLoginDetails(Logins logins);
 
     Accounts sendAccountForRegistration(Accounts accounts);
 
-    Passwords getResetTokenToRecoverAccount(String email);
+    Boolean sendActivationTokenToVerify(Accounts accounts);
 
-    Boolean sendAccountToCreateNewPassword(Accounts accounts);
+    Passwords getPasswordTokenToRecoverAccount(String email);
 
-    Boolean sendLoginDetailsToRecord(Logins logins);
+    Boolean sendPasswordTokenToVerify(Accounts accounts);
 }
