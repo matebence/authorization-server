@@ -43,7 +43,7 @@ public class AttemptsServiceImpl implements AttemptsService {
         Logins logins = new Logins();
         logins.setLoginId(account.getLoginId());
         logins.setIpAddress(ip);
-        logins.setAccount(accounts);
+        logins.setAccounts(accounts);
         logins.setLastLogin(new Timestamp(System.currentTimeMillis()));
 
         this.messagesService.sendLoginDetails(logins);

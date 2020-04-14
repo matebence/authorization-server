@@ -5,11 +5,9 @@ import com.blesk.authorizationserver.Exception.AuthorizationException;
 import com.blesk.authorizationserver.Model.Accounts;
 import com.blesk.authorizationserver.Model.Activations;
 import com.blesk.authorizationserver.Model.Passwords;
-import com.blesk.authorizationserver.Service.Emails.EmailsServiceImpl;
 import com.blesk.authorizationserver.Service.Messages.MessagesServiceImpl;
 import com.blesk.authorizationserver.Value.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
 import org.springframework.security.oauth2.provider.token.TokenStore;
@@ -20,28 +18,18 @@ import javax.servlet.http.HttpServletRequest;
 
 import java.sql.Timestamp;
 import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 public class AuthorizationController {
-
-    @Value("${blesk.javamailer.url.forget-password}")
-    private String resetPasswordUrl;
-
-    @Value("${blesk.javamailer.url.account-activation}")
-    private String activationUrl;
 
     private TokenStore tokenStore;
 
     private MessagesServiceImpl messagesService;
 
-    private EmailsServiceImpl emailsService;
-
     @Autowired
-    public AuthorizationController(TokenStore tokenStore, MessagesServiceImpl messagesService, EmailsServiceImpl emailsService) {
+    public AuthorizationController(TokenStore tokenStore, MessagesServiceImpl messagesService) {
         this.tokenStore = tokenStore;
         this.messagesService = messagesService;
-        this.emailsService = emailsService;
     }
 
     @DeleteMapping(value = "/signout")
@@ -82,10 +70,6 @@ public class AuthorizationController {
         if (account.getAccountId() == null)
             throw new AuthorizationException(Messages.SIGNUP_ERROR);
 
-        Map<String, Object> variables = new HashMap<>();
-        variables.put("activationUrl", String.format(this.activationUrl, account.getAccountId(), account.getActivations().getToken()));
-        this.emailsService.sendHtmlMesseage("Registrácia", "signupactivation", variables, account);
-
         response.setNav("signin", ServletUriComponentsBuilder.fromCurrentContextPath().path("signin").toUriString());
         response.setNav("forgetpassword", ServletUriComponentsBuilder.fromCurrentContextPath().path("forgetpassword").toUriString());
         response.setMessage(Messages.SIGNUP_SUCCESS);
@@ -105,7 +89,7 @@ public class AuthorizationController {
         Response response = new Response();
         response.setTimestamp(new Timestamp(System.currentTimeMillis()).toString());
 
-        if (this.messagesService.sendPasswordTokenToVerify(accounts)) {
+        if (this.messagesService.sendActivationTokenToVerify(accounts)) {
             response.setMessage(Messages.ACTIVATION_TOKEN_SUCCESS);
             response.setError(true);
         } else {
@@ -123,12 +107,8 @@ public class AuthorizationController {
             throw new AuthorizationException(Messages.REQUEST_BODY_NOT_FOUND_EXCEPTION);
 
         Passwords passwords = this.messagesService.getPasswordTokenToRecoverAccount(accounts.get("email"));
-        if (passwords.getAccount() == null)
+        if (passwords.getAccounts() == null)
             throw new AuthorizationException(Messages.ACCOUNT_EMAIL_RECOVERY_ERROR);
-
-        Map<String, Object> variables = new HashMap<>();
-        variables.put("resetPasswordUrl", String.format(this.resetPasswordUrl, passwords.getAccount().getAccountId(), passwords.getToken()));
-        this.emailsService.sendHtmlMesseage("Zabudnuté heslo", "forgetpassword", variables, passwords.getAccount());
 
         Response response = new Response(new Timestamp(System.currentTimeMillis()).toString(), Messages.FORGET_PASSWORD_SUCCESS, false);
         response.setNav("signin", ServletUriComponentsBuilder.fromCurrentContextPath().path("signin").toUriString());

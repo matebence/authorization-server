@@ -41,19 +41,22 @@ public class OAuth2Impl implements OAuth2 {
 
     @Override
     public UserDetails loadUserByUsername(String userName){
-        if (this.attemptServiceImpl.isBlocked(Tools.getClientIP(this.httpServletRequest))) {
+        if (this.attemptServiceImpl.isBlocked(Tools.getClientIP(this.httpServletRequest)))
             throw new AuthorizationException(Messages.BLOCKED_EXCEPTION);
-        }
 
         Accounts accounts = this.messagesService.sendAccountForVerification(userName);
+
+        if (!accounts.getActivated())
+            throw new AuthorizationException(Messages.NOT_ACTIVATED_EXCEPTION);
+
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         for (Roles role : accounts.getRoles()) {
             for (Privileges privilege : role.getPrivileges()) {
                 authorities.add(new SimpleGrantedAuthority(this.oauthPrefix+privilege.getName()));
             }
         }
-        accounts.setGrantedAuthorities(authorities);
 
+        accounts.setGrantedAuthorities(authorities);
         return new Account(accounts);
     }
 }

@@ -13,9 +13,20 @@ public class Passwords implements Serializable {
 
     private String token;
 
-    private Accounts account;
+    private Accounts accounts;
 
     private Date expiryDate;
+
+    public Passwords(Accounts accounts, String token, Date expiryDate) {
+        this.accounts = accounts;
+        this.token = token;
+        this.expiryDate = expiryDate;
+    }
+
+    public Passwords(String token, Date expiryDate) {
+        this.token = token;
+        this.expiryDate = expiryDate;
+    }
 
     public Passwords() {
     }
@@ -36,12 +47,12 @@ public class Passwords implements Serializable {
         this.token = token;
     }
 
-    public Accounts getAccount() {
-        return this.account;
+    public Accounts getAccounts() {
+        return this.accounts;
     }
 
-    public void setAccount(Accounts account) {
-        this.account = account;
+    public void setAccounts(Accounts accounts) {
+        this.accounts = accounts;
     }
 
     public Date getExpiryDate() {
