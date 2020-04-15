@@ -11,7 +11,7 @@ public class Messages {
     public static final String UNSUPPORTED_GRANT_EXPCEPTION = "Chyba pri prihlásení";
     public static final String INVALID_REQUEST_EXCEPTION = "Chyba pri prihlásení";
     public static final String AUTH_REQUIRED_EXCEPTION = "Prístup odmietnutý";
-    public static final String OAUTH_EXPCETION = "Lutujeme, ale nastala chyba";
+    public static final String OAUTH_EXPCETION = "Ľutujeme, ale nastala chyba";
     public static final String SQL_EXCEPTION = "Operácia sa neuskutočnila";
     public static final String EXCEPTION = "Nastala neočakávaná chyba";
     public static final String BLOCKED_EXCEPTION = "Účet bol zablokovaný na 24h";
