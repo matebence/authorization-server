@@ -27,8 +27,6 @@ public class MessagesServiceImpl implements MessagesService {
         Accounts accounts = this.amqpTemplate.convertSendAndReceiveAsType("blesk.verifyAccountExchange", "blesk.verifyAccountRoutingKey", userName, new AccountsReference());
         if (accounts == null)
             throw new AuthorizationException(Messages.SERVER_ERROR);
-        if (accounts.getAccountId() == null)
-            throw new AuthorizationException(Messages.ACCOUNT_VERIFICATION_ERROR);
         return accounts;
     }
 

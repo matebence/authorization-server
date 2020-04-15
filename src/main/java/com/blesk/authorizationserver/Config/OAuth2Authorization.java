@@ -2,7 +2,7 @@ package com.blesk.authorizationserver.Config;
 
 import com.blesk.authorizationserver.DTO.OAuth2.Account;
 import com.blesk.authorizationserver.DTO.OAuth2.Jwt;
-import com.blesk.authorizationserver.Handler.OAuth2Handler;
+import com.blesk.authorizationserver.Translator.OAuthTranslator;
 import com.blesk.authorizationserver.Service.Attempts.AttemptsServiceImpl;
 import com.blesk.authorizationserver.Utilitie.Tools;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,8 +85,7 @@ public class OAuth2Authorization extends AuthorizationServerConfigurerAdapter {
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
-        endpoints.authenticationManager(this.authenticationManager).tokenStore(tokenStore())
-                .accessTokenConverter(tokenEnhancer()).pathMapping("/oauth/token", "/signin").exceptionTranslator(new OAuth2Handler());
+        endpoints.authenticationManager(this.authenticationManager).tokenStore(tokenStore()).accessTokenConverter(tokenEnhancer()).pathMapping("/oauth/token", "/signin").exceptionTranslator(new OAuthTranslator());
     }
 
     @Bean

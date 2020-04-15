@@ -1,4 +1,4 @@
-package com.blesk.authorizationserver.Handler;
+package com.blesk.authorizationserver.EntryPoint;
 
 import com.blesk.authorizationserver.Value.Messages;
 import net.minidev.json.JSONObject;
@@ -12,7 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.Timestamp;
 
-public class SecurityHandler implements AuthenticationEntryPoint {
+public class SecurityEntryPoint implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest req, HttpServletResponse res, AuthenticationException authException) throws IOException, ServletException {

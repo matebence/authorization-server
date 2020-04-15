@@ -1,6 +1,6 @@
 package com.blesk.authorizationserver.Config;
 
-import com.blesk.authorizationserver.Handler.SecurityHandler;
+import com.blesk.authorizationserver.EntryPoint.SecurityEntryPoint;
 import com.blesk.authorizationserver.Service.OAuth2.OAuth2Impl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContextAware;
@@ -60,6 +60,6 @@ public class SpringSecurity extends WebSecurityConfigurerAdapter implements Appl
 
     @Bean
     public AuthenticationEntryPoint authenticationEntryPoint() {
-        return new SecurityHandler();
+        return new SecurityEntryPoint();
     }
 }
