@@ -21,6 +21,7 @@ import java.sql.Timestamp;
 import java.util.HashMap;
 
 @RestController
+@RequestMapping(value = "/", produces = "application/json")
 public class AuthorizationController {
 
     private TokenStore tokenStore;
