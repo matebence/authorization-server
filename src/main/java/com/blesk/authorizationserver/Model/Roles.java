@@ -1,5 +1,7 @@
 package com.blesk.authorizationserver.Model;
 
+import com.blesk.authorizationserver.Model.AccountRoleItems.AccountRoles;
+import com.blesk.authorizationserver.Model.RolePrivilegeItems.RolePrivileges;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -13,23 +15,17 @@ public class Roles implements Serializable {
 
     private Long roleId;
 
-    private Set<Privileges> privileges = new HashSet<Privileges>();
+    private Set<AccountRoles> accountRoles = new HashSet<AccountRoles>();
 
-    private Set<Accounts> accounts = new HashSet<Accounts>();
+    private Set<RolePrivileges> rolePrivileges = new HashSet<RolePrivileges>();
 
     private String name;
 
-    private Boolean isDeleted = false;
-
-    private Long createdBy;
+    private Boolean isDeleted;
 
     private Timestamp createdAt;
 
-    private Long updatedBy;
-
     private Timestamp updatedAt;
-
-    private Long deletedBy;
 
     private Timestamp deletedAt;
 
@@ -44,20 +40,36 @@ public class Roles implements Serializable {
         this.roleId = roleId;
     }
 
-    public Set<Privileges> getPrivileges() {
-        return this.privileges;
+    public void addPrivilege(RolePrivileges rolePrivileges) {
+        this.rolePrivileges.add(rolePrivileges);
     }
 
-    public void setPrivileges(Set<Privileges> privileges) {
-        this.privileges = privileges;
+    public Set<RolePrivileges> getRolePrivileges() {
+        return this.rolePrivileges;
     }
 
-    public Set<Accounts> getAccounts() {
-        return this.accounts;
+    public void setRolePrivileges(Set<RolePrivileges> privileges) {
+        this.rolePrivileges = privileges;
     }
 
-    public void setAccounts(Set<Accounts> accounts) {
-        this.accounts = accounts;
+    public void addRolePrivileges(RolePrivileges rolePrivileges) {
+        this.rolePrivileges.add(rolePrivileges);
+    }
+
+    public void addAccount(AccountRoles accountRoles) {
+        this.accountRoles.add(accountRoles);
+    }
+
+    public Set<AccountRoles> getAccountRoles() {
+        return this.accountRoles;
+    }
+
+    public void setAccountRoles(Set<AccountRoles> accounts) {
+        this.accountRoles = accounts;
+    }
+
+    public void addAccountRoles(AccountRoles accountRoles) {
+        this.accountRoles.add(accountRoles);
     }
 
     public String getName() {
@@ -76,14 +88,6 @@ public class Roles implements Serializable {
         isDeleted = deleted;
     }
 
-    public Long getCreatedBy() {
-        return this.createdBy;
-    }
-
-    public void setCreatedBy(Long createdBy) {
-        this.createdBy = createdBy;
-    }
-
     public Timestamp getCreatedAt() {
         return this.createdAt;
     }
@@ -92,28 +96,12 @@ public class Roles implements Serializable {
         this.createdAt = createdAt;
     }
 
-    public Long getUpdatedBy() {
-        return this.updatedBy;
-    }
-
-    public void setUpdatedBy(Long updatedBy) {
-        this.updatedBy = updatedBy;
-    }
-
     public Timestamp getUpdatedAt() {
         return this.updatedAt;
     }
 
     public void setUpdatedAt(Timestamp updatedAt) {
         this.updatedAt = updatedAt;
-    }
-
-    public Long getDeletedBy() {
-        return this.deletedBy;
-    }
-
-    public void setDeletedBy(Long deletedBy) {
-        this.deletedBy = deletedBy;
     }
 
     public Timestamp getDeletedAt() {

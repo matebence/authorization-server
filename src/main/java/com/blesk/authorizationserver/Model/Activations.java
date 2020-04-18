@@ -10,9 +10,9 @@ public class Activations implements Serializable {
 
     private Long accountActivationId;
 
-    private String token;
+    private Accounts accounts;
 
-    private Accounts account;
+    private String token;
 
     public Activations() {
     }
@@ -33,11 +33,11 @@ public class Activations implements Serializable {
         this.token = token;
     }
 
-    public Accounts getAccount() {
-        return this.account;
+    public Accounts getAccounts() {
+        return this.accounts;
     }
 
-    public void setAccount(Accounts account) {
-        this.account = account;
+    public void setAccounts(Accounts accounts) {
+        this.accounts = accounts;
     }
 }

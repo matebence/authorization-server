@@ -1,5 +1,6 @@
 package com.blesk.authorizationserver.Model;
 
+import com.blesk.authorizationserver.Model.RolePrivilegeItems.RolePrivileges;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -13,21 +14,15 @@ public class Privileges implements Serializable {
 
     private Long privilegeId;
 
-    private Set<Roles> roles = new HashSet<Roles>();
+    private Set<RolePrivileges> rolePrivileges = new HashSet<RolePrivileges>();
 
     private String name;
 
-    private Boolean isDeleted = false;
-
-    private Long createdBy;
+    private Boolean isDeleted;
 
     private Timestamp createdAt;
 
-    private Long updatedBy;
-
     private Timestamp updatedAt;
-
-    private Long deletedBy;
 
     private Timestamp deletedAt;
 
@@ -42,12 +37,20 @@ public class Privileges implements Serializable {
         this.privilegeId = privilegeId;
     }
 
-    public Set<Roles> getRoles() {
-        return this.roles;
+    public void addRole(RolePrivileges rolePrivileges) {
+        this.rolePrivileges.add(rolePrivileges);
     }
 
-    public void setRoles(Set<Roles> roles) {
-        this.roles = roles;
+    public Set<RolePrivileges> getRolePrivileges() {
+        return this.rolePrivileges;
+    }
+
+    public void setRolePrivileges(Set<RolePrivileges> roles) {
+        this.rolePrivileges = roles;
+    }
+
+    public void addRolePrivileges(RolePrivileges rolePrivileges) {
+        this.rolePrivileges.add(rolePrivileges);
     }
 
     public String getName() {
@@ -66,14 +69,6 @@ public class Privileges implements Serializable {
         isDeleted = deleted;
     }
 
-    public Long getCreatedBy() {
-        return this.createdBy;
-    }
-
-    public void setCreatedBy(Long createdBy) {
-        this.createdBy = createdBy;
-    }
-
     public Timestamp getCreatedAt() {
         return this.createdAt;
     }
@@ -82,28 +77,12 @@ public class Privileges implements Serializable {
         this.createdAt = createdAt;
     }
 
-    public Long getUpdatedBy() {
-        return this.updatedBy;
-    }
-
-    public void setUpdatedBy(Long updatedBy) {
-        this.updatedBy = updatedBy;
-    }
-
     public Timestamp getUpdatedAt() {
         return this.updatedAt;
     }
 
     public void setUpdatedAt(Timestamp updatedAt) {
         this.updatedAt = updatedAt;
-    }
-
-    public Long getDeletedBy() {
-        return this.deletedBy;
-    }
-
-    public void setDeletedBy(Long deletedBy) {
-        this.deletedBy = deletedBy;
     }
 
     public Timestamp getDeletedAt() {

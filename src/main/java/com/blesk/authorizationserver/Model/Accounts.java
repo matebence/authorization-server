@@ -1,6 +1,7 @@
 package com.blesk.authorizationserver.Model;
 
-import com.blesk.authorizationserver.Model.Preferences.AccountPreferenceItems;
+import com.blesk.authorizationserver.Model.AccountPreferenceItems.AccountPreferences;
+import com.blesk.authorizationserver.Model.AccountRoleItems.AccountRoles;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import org.springframework.security.core.GrantedAuthority;
@@ -20,9 +21,9 @@ public class Accounts implements Serializable {
 
     private Activations activations;
 
-    private Set<Roles> roles = new HashSet<>();
+    private Set<AccountRoles> accountRoles = new HashSet<AccountRoles>();
 
-    private Set<AccountPreferenceItems> accountPreferenceItems = new HashSet<>();
+    private Set<AccountPreferences> accountPreferences = new HashSet<AccountPreferences>();
 
     private String userName;
 
@@ -30,27 +31,23 @@ public class Accounts implements Serializable {
 
     private String password;
 
+    private String confirmPassword;
+
     private Boolean isActivated;
 
     private Boolean isDeleted;
 
-    private Long createdBy;
-
     private Timestamp createdAt;
-
-    private Long updatedBy;
 
     private Timestamp updatedAt;
 
-    private Long deletedBy;
-
     private Timestamp deletedAt;
-
-    private String confirmPassword;
 
     private HashMap<String, String> validations = new HashMap<>();
 
     private Collection<GrantedAuthority> grantedAuthorities = new ArrayList<>();
+
+    private Collection<String> grantedPrivileges = new ArrayList<>();
 
     public Accounts() {
     }
@@ -87,20 +84,36 @@ public class Accounts implements Serializable {
         this.activations = activations;
     }
 
-    public Set<Roles> getRoles() {
-        return this.roles;
+    public void addRole(AccountRoles accountRoles) {
+        this.accountRoles.add(accountRoles);
     }
 
-    public void setRoles(Set<Roles> roles) {
-        this.roles = roles;
+    public Set<AccountRoles> getAccountRoles() {
+        return this.accountRoles;
     }
 
-    public Set<AccountPreferenceItems> getAccountPreferenceItems() {
-        return this.accountPreferenceItems;
+    public void setAccountRoles(Set<AccountRoles> roles) {
+        this.accountRoles = roles;
     }
 
-    public void setAccountPreferenceItems(Set<AccountPreferenceItems> accountPreferenceItems) {
-        this.accountPreferenceItems = accountPreferenceItems;
+    public void addAccountRoles(AccountRoles accountRoles) {
+        this.accountRoles.add(accountRoles);
+    }
+
+    public void addPreference(AccountPreferences accountPreferences) {
+        this.accountPreferences.add(accountPreferences);
+    }
+
+    public Set<AccountPreferences> getAccountPreferences() {
+        return this.accountPreferences;
+    }
+
+    public void setAccountPreferences(Set<AccountPreferences> preferences) {
+        this.accountPreferences = preferences;
+    }
+
+    public void addAccountPreferences(AccountPreferences accountPreferences) {
+        this.accountPreferences.add(accountPreferences);
     }
 
     public String getUserName() {
@@ -119,12 +132,12 @@ public class Accounts implements Serializable {
         this.email = email;
     }
 
-    public String getPassword() {
-        return this.password;
-    }
-
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setConfirmPassword(String confirmPassword) {
+        this.confirmPassword = confirmPassword;
     }
 
     public Boolean getActivated() {
@@ -143,28 +156,12 @@ public class Accounts implements Serializable {
         isDeleted = deleted;
     }
 
-    public Long getCreatedBy() {
-        return this.createdBy;
-    }
-
-    public void setCreatedBy(Long createdBy) {
-        this.createdBy = createdBy;
-    }
-
     public Timestamp getCreatedAt() {
         return this.createdAt;
     }
 
     public void setCreatedAt(Timestamp createdAt) {
         this.createdAt = createdAt;
-    }
-
-    public Long getUpdatedBy() {
-        return this.updatedBy;
-    }
-
-    public void setUpdatedBy(Long updatedBy) {
-        this.updatedBy = updatedBy;
     }
 
     public Timestamp getUpdatedAt() {
@@ -175,28 +172,12 @@ public class Accounts implements Serializable {
         this.updatedAt = updatedAt;
     }
 
-    public Long getDeletedBy() {
-        return this.deletedBy;
-    }
-
-    public void setDeletedBy(Long deletedBy) {
-        this.deletedBy = deletedBy;
-    }
-
     public Timestamp getDeletedAt() {
         return this.deletedAt;
     }
 
     public void setDeletedAt(Timestamp deletedAt) {
         this.deletedAt = deletedAt;
-    }
-
-    public String getConfirmPassword() {
-        return this.confirmPassword;
-    }
-
-    public void setConfirmPassword(String confirmPassword) {
-        this.confirmPassword = confirmPassword;
     }
 
     public HashMap<String, String> getValidations() {
@@ -207,11 +188,27 @@ public class Accounts implements Serializable {
         this.validations = validations;
     }
 
+    public String getPassword() {
+        return this.password;
+    }
+
+    public String getConfirmPassword() {
+        return this.confirmPassword;
+    }
+
     public Collection<GrantedAuthority> getGrantedAuthorities() {
         return this.grantedAuthorities;
     }
 
     public void setGrantedAuthorities(Collection<GrantedAuthority> grantedAuthorities) {
         this.grantedAuthorities = grantedAuthorities;
+    }
+
+    public Collection<String> getGrantedPrivileges() {
+        return this.grantedPrivileges;
+    }
+
+    public void setGrantedPrivileges(Collection<String> grantedPrivileges) {
+        this.grantedPrivileges = grantedPrivileges;
     }
 }

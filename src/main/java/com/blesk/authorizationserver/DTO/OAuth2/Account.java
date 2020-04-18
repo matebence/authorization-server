@@ -3,12 +3,15 @@ package com.blesk.authorizationserver.DTO.OAuth2;
 import com.blesk.authorizationserver.Model.Accounts;
 import org.springframework.security.core.userdetails.User;
 
+import java.util.Collection;
+
 public class Account extends User {
 
     private Long accountId;
     private Long loginId;
     private String userName;
     private Boolean isActivated;
+    private Collection<String> grantedPrivileges;
 
     public Account(Accounts accounts) {
         super(accounts.getUserName(), accounts.getPassword(), accounts.getGrantedAuthorities());
@@ -16,6 +19,7 @@ public class Account extends User {
         this.loginId = accounts.getLogin().getLoginId();
         this.userName = accounts.getUserName();
         this.isActivated = accounts.getActivated();
+        this.grantedPrivileges = accounts.getGrantedPrivileges();
     }
 
     public Long getAccountId() {
@@ -50,12 +54,22 @@ public class Account extends User {
         this.isActivated = activated;
     }
 
+    public Collection<String> getGrantedPrivileges() {
+        return this.grantedPrivileges;
+    }
+
+    public void setGrantedPrivileges(Collection<String> grantedPrivileges) {
+        this.grantedPrivileges = grantedPrivileges;
+    }
+
     @Override
     public String toString() {
         return "Account{" +
-                "accountId=" + this.accountId +
-                ", userName='" + this.userName + '\'' +
-                ", isActivated=" + this.isActivated +
+                "accountId=" + accountId +
+                ", loginId=" + loginId +
+                ", userName='" + userName + '\'' +
+                ", isActivated=" + isActivated +
+                ", grantedPrivileges=" + grantedPrivileges +
                 '}';
     }
 }
