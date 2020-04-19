@@ -52,6 +52,16 @@ public class Accounts implements Serializable {
     public Accounts() {
     }
 
+    public Accounts(Long accountId, Passwords passwords) {
+        this.accountId = accountId;
+        this.passwords = passwords;
+    }
+
+    public Accounts(Long accountId, Activations activations) {
+        this.accountId = accountId;
+        this.activations = activations;
+    }
+
     public Long getAccountId() {
         return this.accountId;
     }

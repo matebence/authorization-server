@@ -23,6 +23,10 @@ public class Passwords implements Serializable {
     public Passwords() {
     }
 
+    public Passwords(String token) {
+        this.token = token;
+    }
+
     public Long getPasswordTokenId() {
         return this.passwordTokenId;
     }

@@ -17,6 +17,10 @@ public class Activations implements Serializable {
     public Activations() {
     }
 
+    public Activations(String token) {
+        this.token = token;
+    }
+
     public Long getAccountActivationId() {
         return this.accountActivationId;
     }

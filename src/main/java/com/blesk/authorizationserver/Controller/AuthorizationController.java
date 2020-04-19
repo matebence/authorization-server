@@ -84,16 +84,10 @@ public class AuthorizationController {
 
     @GetMapping(value = "signup/account/{accountId}/token/{token}")
     public Response performAccountActivationTokenVerification(@PathVariable Long accountId, @PathVariable String token, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-        Accounts accounts = new Accounts();
-        accounts.setAccountId(accountId);
-        Activations activations = new Activations();
-        activations.setToken(token);
-        accounts.setActivations(activations);
-
         Response response = new Response();
         response.setTimestamp(new Timestamp(System.currentTimeMillis()).toString());
 
-        if (this.messagesService.sendActivationTokenToVerify(accounts)) {
+        if (this.messagesService.sendActivationTokenToVerify(new Accounts(accountId, new Activations(token)))) {
             httpServletResponse.setStatus( HttpServletResponse.SC_OK);
             response.setMessage(Messages.ACTIVATION_TOKEN_SUCCESS);
             response.setError(false);
@@ -126,16 +120,10 @@ public class AuthorizationController {
     @GetMapping(value = "/forgetpassword/account/{accountId}/token/{token}")
     @ResponseStatus(HttpStatus.OK)
     public Response performPasswordResetTokenVerification(@PathVariable Long accountId, @PathVariable String token, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-        Accounts accounts = new Accounts();
-        accounts.setAccountId(accountId);
-        Passwords passwords = new Passwords();
-        passwords.setToken(token);
-        accounts.setPasswords(passwords);
-
         Response response = new Response();
         response.setTimestamp(new Timestamp(System.currentTimeMillis()).toString());
 
-        if (this.messagesService.sendPasswordTokenToVerify(accounts)) {
+        if (this.messagesService.sendPasswordTokenToVerify(new Accounts(accountId, new Passwords(token)))) {
             httpServletResponse.setStatus( HttpServletResponse.SC_OK);
             response.setMessage(Messages.PASSWORD_TOKEN_SUCCESS);
             response.setError(false);
