@@ -1,7 +1,5 @@
-package com.blesk.authorizationserver.Model.AccountPreferenceItems;
+package com.blesk.authorizationserver.Model;
 
-import com.blesk.authorizationserver.Model.Accounts;
-import com.blesk.authorizationserver.Model.Preferences;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -11,7 +9,11 @@ import java.sql.Timestamp;
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, scope = AccountPreferences.class)
 public class AccountPreferences implements Serializable {
 
-    private AccountPreferenceIds accountPreferenceIds = new AccountPreferenceIds();
+    private Long accountPreferenceId;
+
+    private Accounts accounts;
+
+    private Preferences preferences;
 
     private boolean isSet;
 
@@ -27,31 +29,60 @@ public class AccountPreferences implements Serializable {
 
     private Timestamp deletedAt;
 
+    public AccountPreferences(Accounts accounts, Preferences preferences) {
+        this.accounts = accounts;
+        this.preferences = preferences;
+    }
+
+    public AccountPreferences(Accounts accounts) {
+        this.accounts = accounts;
+    }
+
+    public AccountPreferences(Preferences preferences) {
+        this.preferences = preferences;
+    }
+
+    public AccountPreferences(boolean isSet, String content, int value, Boolean isDeleted) {
+        this.isSet = isSet;
+        this.content = content;
+        this.value = value;
+        this.isDeleted = isDeleted;
+    }
+
+    public AccountPreferences(boolean isSet, String content, int value, Boolean isDeleted, Accounts accounts, Preferences preferences) {
+        this.isSet = isSet;
+        this.content = content;
+        this.value = value;
+        this.isDeleted = isDeleted;
+        this.accounts = accounts;
+        this.preferences = preferences;
+    }
+
     public AccountPreferences() {
     }
 
-    public AccountPreferenceIds getAccountPreferenceIds() {
-        return this.accountPreferenceIds;
+    public Long getAccountPreferenceId() {
+        return this.accountPreferenceId;
     }
 
-    public void setAccountPreferenceIds(AccountPreferenceIds accountPreferenceIds) {
-        this.accountPreferenceIds = accountPreferenceIds;
+    public void setAccountPreferenceId(Long accountPreferenceId) {
+        this.accountPreferenceId = accountPreferenceId;
     }
 
     public Accounts getAccounts() {
-        return getAccountPreferenceIds().getAccounts();
+        return this.accounts;
     }
 
     public void setAccounts(Accounts accounts) {
-        getAccountPreferenceIds().setAccounts(accounts);
+        this.accounts = accounts;
     }
 
     public Preferences getPreferences() {
-        return getAccountPreferenceIds().getPreferences();
+        return this.preferences;
     }
 
     public void setPreferences(Preferences preferences) {
-        getAccountPreferenceIds().setPreferences(preferences);
+        this.preferences = preferences;
     }
 
     public boolean isSet() {

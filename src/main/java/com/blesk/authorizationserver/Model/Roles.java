@@ -1,7 +1,5 @@
 package com.blesk.authorizationserver.Model;
 
-import com.blesk.authorizationserver.Model.AccountRoleItems.AccountRoles;
-import com.blesk.authorizationserver.Model.RolePrivilegeItems.RolePrivileges;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -21,13 +19,18 @@ public class Roles implements Serializable {
 
     private String name;
 
-    private Boolean isDeleted;
+    private Boolean isDeleted = false;
 
     private Timestamp createdAt;
 
     private Timestamp updatedAt;
 
     private Timestamp deletedAt;
+
+    public Roles(String name, Boolean isDeleted) {
+        this.name = name;
+        this.isDeleted = isDeleted;
+    }
 
     public Roles() {
     }
@@ -44,32 +47,24 @@ public class Roles implements Serializable {
         this.rolePrivileges.add(rolePrivileges);
     }
 
+    public void removePrivilege(RolePrivileges rolePrivileges) {
+        this.rolePrivileges.remove(rolePrivileges);
+    }
+
     public Set<RolePrivileges> getRolePrivileges() {
         return this.rolePrivileges;
-    }
-
-    public void setRolePrivileges(Set<RolePrivileges> privileges) {
-        this.rolePrivileges = privileges;
-    }
-
-    public void addRolePrivileges(RolePrivileges rolePrivileges) {
-        this.rolePrivileges.add(rolePrivileges);
     }
 
     public void addAccount(AccountRoles accountRoles) {
         this.accountRoles.add(accountRoles);
     }
 
+    public void removeAccount(AccountRoles accountRoles) {
+        this.accountRoles.remove(accountRoles);
+    }
+
     public Set<AccountRoles> getAccountRoles() {
         return this.accountRoles;
-    }
-
-    public void setAccountRoles(Set<AccountRoles> accounts) {
-        this.accountRoles = accounts;
-    }
-
-    public void addAccountRoles(AccountRoles accountRoles) {
-        this.accountRoles.add(accountRoles);
     }
 
     public String getName() {
@@ -85,7 +80,7 @@ public class Roles implements Serializable {
     }
 
     public void setDeleted(Boolean deleted) {
-        isDeleted = deleted;
+        this.isDeleted = deleted;
     }
 
     public Timestamp getCreatedAt() {

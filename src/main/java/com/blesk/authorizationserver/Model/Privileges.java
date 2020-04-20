@@ -1,6 +1,5 @@
 package com.blesk.authorizationserver.Model;
 
-import com.blesk.authorizationserver.Model.RolePrivilegeItems.RolePrivileges;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -18,13 +17,18 @@ public class Privileges implements Serializable {
 
     private String name;
 
-    private Boolean isDeleted;
+    private Boolean isDeleted = false;
 
     private Timestamp createdAt;
 
     private Timestamp updatedAt;
 
     private Timestamp deletedAt;
+
+    public Privileges(String name, Boolean isDeleted) {
+        this.name = name;
+        this.isDeleted = isDeleted;
+    }
 
     public Privileges() {
     }
@@ -41,16 +45,12 @@ public class Privileges implements Serializable {
         this.rolePrivileges.add(rolePrivileges);
     }
 
+    public void removeRole(RolePrivileges rolePrivileges) {
+        this.rolePrivileges.remove(rolePrivileges);
+    }
+
     public Set<RolePrivileges> getRolePrivileges() {
         return this.rolePrivileges;
-    }
-
-    public void setRolePrivileges(Set<RolePrivileges> roles) {
-        this.rolePrivileges = roles;
-    }
-
-    public void addRolePrivileges(RolePrivileges rolePrivileges) {
-        this.rolePrivileges.add(rolePrivileges);
     }
 
     public String getName() {
@@ -66,7 +66,7 @@ public class Privileges implements Serializable {
     }
 
     public void setDeleted(Boolean deleted) {
-        isDeleted = deleted;
+        this.isDeleted = deleted;
     }
 
     public Timestamp getCreatedAt() {

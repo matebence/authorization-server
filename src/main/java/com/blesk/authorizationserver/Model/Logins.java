@@ -17,7 +17,18 @@ public class Logins implements Serializable {
 
     private String ipAddress;
 
-     public Logins() {
+    public Logins(Accounts accounts, Timestamp lastLogin, String ipAddress) {
+        this.accounts = accounts;
+        this.lastLogin = lastLogin;
+        this.ipAddress = ipAddress;
+    }
+
+    public Logins(Timestamp lastLogin, String ipAddress) {
+        this.lastLogin = lastLogin;
+        this.ipAddress = ipAddress;
+    }
+
+    public Logins() {
     }
 
     public Long getLoginId() {

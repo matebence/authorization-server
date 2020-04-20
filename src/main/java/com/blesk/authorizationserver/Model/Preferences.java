@@ -1,6 +1,5 @@
 package com.blesk.authorizationserver.Model;
 
-import com.blesk.authorizationserver.Model.AccountPreferenceItems.AccountPreferences;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -17,6 +16,10 @@ public class Preferences implements Serializable {
 
     private String name;
 
+    public Preferences(String name) {
+        this.name = name;
+    }
+
     public Preferences() {
     }
 
@@ -32,16 +35,12 @@ public class Preferences implements Serializable {
         this.accountPreferences.add(accountPreferences);
     }
 
+    public void removeAccount(AccountPreferences accountPreferences) {
+        this.accountPreferences.remove(accountPreferences);
+    }
+
     public Set<AccountPreferences> getAccountPreferences() {
         return this.accountPreferences;
-    }
-
-    public void setAccountPreferences(Set<AccountPreferences> preferences) {
-        this.accountPreferences = preferences;
-    }
-
-    public void addAccountPreferences(AccountPreferences accountPreferences) {
-        this.accountPreferences.add(accountPreferences);
     }
 
     public String getName() {

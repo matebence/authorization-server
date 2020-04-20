@@ -20,11 +20,22 @@ public class Passwords implements Serializable {
 
     private Timestamp createdAt;
 
-    public Passwords() {
+    public Passwords(Accounts accounts, String token, Date expiryDate) {
+        this.accounts = accounts;
+        this.token = token;
+        this.expiryDate = expiryDate;
+    }
+
+    public Passwords(String token, Date expiryDate) {
+        this.token = token;
+        this.expiryDate = expiryDate;
     }
 
     public Passwords(String token) {
         this.token = token;
+    }
+
+    public Passwords() {
     }
 
     public Long getPasswordTokenId() {

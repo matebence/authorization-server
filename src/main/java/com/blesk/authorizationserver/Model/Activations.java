@@ -14,11 +14,16 @@ public class Activations implements Serializable {
 
     private String token;
 
-    public Activations() {
+    public Activations(Accounts accounts, String token) {
+        this.accounts = accounts;
+        this.token = token;
     }
 
     public Activations(String token) {
         this.token = token;
+    }
+
+    public Activations() {
     }
 
     public Long getAccountActivationId() {

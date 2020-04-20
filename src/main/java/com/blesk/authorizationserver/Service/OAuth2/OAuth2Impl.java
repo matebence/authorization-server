@@ -1,10 +1,10 @@
 package com.blesk.authorizationserver.Service.OAuth2;
 
 import com.blesk.authorizationserver.DTO.OAuth2.Account;
-import com.blesk.authorizationserver.Model.AccountRoleItems.AccountRoles;
+import com.blesk.authorizationserver.Model.AccountRoles;
 import com.blesk.authorizationserver.Model.Accounts;
 import com.blesk.authorizationserver.Exception.AuthorizationException;
-import com.blesk.authorizationserver.Model.RolePrivilegeItems.RolePrivileges;
+import com.blesk.authorizationserver.Model.RolePrivileges;
 import com.blesk.authorizationserver.Service.Attempts.AttemptsServiceImpl;
 import com.blesk.authorizationserver.Service.Messages.MessagesServiceImpl;
 import com.blesk.authorizationserver.Utilitie.Tools;

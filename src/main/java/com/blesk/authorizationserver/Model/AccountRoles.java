@@ -1,7 +1,5 @@
-package com.blesk.authorizationserver.Model.AccountRoleItems;
+package com.blesk.authorizationserver.Model;
 
-import com.blesk.authorizationserver.Model.Accounts;
-import com.blesk.authorizationserver.Model.Roles;
 import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
@@ -10,32 +8,59 @@ import java.io.Serializable;
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, scope = AccountRoles.class)
 public class AccountRoles implements Serializable {
 
-    private AccountRoleIds accountRoleIds = new AccountRoleIds();
+    private Long accountRoleId;
+
+    private Accounts accounts;
+
+    private Roles roles;
+
+    private Boolean isDeleted;
+
+    public AccountRoles(Accounts accounts, Roles roles) {
+        this.accounts = accounts;
+        this.roles = roles;
+    }
+
+    public AccountRoles(Accounts accounts) {
+        this.accounts = accounts;
+    }
+
+    public AccountRoles(Roles roles) {
+        this.roles = roles;
+    }
 
     public AccountRoles() {
     }
 
-    public AccountRoleIds getAccountRoleIds() {
-        return this.accountRoleIds;
+    public Long getAccountRoleId() {
+        return this.accountRoleId;
     }
 
-    public void setAccountRoleIds(AccountRoleIds accountRoleIds) {
-        this.accountRoleIds = accountRoleIds;
+    public void setAccountRoleId(Long accountRoleId) {
+        this.accountRoleId = accountRoleId;
     }
 
     public Accounts getAccounts() {
-        return getAccountRoleIds().getAccounts();
+        return this.accounts;
     }
 
     public void setAccounts(Accounts accounts) {
-        getAccountRoleIds().setAccounts(accounts);
+        this.accounts = accounts;
     }
 
     public Roles getRoles() {
-        return getAccountRoleIds().getRoles();
+        return this.roles;
     }
 
     public void setRoles(Roles roles) {
-        getAccountRoleIds().setRoles(roles);
+        this.roles = roles;
+    }
+
+    public Boolean getDeleted() {
+        return this.isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.isDeleted = deleted;
     }
 }
