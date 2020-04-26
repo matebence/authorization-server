@@ -42,4 +42,9 @@ public class Messages {
 
     public static final String NO_MORE_INFORMATION = "Žiadné ďalšie informácie";
     public static final String SIGNUP_BAD_DATA = "Údaje boli nesprávne vyplnené";
+
+
+
+    public static final String ACCESS_TOKEN_ERROR = "Kľúč pre prístup nebol najdení ";
+    public static final String ACCESS_TOKEN_FAILED = "Deserializácia kľúču sa nepodarilo  ";
 }

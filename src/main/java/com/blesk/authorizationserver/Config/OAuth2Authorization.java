@@ -99,7 +99,7 @@ public class OAuth2Authorization extends AuthorizationServerConfigurerAdapter {
 
     @Bean
     public TokenStore tokenStore() {
-        return new JdbcTokenStore(this.dataSource);
+        return new JdbcToken(this.dataSource);
     }
 
     @Bean
