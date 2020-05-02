@@ -1,5 +1,6 @@
 package com.blesk.authorizationserver.Controller;
 
+import com.blesk.authorizationserver.Config.JdbcToken;
 import com.blesk.authorizationserver.DTO.OAuth2.Response;
 import com.blesk.authorizationserver.Exception.AuthorizationException;
 import com.blesk.authorizationserver.Model.Accounts;
@@ -10,7 +11,6 @@ import com.blesk.authorizationserver.Value.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.oauth2.common.OAuth2AccessToken;
-import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -24,13 +24,13 @@ import java.util.HashMap;
 @RequestMapping(value = "/", produces = "application/json")
 public class AuthorizationController {
 
-    private TokenStore tokenStore;
+    private JdbcToken jdbcToken;
 
     private MessagesServiceImpl messagesService;
 
     @Autowired
-    public AuthorizationController(TokenStore tokenStore, MessagesServiceImpl messagesService) {
-        this.tokenStore = tokenStore;
+    public AuthorizationController(JdbcToken jdbcToken, MessagesServiceImpl messagesService) {
+        this.jdbcToken = jdbcToken;
         this.messagesService = messagesService;
     }
 
@@ -41,12 +41,12 @@ public class AuthorizationController {
             throw new AuthorizationException(Messages.LOGOUT_EXCEPTION);
 
         String bearer = authorization.replace("Bearer", "").trim();
-        OAuth2AccessToken accessToken = this.tokenStore.readAccessToken(bearer);
+        OAuth2AccessToken accessToken = this.jdbcToken.readAccessToken(bearer);
         if (accessToken == null)
             throw new AuthorizationException(Messages.LOGOUT_EXCEPTION);
 
-        this.tokenStore.removeAccessToken(accessToken);
-        this.tokenStore.removeRefreshToken(accessToken.getRefreshToken());
+        this.jdbcToken.removeAccessToken(accessToken);
+        this.jdbcToken.removeRefreshToken(accessToken.getRefreshToken());
 
         Response response = new Response(new Timestamp(System.currentTimeMillis()).toString(), Messages.SIGNOUT_SUCCESS, false);
         response.setNav("signin", ServletUriComponentsBuilder.fromCurrentContextPath().path("signin").toUriString());
