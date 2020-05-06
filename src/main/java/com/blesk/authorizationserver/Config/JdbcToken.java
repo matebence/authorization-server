@@ -19,7 +19,7 @@ public class JdbcToken extends JdbcTokenStore {
         OAuth2AccessToken oAuth2AccessToken = null;
         try {
             oAuth2AccessToken = super.readAccessToken(tokenValue);
-        } catch (EmptyResultDataAccessException ignore) {}
+        } catch (Exception ignore) {}
         return oAuth2AccessToken;
     }
 }
