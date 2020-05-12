@@ -14,9 +14,9 @@ public class Messages {
     public static final String OAUTH_EXPCETION = "Ľutujeme, ale nastala chyba";
     public static final String SQL_EXCEPTION = "Operácia sa neuskutočnila";
     public static final String EXCEPTION = "Nastala neočakávaná chyba";
-    public static final String BLOCKED_EXCEPTION = "Účet bol zablokovaný na 24h";
+    public static final String BLOCKED_EXCEPTION = "Účet ako aj IP adresa bola zablokovaná na 24h";
     public static final String NOT_ACTIVATED_EXCEPTION = "Účet nie je aktivovaný";
-    public static final String LOGOUT_EXCEPTION = "Pri odhlásení nastala chyba";
+    public static final String SIGNOUT_EXCEPTION = "Pri odhlásení nastala chyba";
 
 
 

@@ -36,24 +36,22 @@ public class AuthorizationController {
 
     @DeleteMapping(value = "/signout")
     public Response performSignout(HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
+        Response response = new Response(new Timestamp(System.currentTimeMillis()).toString(), Messages.SIGNOUT_EXCEPTION, true);
         String authorization = httpServletRequest.getHeader("Authorization");
-        if (authorization == null)
-            throw new AuthorizationException(Messages.LOGOUT_EXCEPTION);
-
-        String bearer = authorization.replace("Bearer", "").trim();
-        OAuth2AccessToken accessToken = this.jdbcToken.readAccessToken(bearer);
-        if (accessToken == null)
-            throw new AuthorizationException(Messages.LOGOUT_EXCEPTION);
+        if (authorization == null) return response;
+        OAuth2AccessToken accessToken = this.jdbcToken.readAccessToken(authorization.replace("Bearer", "").trim());
+        if (accessToken == null) return response;
 
         this.jdbcToken.removeAccessToken(accessToken);
         this.jdbcToken.removeRefreshToken(accessToken.getRefreshToken());
 
-        Response response = new Response(new Timestamp(System.currentTimeMillis()).toString(), Messages.SIGNOUT_SUCCESS, false);
         response.setNav("signin", ServletUriComponentsBuilder.fromCurrentContextPath().path("signin").toUriString());
         response.setNav("signup", ServletUriComponentsBuilder.fromCurrentContextPath().path("signup").toUriString());
         response.setNav("forgetpassword", ServletUriComponentsBuilder.fromCurrentContextPath().path("forgetpassword").toUriString());
 
-        httpServletResponse.setStatus( HttpServletResponse.SC_OK);
+        httpServletResponse.setStatus(HttpServletResponse.SC_OK);
+        response.setMessage(Messages.SIGNOUT_SUCCESS);
+        response.setError(false);
         return response;
     }
 
@@ -67,18 +65,17 @@ public class AuthorizationController {
             response.setError(true);
             response.setReason(account.getValidations());
             response.setMessage(Messages.SIGNUP_BAD_DATA);
-            httpServletResponse.setStatus( HttpServletResponse.SC_BAD_REQUEST);
+            httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             return response;
         }
-        if (account.getAccountId() == null)
-            throw new AuthorizationException(Messages.SIGNUP_ERROR);
 
+        if (account.getAccountId() == null) throw new AuthorizationException(Messages.SIGNUP_ERROR);
         response.setNav("signin", ServletUriComponentsBuilder.fromCurrentContextPath().path("signin").toUriString());
         response.setNav("forgetpassword", ServletUriComponentsBuilder.fromCurrentContextPath().path("forgetpassword").toUriString());
         response.setMessage(Messages.SIGNUP_SUCCESS);
         response.setError(false);
 
-        httpServletResponse.setStatus( HttpServletResponse.SC_CREATED);
+        httpServletResponse.setStatus(HttpServletResponse.SC_CREATED);
         return response;
     }
 
@@ -88,11 +85,11 @@ public class AuthorizationController {
         response.setTimestamp(new Timestamp(System.currentTimeMillis()).toString());
 
         if (this.messagesService.sendActivationTokenToVerify(new Accounts(accountId, new Activations(token)))) {
-            httpServletResponse.setStatus( HttpServletResponse.SC_OK);
+            httpServletResponse.setStatus(HttpServletResponse.SC_OK);
             response.setMessage(Messages.ACTIVATION_TOKEN_SUCCESS);
             response.setError(false);
         } else {
-            httpServletResponse.setStatus( HttpServletResponse.SC_BAD_REQUEST);
+            httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.setMessage(Messages.ACTIVATION_TOKEN_ERROR);
             response.setError(true);
         }
@@ -102,18 +99,15 @@ public class AuthorizationController {
 
     @PostMapping(value = "/forgetpassword")
     public Response performPasswordRecovery(@RequestBody HashMap<String, String> accounts, HttpServletRequest httpServletRequest, HttpServletResponse httpServletResponse) {
-        if (accounts.get("email") == null)
-            throw new AuthorizationException(Messages.REQUEST_BODY_NOT_FOUND_EXCEPTION);
-
+        if (accounts.get("email") == null) throw new AuthorizationException(Messages.REQUEST_BODY_NOT_FOUND_EXCEPTION);
         Passwords passwords = this.messagesService.getPasswordTokenToRecoverAccount(accounts.get("email"));
-        if (passwords.getAccounts() == null)
-            throw new AuthorizationException(Messages.ACCOUNT_EMAIL_RECOVERY_ERROR);
+        if (passwords.getAccounts() == null) throw new AuthorizationException(Messages.ACCOUNT_EMAIL_RECOVERY_ERROR);
 
         Response response = new Response(new Timestamp(System.currentTimeMillis()).toString(), Messages.FORGET_PASSWORD_SUCCESS, false);
         response.setNav("signin", ServletUriComponentsBuilder.fromCurrentContextPath().path("signin").toUriString());
         response.setNav("signup", ServletUriComponentsBuilder.fromCurrentContextPath().path("signup").toUriString());
 
-        httpServletResponse.setStatus( HttpServletResponse.SC_CREATED);
+        httpServletResponse.setStatus(HttpServletResponse.SC_CREATED);
         return response;
     }
 
@@ -124,11 +118,11 @@ public class AuthorizationController {
         response.setTimestamp(new Timestamp(System.currentTimeMillis()).toString());
 
         if (this.messagesService.sendPasswordTokenToVerify(new Accounts(accountId, new Passwords(token)))) {
-            httpServletResponse.setStatus( HttpServletResponse.SC_OK);
+            httpServletResponse.setStatus(HttpServletResponse.SC_OK);
             response.setMessage(Messages.PASSWORD_TOKEN_SUCCESS);
             response.setError(false);
         } else {
-            httpServletResponse.setStatus( HttpServletResponse.SC_BAD_REQUEST);
+            httpServletResponse.setStatus(HttpServletResponse.SC_BAD_REQUEST);
             response.setMessage(Messages.PASSWORD_TOKEN_ERROR);
             response.setError(true);
         }
