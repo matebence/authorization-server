@@ -33,7 +33,7 @@ public class Messages {
     public static final String SIGNUP_SUCCESS = "Registrácia prebehla úspešne, na Vami zvolenú emailovú adresu sme poslali aktivačný odkaz";
     public static final String SIGNUP_ERROR = "Registrácia bola neúspešná, skúste znova";
     public static final String FORGET_PASSWORD_SUCCESS = "Postup obnovenia hesla Vám bol zaslaný na uvedenú emailovú adresu";
-    public static final String PASSWORD_TOKEN_SUCCESS = "Pre dokončenie procesu zadajte nové heslo";
+    public static final String PASSWORD_TOKEN_SUCCESS = "Totožnosť overená, nové heslo bolo vygenerované a odoslané na Vami uvedenú emailovú adresu";
     public static final String PASSWORD_TOKEN_ERROR = "Ľutujeme, kľúč pre zabudnuté heslo je neplatný";
     public static final String ACTIVATION_TOKEN_SUCCESS = "Váš účet bol úspešne aktivovný, možete sa prihlásiť";
     public static final String ACTIVATION_TOKEN_ERROR = "Počas aktivovanie úctu nastala chyba";
