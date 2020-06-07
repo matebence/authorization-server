@@ -15,7 +15,7 @@ public class Activations implements Serializable {
 
     private String token;
 
-    private Boolean isDeleted;
+    private Boolean isDeleted = false;
 
     private Timestamp createdAt;
 

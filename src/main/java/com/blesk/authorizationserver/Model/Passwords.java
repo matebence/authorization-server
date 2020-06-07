@@ -18,7 +18,7 @@ public class Passwords implements Serializable {
 
     private Date expiryDate;
 
-    private Boolean isDeleted;
+    private Boolean isDeleted = false;
 
     private Timestamp createdAt;
 
@@ -26,7 +26,7 @@ public class Passwords implements Serializable {
 
     private Timestamp deletedAt;
 
-    public Passwords(Accounts accounts, String token, Boolean isDeleted) {
+    public Passwords(Accounts accounts, String token, Boolean isDeleted, Date expiryDate) {
         this.accounts = accounts;
         this.token = token;
         this.isDeleted = isDeleted;

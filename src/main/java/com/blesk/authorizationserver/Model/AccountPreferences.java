@@ -21,7 +21,7 @@ public class AccountPreferences implements Serializable {
 
     private int value;
 
-    private Boolean isDeleted;
+    private Boolean isDeleted = false;
 
     private Timestamp createdAt;
 

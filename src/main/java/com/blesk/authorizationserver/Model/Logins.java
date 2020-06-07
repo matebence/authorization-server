@@ -13,11 +13,11 @@ public class Logins implements Serializable {
 
     private Accounts accounts;
 
-    private Timestamp lastLogin;
+    private Timestamp lastLogin = new Timestamp(System.currentTimeMillis());
 
     private String ipAddress;
 
-    private Boolean isDeleted;
+    private Boolean isDeleted = false;
 
     private Timestamp createdAt;
 
