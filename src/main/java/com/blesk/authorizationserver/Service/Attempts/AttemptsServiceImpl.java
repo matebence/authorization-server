@@ -21,6 +21,9 @@ public class AttemptsServiceImpl implements AttemptsService {
     @Value("${config.oauth2.max-attempts}")
     private Integer maxAttempts;
 
+    @Value("${config.oauth2.block-account}")
+    private Integer blockAccount;
+
     @Autowired
     private MessagesServiceImpl messagesService;
 
@@ -28,7 +31,7 @@ public class AttemptsServiceImpl implements AttemptsService {
 
     public AttemptsServiceImpl() {
         super();
-        this.loadingCache = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.DAYS).build(new CacheLoader<String, Integer>() {
+        this.loadingCache = CacheBuilder.newBuilder().expireAfterWrite(blockAccount, TimeUnit.MINUTES).build(new CacheLoader<String, Integer>() {
             public Integer load(String ip) {
                 return 0;
             }
