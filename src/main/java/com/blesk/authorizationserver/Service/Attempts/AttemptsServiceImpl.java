@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import javax.annotation.PostConstruct;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -29,13 +30,17 @@ public class AttemptsServiceImpl implements AttemptsService {
 
     private LoadingCache<String, Integer> loadingCache;
 
-    public AttemptsServiceImpl() {
-        super();
-        this.loadingCache = CacheBuilder.newBuilder().expireAfterWrite(blockAccount, TimeUnit.MINUTES).build(new CacheLoader<String, Integer>() {
+    @PostConstruct
+    public void init() {
+        this.loadingCache = CacheBuilder.newBuilder().expireAfterWrite(this.blockAccount, TimeUnit.MINUTES).build(new CacheLoader<String, Integer>() {
             public Integer load(String ip) {
                 return 0;
             }
         });
+    }
+
+    public AttemptsServiceImpl() {
+        super();
     }
 
     public void loginSucceeded(String ip, Account account) {
