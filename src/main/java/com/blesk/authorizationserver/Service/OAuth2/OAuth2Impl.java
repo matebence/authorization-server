@@ -4,7 +4,6 @@ import com.blesk.authorizationserver.DTO.OAuth2.Account;
 import com.blesk.authorizationserver.Model.AccountRoles;
 import com.blesk.authorizationserver.Model.Accounts;
 import com.blesk.authorizationserver.Exception.AuthorizationException;
-import com.blesk.authorizationserver.Model.RolePrivileges;
 import com.blesk.authorizationserver.Service.Attempts.AttemptsServiceImpl;
 import com.blesk.authorizationserver.Service.Messages.MessagesServiceImpl;
 import com.blesk.authorizationserver.Utilitie.Tools;
@@ -52,17 +51,10 @@ public class OAuth2Impl implements OAuth2 {
             throw new AuthorizationException(Messages.NOT_ACTIVATED_EXCEPTION);
 
         Collection<GrantedAuthority> authorities = new ArrayList<>();
-        Collection<String> privileges = new ArrayList<>();
-
         for (AccountRoles accountRoles : accounts.getAccountRoles()) {
             authorities.add(new SimpleGrantedAuthority(accountRoles.getRoles().getName()));
-            for (RolePrivileges rolePrivileges: accountRoles.getRoles().getRolePrivileges()){
-                privileges.add(rolePrivileges.getPrivileges().getName());
-            }
         }
-
         accounts.setGrantedAuthorities(authorities);
-        accounts.setGrantedPrivileges(privileges);
 
         return new Account(accounts);
     }

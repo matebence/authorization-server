@@ -23,8 +23,6 @@ public class Jwt extends JwtAccessTokenConverter {
             data.put("user_name", account.getUserName());
         if (account.isActivated() != null)
             data.put("activated", account.isActivated());
-        if (account.getGrantedPrivileges() != null)
-            data.put("privileges", account.getGrantedPrivileges());
 
         DefaultOAuth2AccessToken defaultOAuth2AccessToken = new DefaultOAuth2AccessToken(accessToken);
         defaultOAuth2AccessToken.setAdditionalInformation(data);
