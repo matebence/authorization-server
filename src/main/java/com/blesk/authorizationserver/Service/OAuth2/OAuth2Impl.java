@@ -4,12 +4,12 @@ import com.blesk.authorizationserver.DTO.OAuth2.Account;
 import com.blesk.authorizationserver.Model.AccountRoles;
 import com.blesk.authorizationserver.Model.Accounts;
 import com.blesk.authorizationserver.Exception.AuthorizationException;
-import com.blesk.authorizationserver.Model.RolePrivileges;
 import com.blesk.authorizationserver.Service.Attempts.AttemptsServiceImpl;
 import com.blesk.authorizationserver.Service.Messages.MessagesServiceImpl;
 import com.blesk.authorizationserver.Utilitie.Tools;
 import com.blesk.authorizationserver.Value.Messages;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -21,6 +21,9 @@ import java.util.Collection;
 
 @Service
 public class OAuth2Impl implements OAuth2 {
+
+    @Value("${config.oauth2.block-account}")
+    private Integer blockAccount;
 
     private AttemptsServiceImpl attemptServiceImpl;
 
@@ -38,7 +41,7 @@ public class OAuth2Impl implements OAuth2 {
     @Override
     public UserDetails loadUserByUsername(String userName) {
         if (this.attemptServiceImpl.isBlocked(Tools.getClientIP(this.httpServletRequest)))
-            throw new AuthorizationException(Messages.BLOCKED_EXCEPTION);
+            throw new AuthorizationException(String.format(Messages.BLOCKED_EXCEPTION, blockAccount));
 
         Accounts accounts = this.messagesService.sendAccountForVerification(userName);
 
@@ -48,17 +51,10 @@ public class OAuth2Impl implements OAuth2 {
             throw new AuthorizationException(Messages.NOT_ACTIVATED_EXCEPTION);
 
         Collection<GrantedAuthority> authorities = new ArrayList<>();
-        Collection<String> privileges = new ArrayList<>();
-
         for (AccountRoles accountRoles : accounts.getAccountRoles()) {
             authorities.add(new SimpleGrantedAuthority(accountRoles.getRoles().getName()));
-            for (RolePrivileges rolePrivileges: accountRoles.getRoles().getRolePrivileges()){
-                privileges.add(rolePrivileges.getPrivileges().getName());
-            }
         }
-
         accounts.setGrantedAuthorities(authorities);
-        accounts.setGrantedPrivileges(privileges);
 
         return new Account(accounts);
     }

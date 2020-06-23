@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 
 @JsonIdentityInfo(generator = ObjectIdGenerators.IntSequenceGenerator.class, scope = Activations.class)
 public class Activations implements Serializable {
@@ -13,6 +14,20 @@ public class Activations implements Serializable {
     private Accounts accounts;
 
     private String token;
+
+    private Boolean isDeleted = false;
+
+    private Timestamp createdAt;
+
+    private Timestamp updatedAt;
+
+    private Timestamp deletedAt;
+
+    public Activations(Accounts accounts, String token, Boolean isDeleted) {
+        this.accounts = accounts;
+        this.token = token;
+        this.isDeleted = isDeleted;
+    }
 
     public Activations(Accounts accounts, String token) {
         this.accounts = accounts;
@@ -48,5 +63,37 @@ public class Activations implements Serializable {
 
     public void setAccounts(Accounts accounts) {
         this.accounts = accounts;
+    }
+
+    public Boolean getDeleted() {
+        return this.isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.isDeleted = deleted;
+    }
+
+    public Timestamp getCreatedAt() {
+        return this.createdAt;
+    }
+
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Timestamp getUpdatedAt() {
+        return this.updatedAt;
+    }
+
+    public void setUpdatedAt(Timestamp updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Timestamp getDeletedAt() {
+        return this.deletedAt;
+    }
+
+    public void setDeletedAt(Timestamp deletedAt) {
+        this.deletedAt = deletedAt;
     }
 }

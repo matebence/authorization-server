@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,6 +16,14 @@ public class Preferences implements Serializable {
     private Set<AccountPreferences> accountPreferences = new HashSet<AccountPreferences>();
 
     private String name;
+
+    private Boolean isDeleted = false;
+
+    private Timestamp createdAt;
+
+    private Timestamp updatedAt;
+
+    private Timestamp deletedAt;
 
     public Preferences(String name) {
         this.name = name;
@@ -49,5 +58,37 @@ public class Preferences implements Serializable {
 
     public void setName(String name) {
         this.name = name;
+    }
+
+    public Boolean getDeleted() {
+        return this.isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.isDeleted = deleted;
+    }
+
+    public Timestamp getCreatedAt() {
+        return this.createdAt;
+    }
+
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Timestamp getUpdatedAt() {
+        return this.updatedAt;
+    }
+
+    public void setUpdatedAt(Timestamp updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Timestamp getDeletedAt() {
+        return this.deletedAt;
+    }
+
+    public void setDeletedAt(Timestamp deletedAt) {
+        this.deletedAt = deletedAt;
     }
 }

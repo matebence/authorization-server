@@ -33,7 +33,7 @@ public class Accounts implements Serializable {
 
     private Boolean isActivated;
 
-    private Boolean isDeleted;
+    private Boolean isDeleted = false;
 
     private Timestamp createdAt;
 

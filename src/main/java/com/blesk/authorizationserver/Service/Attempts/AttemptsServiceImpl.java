@@ -12,6 +12,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
+import javax.annotation.PostConstruct;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -21,18 +22,25 @@ public class AttemptsServiceImpl implements AttemptsService {
     @Value("${config.oauth2.max-attempts}")
     private Integer maxAttempts;
 
+    @Value("${config.oauth2.block-account}")
+    private Integer blockAccount;
+
     @Autowired
     private MessagesServiceImpl messagesService;
 
     private LoadingCache<String, Integer> loadingCache;
 
-    public AttemptsServiceImpl() {
-        super();
-        this.loadingCache = CacheBuilder.newBuilder().expireAfterWrite(1, TimeUnit.DAYS).build(new CacheLoader<String, Integer>() {
+    @PostConstruct
+    public void init() {
+        this.loadingCache = CacheBuilder.newBuilder().expireAfterWrite(this.blockAccount, TimeUnit.MINUTES).build(new CacheLoader<String, Integer>() {
             public Integer load(String ip) {
                 return 0;
             }
         });
+    }
+
+    public AttemptsServiceImpl() {
+        super();
     }
 
     public void loginSucceeded(String ip, Account account) {

@@ -13,9 +13,24 @@ public class Logins implements Serializable {
 
     private Accounts accounts;
 
-    private Timestamp lastLogin;
+    private Timestamp lastLogin = new Timestamp(System.currentTimeMillis());
 
     private String ipAddress;
+
+    private Boolean isDeleted = false;
+
+    private Timestamp createdAt;
+
+    private Timestamp updatedAt;
+
+    private Timestamp deletedAt;
+
+    public Logins(Accounts accounts, Timestamp lastLogin, String ipAddress, Boolean isDeleted) {
+        this.accounts = accounts;
+        this.lastLogin = lastLogin;
+        this.ipAddress = ipAddress;
+        this.isDeleted = isDeleted;
+    }
 
     public Logins(Accounts accounts, Timestamp lastLogin, String ipAddress) {
         this.accounts = accounts;
@@ -61,5 +76,37 @@ public class Logins implements Serializable {
 
     public void setIpAddress(String ipAddress) {
         this.ipAddress = ipAddress;
+    }
+
+    public Boolean getDeleted() {
+        return this.isDeleted;
+    }
+
+    public void setDeleted(Boolean deleted) {
+        this.isDeleted = deleted;
+    }
+
+    public Timestamp getCreatedAt() {
+        return this.createdAt;
+    }
+
+    public void setCreatedAt(Timestamp createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Timestamp getUpdatedAt() {
+        return this.updatedAt;
+    }
+
+    public void setUpdatedAt(Timestamp updatedAt) {
+        this.updatedAt = updatedAt;
+    }
+
+    public Timestamp getDeletedAt() {
+        return this.deletedAt;
+    }
+
+    public void setDeletedAt(Timestamp deletedAt) {
+        this.deletedAt = deletedAt;
     }
 }
