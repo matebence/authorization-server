@@ -1,6 +1,5 @@
 package com.blesk.authorizationserver.Service.Attempts;
 
-import com.blesk.authorizationserver.DTO.OAuth2.Account;
 import com.blesk.authorizationserver.Model.Accounts;
 import com.blesk.authorizationserver.Model.Logins;
 import com.blesk.authorizationserver.Service.Messages.MessagesServiceImpl;
@@ -43,12 +42,12 @@ public class AttemptsServiceImpl implements AttemptsService {
         super();
     }
 
-    public void loginSucceeded(String ip, Account account) {
+    public void loginSucceeded(String ip, Accounts account) {
         Accounts accounts = new Accounts();
         accounts.setAccountId(account.getAccountId());
 
         Logins logins = new Logins();
-        logins.setLoginId(account.getLoginId());
+        logins.setLoginId(account.getLogin().getLoginId());
         logins.setIpAddress(ip);
         logins.setAccounts(accounts);
 

@@ -45,10 +45,8 @@ public class OAuth2Impl implements OAuth2 {
 
         Accounts accounts = this.messagesService.sendAccountForVerification(userName);
 
-        if (accounts.getAccountId() == null)
-            throw new AuthorizationException(Messages.ACCOUNT_VERIFICATION_ERROR);
-        if (!accounts.getActivated())
-            throw new AuthorizationException(Messages.NOT_ACTIVATED_EXCEPTION);
+        if (accounts.getAccountId() == null) throw new AuthorizationException(Messages.ACCOUNT_VERIFICATION_ERROR);
+        if (!accounts.getActivated()) throw new AuthorizationException(Messages.NOT_ACTIVATED_EXCEPTION);
 
         Collection<GrantedAuthority> authorities = new ArrayList<>();
         for (AccountRoles accountRoles : accounts.getAccountRoles()) {

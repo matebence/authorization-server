@@ -1,7 +1,7 @@
 package com.blesk.authorizationserver.Config;
 
-import com.blesk.authorizationserver.DTO.OAuth2.Account;
 import com.blesk.authorizationserver.DTO.OAuth2.Jwt;
+import com.blesk.authorizationserver.Model.Accounts;
 import com.blesk.authorizationserver.Translator.OAuthTranslator;
 import com.blesk.authorizationserver.Service.Attempts.AttemptsServiceImpl;
 import com.blesk.authorizationserver.Utilitie.Tools;
@@ -111,8 +111,8 @@ public class OAuth2Authorization extends AuthorizationServerConfigurerAdapter {
 
     @EventListener
     public void authSuccessEventListener(AuthenticationSuccessEvent authorizedEvent) {
-        if (authorizedEvent.getAuthentication().getPrincipal() instanceof Account) {
-            Account account = (Account) authorizedEvent.getAuthentication().getPrincipal();
+        if (authorizedEvent.getAuthentication().getPrincipal() instanceof Accounts) {
+            Accounts account = (Accounts) authorizedEvent.getAuthentication().getPrincipal();
             this.attemptServiceImpl.loginSucceeded(Tools.getClientIP(this.httpServletRequest), account);
         }
     }
