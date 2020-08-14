@@ -75,24 +75,24 @@ public class OAuth2Authorization extends AuthorizationServerConfigurerAdapter {
 
     @Override
     public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
-        clients.jdbc(this.dataSource).withClient(this.clientId).secret(this.passwordEncoder.encode(this.clientSecret))
-                .scopes("trust")
-                .authorizedGrantTypes("password", "refresh_token")
-                .accessTokenValiditySeconds(Integer.parseInt(this.accessTokenValidity))
-                .refreshTokenValiditySeconds(Integer.parseInt(this.refreshTokenValidity));
+        clients.jdbc(this.dataSource).withClient(this.clientId).secret(this.passwordEncoder.encode(this.clientSecret)).scopes("trust").authorizedGrantTypes("password", "refresh_token");
     }
 
     @Override
     public void configure(AuthorizationServerEndpointsConfigurer endpoints) {
-        endpoints.authenticationManager(this.authenticationManager).tokenStore(tokenStore()).accessTokenConverter(tokenEnhancer()).pathMapping("/oauth/token", "/signin").exceptionTranslator(new OAuthTranslator());
+        endpoints.authenticationManager(this.authenticationManager).tokenServices(this.tokenServices()).pathMapping("/oauth/token", "/signin").exceptionTranslator(new OAuthTranslator());
     }
 
     @Bean
     @Primary
     public DefaultTokenServices tokenServices() {
         DefaultTokenServices defaultTokenServices = new DefaultTokenServices();
-        defaultTokenServices.setTokenStore(tokenStore());
+        defaultTokenServices.setTokenEnhancer(this.tokenEnhancer());
+        defaultTokenServices.setTokenStore(this.tokenStore());
+        defaultTokenServices.setReuseRefreshToken(false);
         defaultTokenServices.setSupportRefreshToken(true);
+        defaultTokenServices.setAccessTokenValiditySeconds(Integer.parseInt(this.accessTokenValidity));
+        defaultTokenServices.setRefreshTokenValiditySeconds(Integer.parseInt(this.refreshTokenValidity));
         return defaultTokenServices;
     }
 
